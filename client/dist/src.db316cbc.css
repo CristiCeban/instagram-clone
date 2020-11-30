@@ -1,0 +1,26 @@
+body {
+  font-size: 20;
+}
+.helloWorld {
+  text-align: center;
+  padding: 20;
+}
+
+.helloWorld .hello {
+  padding: 20;
+}
+.helloWorld .counter .count {
+  padding: 20;
+}
+
+.helloWorld .counter .increment {
+  padding: 20;
+}
+
+.helloWorld .counter .decrement {
+  padding: 20;
+  margin: 10;
+}
+
+
+/*# sourceMappingURL=/src.db316cbc.css.map */
