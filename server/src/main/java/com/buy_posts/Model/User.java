@@ -1,4 +1,4 @@
-package com.example.accessingdatamysql;
+package com.buy_posts.Model;
 
 
 import javax.persistence.Entity;
