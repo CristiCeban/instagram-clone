@@ -1,13 +1,15 @@
 import React from 'react';
 import { fade, makeStyles } from '@material-ui/core/styles';
-import {AccountCircle, Favorite, Home, Search} from "@material-ui/icons";
+import {AccountCircle, Favorite, Home, Search, ShoppingCart, Store} from "@material-ui/icons";
 import {AppBar, IconButton, InputBase, Link, Toolbar, Typography} from "@material-ui/core";
 import { useLocation } from 'react-router-dom'
 
 enum routerEnum {
     main = '/',
     profile = '/profile',
-    favorites = '/favorites'
+    favorites = '/favorites',
+    cart = '/cart',
+    products = '/products'
 }
 
 
@@ -18,10 +20,14 @@ const NavBar = () =>{
 
     return (
         <div className={classes.root}>
-            <AppBar position="fixed" style={{backgroundColor:'#bbbfbc'}}>
+            <AppBar position={"fixed"}
+                    style={{backgroundColor:'#bbbfbc'}}
+            >
                 <Toolbar>
                     <Typography className={classes.title} variant="h6" noWrap>
-                        Instagram Clone
+                        <Link href={'/'} style={{color:'black'}}>
+                            Instagram Clone
+                        </Link>
                     </Typography>
                     <div className={classes.search}>
                         <div className={classes.searchIcon}>
@@ -47,6 +53,16 @@ const NavBar = () =>{
                         </IconButton>
                     </Link>
 
+                    <Link href={'/products'}>
+                        <IconButton>
+                            <Store className={pathname === routerEnum.products
+                                ? classes.selectedNavIcon
+                                :
+                                undefined}
+                            />
+                        </IconButton>
+                    </Link>
+
                     <Link href={'/favorites'}>
                         <IconButton>
                                 <Favorite className={pathname === routerEnum.favorites
@@ -54,6 +70,16 @@ const NavBar = () =>{
                                     :
                                     undefined }
                                 />
+                        </IconButton>
+                    </Link>
+
+                    <Link href={'/cart'}>
+                        <IconButton>
+                            <ShoppingCart className={pathname === routerEnum.cart
+                                ? classes.selectedNavIcon
+                                :
+                                undefined}
+                            />
                         </IconButton>
                     </Link>
 
