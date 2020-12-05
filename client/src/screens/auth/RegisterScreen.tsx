@@ -48,8 +48,9 @@ const RegisterScreen = () => {
     const {inProgress} = useSelector((state: ApplicationState) => state.authReducer);
     const formikRef = useRef(null);
 
-    const onSignIn= () => {
-        console.log('sign in');
+    const onSignUp= (values : any) => {
+        console.log('sign up');
+        console.log(values)
         dispatch(onLogin({email : 'a',password : 'a'}))
     }
     return (
@@ -58,16 +59,15 @@ const RegisterScreen = () => {
                 innerRef={formikRef}
                 validationSchema={validationSchema}
                 initialValues={initFormValue}
-                onSubmit={onSignIn}
+                onSubmit={(values) => onSignUp(values)}
             >
                 {({
-                      handleChange,
-                      handleSubmit,
-                      errors,
-                      touched,
-                      handleBlur,
-                      setFieldValue,
-                      values
+                    values,
+                    touched,
+                    errors,
+                    handleChange,
+                    handleBlur,
+                    handleSubmit
                   }) => (
                     <>
                         <CssBaseline />
@@ -78,51 +78,68 @@ const RegisterScreen = () => {
                             <Typography component="h1" variant="h5">
                                 Sign Up
                             </Typography>
-                            <form className={classes.form} onSubmit={onSignIn}>
+                            <form className={classes.form} onSubmit={handleSubmit}>
                                 <TextField
                                     variant="outlined"
                                     margin="normal"
-                                    required
                                     fullWidth
                                     id="email"
                                     label="Email Address"
                                     name="email"
                                     autoComplete="email"
                                     autoFocus
+                                    value={values.email}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    helperText={(errors.email && touched.email) && errors.email}
+                                    FormHelperTextProps={{
+                                        className : classes.helperText
+                                    }}
                                 />
                                 <TextField
                                     variant="outlined"
                                     margin="normal"
-                                    required
                                     fullWidth
                                     name="name"
                                     label="name"
                                     type="name"
                                     id="name"
                                     autoComplete="name"
+                                    value={values.name}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    helperText={(errors.name&&touched.name) && errors.name}
+                                    FormHelperTextProps={{
+                                        className : classes.helperText
+                                    }}
                                 />
                                 <TextField
                                     variant="outlined"
                                     margin="normal"
-                                    required
                                     fullWidth
                                     name="password"
                                     label="Password"
                                     type="password"
                                     id="password"
                                     autoComplete="current-password"
+                                    value={values.password}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    helperText={(errors.password&&touched.password) && errors.password}
+                                    FormHelperTextProps={{
+                                        className : classes.helperText
+                                    }}
                                 />
                                 <FormControlLabel
                                     control={<Checkbox value="remember" color="primary" />}
                                     label="Remember me"
                                 />
                                 <Button
-                                    type='button'
+                                    type='submit'
                                     fullWidth
                                     variant="contained"
                                     color="primary"
                                     className={classes.submit}
-                                    onClick={() => handleSubmit()}
                                 >
                                     <div style={{minHeight:25}}>
                                         {inProgress ?
@@ -173,6 +190,9 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    helperText : {
+        color : '#a20606'
+    }
 }));
 
 
