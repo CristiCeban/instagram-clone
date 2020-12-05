@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -57,7 +58,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
             .cors().and().csrf().disable()
             .authorizeRequests()
             .antMatchers("/").permitAll()
-            .antMatchers("/api/**").permitAll();
+            .antMatchers("/api/**").permitAll()
+            .antMatchers("/authenticate","/register").permitAll()
+            .anyRequest().authenticated()
+            .and()
+            .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
+            .and()
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+
+            http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
             // .and()
             // .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
             // .antMatchers(HttpMethod.GET,"/all").permitAll()
