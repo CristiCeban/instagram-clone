@@ -1,6 +1,7 @@
 package com.buy_posts.Configuration;
 
 import java.io.Serializable;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +26,7 @@ public class JwtTokenUtil implements Serializable{
 
     public static final long JWT_TOKEN_VALIDITY = 5*60*60;
 
-    @Value("")
+    @Value("f1z0EOVcv5Uiz6JFhP0mHpBHojkkrd2AFNmzznETgPtBaM9XajCZTXImyL5z")
     private String secret;
     
     public String getUserNameFromToken(String token){
@@ -65,8 +66,9 @@ public class JwtTokenUtil implements Serializable{
 
 	private String doGenerateToken(Map<String, Object> claims, String subject) {
 
+        String encodedString = Base64.getEncoder().encodeToString(secret.getBytes());
 		return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY*1000)).signWith(SignatureAlgorithm.HS512, secret).compact();
+				.setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY*1000)).signWith(SignatureAlgorithm.HS512, encodedString).compact();
 	}
 
 	public Boolean canTokenBeRefreshed(String token) {

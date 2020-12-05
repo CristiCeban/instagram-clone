@@ -1,8 +1,10 @@
 package com.buy_posts.Repository;
 
-import org.springframework.data.repository.CrudRepository;
-import com.buy_posts.Model.User;
+import com.buy_posts.Model.UserDao;
 
-public interface UserRepository extends  CrudRepository<User, Integer> {
-    
+import org.springframework.data.repository.CrudRepository;
+
+public interface UserRepository extends  CrudRepository<UserDao, Integer> {
+
+	UserDao findByEmail(String username);
 }

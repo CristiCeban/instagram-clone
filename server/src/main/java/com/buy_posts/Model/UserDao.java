@@ -1,25 +1,34 @@
 package com.buy_posts.Model;
 
-
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
-@Entity // This tells Hibernate to make a table out of this class
-public class User {
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+@Entity(name = "users") // This tells Hibernate to make a table out of this class
+public class UserDao {
   @Id
   @GeneratedValue(strategy=GenerationType.AUTO)
   private Integer id;
-
-  private String name;
-
+  @Column
+  private String userName;
+  @Column(unique = true)
   private String email;
 
+  @JsonIgnore
+  @Column
   private String password;
 
+  @JsonIgnore
   private String imagePath;
 
+  @JsonIgnore
+  private String role;
 
   public Integer getId() {
     return id;
@@ -29,14 +38,7 @@ public class User {
     this.id = id;
   }
 
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
+  
   public String getEmail() {
     return email;
   }
@@ -59,5 +61,21 @@ public class User {
 
   public void setImagePath(String imagePath) {
       this.imagePath = imagePath;
+  }
+
+  public String getUserName() {
+    return userName;
+  }
+
+  public void setUserName(String userName) {
+    this.userName = userName;
+  }
+
+  public String getRole() {
+    return null;
+  }
+
+  public void setRole(String role) {
+    this.role = role;
   }
 }
