@@ -1,14 +1,24 @@
 import React from 'react';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import {AccountCircle, Favorite, Home, Search} from "@material-ui/icons";
-import {AppBar, IconButton, InputBase, Toolbar, Typography} from "@material-ui/core";
+import {AppBar, IconButton, InputBase, Link, Toolbar, Typography} from "@material-ui/core";
+import { useLocation } from 'react-router-dom'
+
+enum routerEnum {
+    main = '/',
+    profile = '/profile',
+    favorites = '/favorites'
+}
+
 
 const NavBar = () =>{
     const classes = useStyles();
+    const location = useLocation();
+    const {pathname} = location;
 
     return (
         <div className={classes.root}>
-            <AppBar position="static" style={{backgroundColor:'#bbbfbc'}}>
+            <AppBar position="fixed" style={{backgroundColor:'#bbbfbc'}}>
                 <Toolbar>
                     <Typography className={classes.title} variant="h6" noWrap>
                         Instagram Clone
@@ -26,15 +36,37 @@ const NavBar = () =>{
                             inputProps={{ 'aria-label': 'search' }}
                         />
                     </div>
-                    <IconButton onClick={() => console.log('home')}>
-                        <Home/>
-                    </IconButton>
-                    <IconButton>
-                        <Favorite/>
-                    </IconButton>
-                    <IconButton>
-                        <AccountCircle/>
-                    </IconButton>
+
+                    <Link href={'/'}>
+                        <IconButton>
+                                <Home className={pathname === routerEnum.main
+                                    ? classes.selectedNavIcon
+                                    :
+                                    undefined}
+                                />
+                        </IconButton>
+                    </Link>
+
+                    <Link href={'/favorites'}>
+                        <IconButton>
+                                <Favorite className={pathname === routerEnum.favorites
+                                    ? classes.selectedNavIcon
+                                    :
+                                    undefined }
+                                />
+                        </IconButton>
+                    </Link>
+
+                    <Link href={'/profile'}>
+                        <IconButton>
+                                <AccountCircle className={pathname === routerEnum.profile
+                                    ? classes.selectedNavIcon
+                                    :
+                                    undefined}
+                                />
+                        </IconButton>
+                    </Link>
+
                 </Toolbar>
             </AppBar>
         </div>
@@ -96,6 +128,9 @@ const useStyles = makeStyles((theme) => ({
             },
         },
     },
+    selectedNavIcon : {
+        color:'#a50101'
+    }
 }));
 
 export default NavBar;

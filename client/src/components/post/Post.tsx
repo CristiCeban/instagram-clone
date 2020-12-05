@@ -21,9 +21,9 @@ const useStyles = ({width=0,height=0} : any) => makeStyles(() => ({
     },
     cart: {
         backgroundColor:'white',
-        display: 'flex',
-        justifyContent:'center',
-        alignItems:'center',
+        // display: 'flex',
+        // justifyContent:'center',
+        // alignItems:'center',
         marginTop:10,
         marginRight:width/4,
         marginLeft:width/4,

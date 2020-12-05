@@ -11,7 +11,7 @@ type AuthState = {
 
 const initialState = {
     inProgress : false,
-    isLogged : false,
+    isLogged : true,
     token : undefined,
     userType : undefined,
     error : undefined,

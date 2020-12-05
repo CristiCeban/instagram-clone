@@ -45,7 +45,9 @@ const AuthScreen = () =>{
     const formikRef = useRef(null);
 
 
-    const onSignIn= () => {
+    const onSignIn= (values : any) => {
+        console.log('sign in');
+        console.log(values)
         dispatch(onLogin({email : 'a',password : 'a'}))
     }
 
@@ -55,12 +57,16 @@ const AuthScreen = () =>{
                 innerRef={formikRef}
                 validationSchema={validationSchema}
                 initialValues={initFormValue}
-                onSubmit={() => console.log('submit')}
+                onSubmit={(values) => onSignIn(values)}
             >
-                {({errors,
-                  status,
-                  touched}
-                ) => (
+                {({
+                      values,
+                      touched,
+                      errors,
+                      handleChange,
+                      handleBlur,
+                      handleSubmit
+                  }) => (
                     <>
                         <CssBaseline />
                         <div className={classes.paper}>
@@ -70,40 +76,51 @@ const AuthScreen = () =>{
                             <Typography component="h1" variant="h5">
                                 Sign in
                             </Typography>
-                            <form className={classes.form}>
+                            <form className={classes.form} onSubmit={handleSubmit}>
                                 <TextField
                                     variant="outlined"
                                     margin="normal"
-                                    required
                                     fullWidth
                                     id="email"
                                     label="Email Address"
                                     name="email"
                                     autoComplete="email"
                                     autoFocus
+                                    value={values.email}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    helperText={(errors.email && touched.email) && errors.email}
+                                    FormHelperTextProps={{
+                                        className : classes.helperText
+                                    }}
                                 />
                                 <TextField
                                     variant="outlined"
                                     margin="normal"
-                                    required
                                     fullWidth
                                     name="password"
                                     label="Password"
                                     type="password"
                                     id="password"
                                     autoComplete="current-password"
+                                    value={values.password}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    helperText={(errors.password&&touched.password) && errors.password}
+                                    FormHelperTextProps={{
+                                        className : classes.helperText
+                                    }}
                                 />
                                 <FormControlLabel
                                     control={<Checkbox value="remember" color="primary" />}
                                     label="Remember me"
                                 />
                                 <Button
-                                    type='button'
+                                    type='submit'
                                     fullWidth
                                     variant="contained"
                                     color="primary"
                                     className={classes.submit}
-                                    onClick={onSignIn}
                                 >
                                      <div style={{minHeight:25}}>
                                          {inProgress ?
@@ -153,6 +170,9 @@ const useStyles = makeStyles((theme) => ({
     },
     submit: {
         margin: theme.spacing(3, 0, 2),
+    },
+    helperText : {
+        color : '#a20606'
     },
 }));
 
