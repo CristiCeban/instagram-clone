@@ -17,6 +17,7 @@
     "@types/react-router-dom": "^5.1.6",
     "@types/yup": "^0.29.9",
     "aphrodite": "^2.4.0",
+    "axios": "^0.21.0",
     "formik": "^2.2.5",
     "react": "^16.14.0",
     "react-activity": "^1.2.2",

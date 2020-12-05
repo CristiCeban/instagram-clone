@@ -8,6 +8,7 @@ import {useSelector} from "react-redux";
 import {ApplicationState} from "../redux/reducers";
 import Main from "../screens/main/Main";
 import NavBar from "../components/navBar/NavBar";
+import RegisterScreen from "../screens/auth/RegisterScreen";
 
 
 const Navigation = () => {
@@ -15,7 +16,7 @@ const Navigation = () => {
     return (
         <Router>
             <Route exact path={'/'} render={() =>(
-                isLogged ?
+                !isLogged ?
                     <Route component={AuthScreen}/>
                 :
                     <>
@@ -23,6 +24,26 @@ const Navigation = () => {
                         <Route component={Main}/>
                     </>
                 )
+            }/>
+            <Route exact path={'/signIn'} render={() =>(
+                !isLogged ?
+                    <Route component={AuthScreen}/>
+                    :
+                    <>
+                        <NavBar/>
+                        <Route component={Main}/>
+                    </>
+            )
+            }/>
+            <Route exact path={'/signUp'} render={()=>(
+                !isLogged ?
+                    <Route component={RegisterScreen}/>
+                    :
+                    <>
+                        <NavBar/>
+                        <Route component={Main}/>
+                    </>
+            )
             }/>
         </Router>
     )

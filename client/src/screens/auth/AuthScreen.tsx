@@ -13,6 +13,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+// @ts-ignore
 import { Bounce } from 'react-activity';
 import 'react-activity/dist/react-activity.css';
 import * as yup from 'yup'
@@ -44,7 +45,7 @@ const AuthScreen = () =>{
     const formikRef = useRef(null);
 
 
-    const signUp = () => {
+    const onSignIn= () => {
         dispatch(onLogin({email : 'a',password : 'a'}))
     }
 
@@ -102,7 +103,7 @@ const AuthScreen = () =>{
                                     variant="contained"
                                     color="primary"
                                     className={classes.submit}
-                                    onClick={signUp}
+                                    onClick={onSignIn}
                                 >
                                      <div style={{minHeight:25}}>
                                          {inProgress ?
@@ -120,7 +121,7 @@ const AuthScreen = () =>{
                                         </Link>
                                     </Grid>
                                     <Grid item>
-                                        <Link href="#" variant="body2">
+                                        <Link href="/signUp" variant="body2">
                                             {"Don't have an account? Sign Up"}
                                         </Link>
                                     </Grid>
