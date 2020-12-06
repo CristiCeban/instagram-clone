@@ -1,9 +1,11 @@
-import {combineReducers} from "redux";
+import {combineReducers,applyMiddleware} from "redux";
 import {AuthReducer} from "./authReducers";
+import {routerReducer} from "react-router-redux";
 
 
 const rootReducer = combineReducers({
-    authReducer : AuthReducer
+    authReducer : AuthReducer,
+    routing:routerReducer,
 })
 
 export type ApplicationState = ReturnType<typeof rootReducer>

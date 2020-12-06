@@ -18,7 +18,7 @@ import Link from "@material-ui/core/Link";
 import Box from "@material-ui/core/Box";
 // @ts-ignore
 import { Bounce } from 'react-activity';
-import {onLogin} from "../../redux/actions/authActions";
+import {onLogin, onRegister} from "../../redux/actions/authActions";
 
 
 
@@ -49,6 +49,7 @@ const RegisterScreen = () => {
     const formikRef = useRef(null);
 
     const onSignUp= (values : any) => {
+        dispatch(onRegister(values))
         console.log('sign up');
         console.log(values)
         dispatch(onLogin({email : 'a',password : 'a'}))

@@ -38,6 +38,12 @@ const AuthReducer = (state : AuthState = initialState,action : AuthActions) => {
                 ...state,
                 inProgress : action.payload
             }
+        case "ON_REGISTER":
+            return {
+                ...state,
+                token: action.payload.token,
+                isLogged: true,
+            }
         default :
             return state;
     }

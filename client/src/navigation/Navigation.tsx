@@ -1,9 +1,9 @@
 import React from "react";
 import {
-    BrowserRouter as Router,
+    Router,
     Route,
     Redirect
-} from 'react-router-dom'
+} from 'react-router'
 import AuthScreen from "../screens/auth/AuthScreen";
 import {useSelector} from "react-redux";
 import {ApplicationState} from "../redux/reducers";
@@ -14,12 +14,14 @@ import FavoritesScreen from "../screens/favorites/FavoritesScreen";
 import ProfileScreen from "../screens/profile/ProfileScreen";
 import CartScreen from "../screens/cart/CartScreen";
 import ProductsScreen from "../screens/products/ProductsScreen";
+import PageNotFound from "../screens/pageNotFound/PageNotFound";
 
 
-const Navigation = () => {
+const Navigation = ({history} : any) => {
     const {isLogged} = useSelector((state: ApplicationState) => state.authReducer);
     return (
-        <Router>
+        <Router history={history}>
+            <Route path={'/*'} component={PageNotFound}/>
             {!isLogged ?
                 <>
                     <Route exact path={'/'} component={AuthScreen}/>
