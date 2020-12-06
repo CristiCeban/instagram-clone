@@ -10,6 +10,11 @@ import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
 @Entity(name = "users") // This tells Hibernate to make a table out of this class
 public class UserDao {
   @Id
@@ -30,52 +35,5 @@ public class UserDao {
   @JsonIgnore
   private String role;
 
-  public Integer getId() {
-    return id;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
-  
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  public String getPassword() {
-      return password;
-  }
-
-  public void setPassword(String password) {
-      this.password = password;
-  }
-
-  public String getImagePath() {
-      return imagePath;
-  }
-
-  public void setImagePath(String imagePath) {
-      this.imagePath = imagePath;
-  }
-
-  public String getUserName() {
-    return userName;
-  }
-
-  public void setUserName(String userName) {
-    this.userName = userName;
-  }
-
-  public String getRole() {
-    return null;
-  }
-
-  public void setRole(String role) {
-    this.role = role;
-  }
+ 
 }

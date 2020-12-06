@@ -4,6 +4,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -56,7 +57,7 @@ public class JwtAuthenticationController {
     @RequestMapping(value = "/register", method = RequestMethod.POST)
 	public ResponseEntity<?> saveUser(@RequestBody UserDto user) throws Exception {
         userDetailsService.save(user);
-        final UserDetails userdetails = new org.springframework.security.core.userdetails.User(user.getEmail(),user.getPassword(), new ArrayList<>());
+        final UserDetails userdetails = new User(user.getEmail(),user.getPassword(), new ArrayList<>());
         final String token = jwtTokenUtil.generateToken(userdetails);
 		return ResponseEntity.ok(new JwtResponse(token));
     }
