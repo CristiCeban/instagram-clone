@@ -23,12 +23,12 @@ import {onLogin} from "../../redux/actions/authActions";
 import {ApplicationState} from "../../redux/reducers";
 
 const initFormValue = {
-    email: '',
+    username: '',
     password: '',
 }
 const validationSchema = yup.object().shape({
-    email: yup.string()
-        .label('Email')
+    username: yup.string()
+        .label('username')
         .email('Enter a valid email')
         .required('Please enter an email'),
     password: yup.string()
@@ -46,9 +46,7 @@ const AuthScreen = () =>{
 
 
     const onSignIn= (values : any) => {
-        console.log('sign in');
-        console.log(values)
-        dispatch(onLogin({email : 'a',password : 'a'}))
+        dispatch(onLogin(values))
     }
 
     return (
@@ -81,15 +79,15 @@ const AuthScreen = () =>{
                                     variant="outlined"
                                     margin="normal"
                                     fullWidth
-                                    id="email"
+                                    id="username"
                                     label="Email Address"
-                                    name="email"
+                                    name="username"
                                     autoComplete="email"
                                     autoFocus
-                                    value={values.email}
+                                    value={values.username}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    helperText={(errors.email && touched.email) && errors.email}
+                                    helperText={(errors.username && touched.username) && errors.username}
                                     FormHelperTextProps={{
                                         className : classes.helperText
                                     }}

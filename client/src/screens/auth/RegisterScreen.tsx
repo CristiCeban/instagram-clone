@@ -50,9 +50,6 @@ const RegisterScreen = () => {
 
     const onSignUp= (values : any) => {
         dispatch(onRegister(values))
-        console.log('sign up');
-        console.log(values)
-        dispatch(onLogin({email : 'a',password : 'a'}))
     }
     return (
         <Container component="main" maxWidth="xs">
