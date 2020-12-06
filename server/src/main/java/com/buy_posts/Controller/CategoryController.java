@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.buy_posts.DTO.CategoryDto;
+import com.buy_posts.Model.CategoriesResponse;
 import com.buy_posts.Model.CategoryDao;
 import com.buy_posts.Service.CategoryService;
 import com.nimbusds.jose.shaded.json.JSONObject;
@@ -43,12 +44,9 @@ public class CategoryController {
      * @return List of categories.
      */
     @GetMapping(path =  "/api/categories", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object>  getCategories() {
-        List<JSONObject> entities = new ArrayList<JSONObject>();
-        List<CategoryDao> al = categoryService.getCategories();
-        for (CategoryDao categoryDao : al) {
-            JSONObject entity = new JSONObject();
-        }
-        return   ResponseEntity<Object>.ok(); 
+    public ResponseEntity<CategoriesResponse>  getCategories() {
+        CategoriesResponse categories = new CategoriesResponse(categoryService.getCategories());
+
+        return   ResponseEntity.ok(categories); 
     }
 }
