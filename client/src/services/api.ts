@@ -38,7 +38,8 @@ export default {
     post(path:string,body : any) {
         return apiClient.post(`/${path}`,body,{
             headers: {
-                'Content-Type': 'multipart/form-data'
+                // 'Content-Type': 'multipart/form-data'
+                "Content-Type" : "application/json",
             }
         })
     },
@@ -53,7 +54,7 @@ export default {
         return apiClient.put(`/${path}`,body);
     },
     delete(path:string){
-        return apiClient.delete(`/$path`);
+        return apiClient.delete(`/${path}`);
     }
 }
 

@@ -11,7 +11,7 @@ type AuthState = {
 
 const initialState = {
     inProgress : false,
-    isLogged : true,
+    isLogged : false,
     token : undefined,
     userType : undefined,
     error : undefined,
@@ -37,6 +37,12 @@ const AuthReducer = (state : AuthState = initialState,action : AuthActions) => {
             return {
                 ...state,
                 inProgress : action.payload
+            }
+        case "ON_REGISTER":
+            return {
+                ...state,
+                token: action.payload.token,
+                isLogged: true,
             }
         default :
             return state;

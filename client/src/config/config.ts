@@ -1,7 +1,7 @@
 const Config = Object.freeze({
-    apiUrl : '127.0.0.1:8080/api',
+    apiUrl : 'http://127.0.0.1:8080/api/',
     tokenVariableName : 'Bearer-token',
-    sourceUrl: '127.0.0.1:8080'
+    sourceUrl: 'http://127.0.0.1:8080'
 })
 
 export default Config;

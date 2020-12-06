@@ -1,5 +1,6 @@
 import {LoginModel} from "../types/authTypes";
 import {Dispatch} from "react";
+import ApiService from '../../services/api'
 
 export interface UserModel {
     token : string,
@@ -36,6 +37,11 @@ export interface SetToken {
     payload : any,
 }
 
+export interface RegisterAction {
+    readonly type : 'ON_REGISTER'
+    payload : any,
+}
+
 export type AuthActions =
     | LoginAction
     | LogoutAction
@@ -43,6 +49,7 @@ export type AuthActions =
     | ErrorRegister
     | InProgress
     | SetToken
+    | RegisterAction
 
 export const onLogin=(body : LoginModel) => {
     return async (dispatch : Dispatch<AuthActions>) =>{
@@ -53,7 +60,28 @@ export const onLogin=(body : LoginModel) => {
             console.error(e);
         }
         finally {
-            // dispatch({type : 'SET_IN_PROGRESS',payload : false})
+            setTimeout(() => dispatch({type : 'SET_IN_PROGRESS',payload : false}),3000 )
+        }
+    }
+}
+
+export const onRegister = (body : any) => {
+    return async (dispatch : Dispatch<AuthActions>) => {
+        try{
+            dispatch({type :'SET_IN_PROGRESS',payload:true})
+            setTimeout(async () => {
+                const response = await ApiService.post('register', {...body})
+                console.log(response)
+                console.log(response.data);
+                dispatch({type: 'ON_REGISTER', payload: response.data.token})
+            },3000)
+        }
+        catch (e) {
+            console.log('error')
+            console.log(e);
+        }
+        finally {
+            dispatch({type : 'SET_IN_PROGRESS',payload : false})
         }
     }
 }
