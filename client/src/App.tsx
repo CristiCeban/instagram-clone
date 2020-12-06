@@ -5,7 +5,7 @@ import {persistor, store} from "./redux/store";
 import {createBrowserHistory} from 'history';
 import {PersistGate} from "redux-persist/integration/react";
 
-const history = createBrowserHistory({basename : 'insta-clone'})
+const history = createBrowserHistory()
 
 export const App = () => {
     return (

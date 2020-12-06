@@ -2,7 +2,7 @@ import React from "react";
 import {
     Router,
     Route,
-    Redirect
+    Redirect, Switch
 } from 'react-router'
 import AuthScreen from "../screens/auth/AuthScreen";
 import {useSelector} from "react-redux";
@@ -21,89 +21,71 @@ const Navigation = ({history} : any) => {
     const {isLogged} = useSelector((state: ApplicationState) => state.authReducer);
     return (
         <Router history={history}>
-            <Route path={'/*'} component={PageNotFound}/>
-            {!isLogged ?
-                <>
-                    <Route exact path={'/'} component={AuthScreen}/>
-                    <Route exact path={'/SignIn'} component={AuthScreen}/>
-                    <Route exact path={'/SignUp'} component={RegisterScreen}/>
-                </>
-                :
-                <>
-                    <Route exact path={'/'} render={() =>(
-                        !isLogged ?
-                            <Redirect  to={'/SignIn'}/>
-                        :
+            <Switch>
+                {!isLogged ?
+                    <Switch>
+                        <Route exact path={'/'} component={AuthScreen}/>
+                        <Route exact path={'/SignIn'} component={AuthScreen}/>
+                        <Route exact path={'/SignUp'} component={RegisterScreen}/>
+                        <Route path={'/*'} component={() => <Redirect to={'signIn'}/>}/>
+                    </Switch>
+
+                    :
+
+                    <Switch>
+                        <Route exact path={'/'} render={() =>(
                             <>
                                 <NavBar/>
                                 <Route component={Main}/>
-                            </>
+                            </>)}
+                        />
+                        <Route exact path={'/signIn'} render={() =>(
+                            !isLogged ?
+                                <Route component={AuthScreen} />
+                                :
+                                <Redirect to={'/'}/>
                         )
-                    }/>
-                    <Route exact path={'/signIn'} render={() =>(
-                        !isLogged ?
-                            <Route component={AuthScreen} />
-                            :
-                            <Redirect to={'/'}/>
-                    )
-                    }/>
-                    <Route exact path={'/signUp'} render={()=>(
-                        !isLogged ?
-                            <Route component={RegisterScreen} />
-                            :
-                            <Redirect to={'/'}/>
-                    )
-                    }/>
+                        }/>
+                        <Route exact path={'/signUp'} render={()=>(
+                            !isLogged ?
+                                <Route component={RegisterScreen} />
+                                :
+                                <Redirect to={'/'}/>
+                        )
+                        }/>
 
-                    <Route exact path={'/products'} render={()=>(
-                        !isLogged ?
-                            <Redirect  to={'/SignIn'}/>
-                            :
+                        <Route exact path={'/products'} render={()=>(
                             <>
                                 <NavBar/>
                                 <Route component={ProductsScreen}/>
-                            </>
-                    )
-                    }/>
+                            </>)}
+                        />
 
-                    <Route exact path={'/favorites'} render={()=>(
-                        !isLogged ?
-                            <Redirect  to={'/SignIn'}/>
-                            :
+                        <Route exact path={'/favorites'} render={()=>(
                             <>
                                 <NavBar/>
                                 <Route component={FavoritesScreen}/>
-                            </>
-                    )
-                    }/>
+                            </>)}
+                        />
 
-                    <Route exact path={'/cart'} render={()=>(
-                        !isLogged ?
-                            <Redirect  to={'/SignIn'}/>
-                            :
+                        <Route exact path={'/cart'} render={()=>(
                             <>
                                 <NavBar/>
                                 <Route component={CartScreen}/>
-                            </>
-                    )
-                    }/>
+                            </>)}
+                        />
 
-                    <Route exact path={'/profile'} render={()=>(
-                        !isLogged ?
-                            <Redirect  to={'/SignIn'}/>
-                            :
+                        <Route exact path={'/profile'} render={()=>(
                             <>
                                 <NavBar/>
                                 <Route component={ProfileScreen}/>
-                            </>
-                    )
-                    }/>
+                            </>)}
+                        />
 
-
-
-
-                </>
-            }
+                    </Switch>
+                }
+                <Route path={'/*'} component={PageNotFound}/>
+            </Switch>
         </Router>
     )
 }
