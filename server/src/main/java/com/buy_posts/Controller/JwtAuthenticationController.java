@@ -4,6 +4,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,21 +16,27 @@ import com.buy_posts.Configuration.JwtTokenUtil;
 import com.buy_posts.DTO.UserDto;
 import com.buy_posts.Model.JwtRequest;
 import com.buy_posts.Model.JwtResponse;
+import com.buy_posts.Model.UserDao;
+import com.buy_posts.Repository.UserRepository;
 import com.buy_posts.Service.JwtUserDetailsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController
 @CrossOrigin
 @RequestMapping(path = "/api")
 public class JwtAuthenticationController {
     
+	@Autowired
+	private UserRepository userRepository;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -72,5 +79,13 @@ public class JwtAuthenticationController {
 		} catch (BadCredentialsException e) {
 			throw new Exception("INVALID_CREDENTIALS", e);
 		}
+	}
+
+	@GetMapping(value= "/me")
+	private UserDao getProf(Authentication authenticate){
+		String username = authenticate.getName();
+		UserDao user = userRepository.findByEmail(username);
+
+		return user;
 	}
  }
