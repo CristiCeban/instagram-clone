@@ -25,18 +25,13 @@ const useStyles = ({width=0,height=0} : any) => makeStyles(() => ({
     },
     cart: {
         backgroundColor:'white',
-        // display: 'flex',
-        // justifyContent:'center',
-        // alignItems:'center',
         marginTop:30,
         marginBottom:10,
-        width:width/2,
-        marginRight:width/4,
-        marginLeft:width/4,
+        maxWidth:650,
+        margin:'0px auto',
     },
     image: {
         flex: 1,
-        // height: undefined,
         width : '100%'
     }
 }));
