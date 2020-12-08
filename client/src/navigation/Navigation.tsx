@@ -12,9 +12,9 @@ import NavBar from "../components/navBar/NavBar";
 import RegisterScreen from "../screens/auth/RegisterScreen";
 import FavoritesScreen from "../screens/favorites/FavoritesScreen";
 import ProfileScreen from "../screens/profile/ProfileScreen";
-import CartScreen from "../screens/cart/CartScreen";
 import ProductsScreen from "../screens/products/ProductsScreen";
 import PageNotFound from "../screens/pageNotFound/PageNotFound";
+import Footer from "../components/footer/Footer";
 
 
 const Navigation = ({history} : any) => {
@@ -31,12 +31,12 @@ const Navigation = ({history} : any) => {
                     </Switch>
 
                     :
-
                     <Switch>
                         <Route exact path={'/'} render={() =>(
                             <>
                                 <NavBar/>
                                 <Route component={Main}/>
+                                <Footer/>
                             </>)}
                         />
                         <Route exact path={'/signIn'} render={() =>(
@@ -58,6 +58,7 @@ const Navigation = ({history} : any) => {
                             <>
                                 <NavBar/>
                                 <Route component={ProductsScreen}/>
+                                <Footer/>
                             </>)}
                         />
 
@@ -65,13 +66,7 @@ const Navigation = ({history} : any) => {
                             <>
                                 <NavBar/>
                                 <Route component={FavoritesScreen}/>
-                            </>)}
-                        />
-
-                        <Route exact path={'/cart'} render={()=>(
-                            <>
-                                <NavBar/>
-                                <Route component={CartScreen}/>
+                                <Footer/>
                             </>)}
                         />
 
@@ -79,9 +74,10 @@ const Navigation = ({history} : any) => {
                             <>
                                 <NavBar/>
                                 <Route component={ProfileScreen}/>
+                                <Footer/>
                             </>)}
                         />
-
+                        <Route path={'/*'} component={PageNotFound}/>
                     </Switch>
                 }
                 <Route path={'/*'} component={PageNotFound}/>

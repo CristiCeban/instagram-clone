@@ -24,8 +24,10 @@ import {onLogin, onRegister} from "../../redux/actions/authActions";
 
 const initFormValue = {
     email: '',
-    name : '',
+    username : '',
     password: '',
+    name: '',
+    phone: '',
 }
 const validationSchema = yup.object().shape({
     email: yup.string()
@@ -34,12 +36,21 @@ const validationSchema = yup.object().shape({
         .required('Please enter an email'),
     password: yup.string()
         .label('Password')
-        .required()
+        .required('Please enter your password')
         .min(4, 'Password must have at least 4 characters '),
-    name : yup.string()
+    username : yup.string()
+        .label('username')
+        .required('Please enter an username')
+        .min(4,'Name must have at least 4 characters'),
+    name: yup.string()
         .label('name')
         .required()
-        .min(4,'Name must have at least 4 characters'),
+        .min(4),
+    phone: yup.string()
+        .label('phone')
+        .required('Please enter your phone number')
+        .min(7)
+        .max(20)
 });
 
 const RegisterScreen = () => {
@@ -98,15 +109,15 @@ const RegisterScreen = () => {
                                     variant="outlined"
                                     margin="normal"
                                     fullWidth
-                                    name="name"
-                                    label="name"
-                                    type="name"
-                                    id="name"
+                                    name="username"
+                                    label="username"
+                                    type="username"
+                                    id="username"
                                     autoComplete="name"
-                                    value={values.name}
+                                    value={values.username}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    helperText={(errors.name&&touched.name) && errors.name}
+                                    helperText={(errors.username&&touched.username) && errors.username}
                                     FormHelperTextProps={{
                                         className : classes.helperText
                                     }}
@@ -124,6 +135,40 @@ const RegisterScreen = () => {
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     helperText={(errors.password&&touched.password) && errors.password}
+                                    FormHelperTextProps={{
+                                        className : classes.helperText
+                                    }}
+                                />
+                                <TextField
+                                    variant="outlined"
+                                    margin="normal"
+                                    fullWidth
+                                    name="name"
+                                    label="name"
+                                    type="name"
+                                    id="name"
+                                    autoComplete="current-name"
+                                    value={values.name}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    helperText={(errors.name&&touched.name) && errors.name}
+                                    FormHelperTextProps={{
+                                        className : classes.helperText
+                                    }}
+                                />
+                                <TextField
+                                    variant="outlined"
+                                    margin="normal"
+                                    fullWidth
+                                    name="phone"
+                                    label="phone"
+                                    type="phone"
+                                    id="phone"
+                                    autoComplete="current-phone"
+                                    value={values.phone}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    helperText={(errors.phone&&touched.phone) && errors.phone}
                                     FormHelperTextProps={{
                                         className : classes.helperText
                                     }}
