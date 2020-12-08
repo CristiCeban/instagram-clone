@@ -55,18 +55,19 @@ export const onLogin=(body : LoginModel) => {
     return async (dispatch : Dispatch<AuthActions>) =>{
         try {
             dispatch({type :'SET_IN_PROGRESS',payload:true})
-            setTimeout(async () => {
+            // setTimeout(async () => {
+                console.log(body)
                 const response = await ApiService.post('authenticate', {...body})
-                console.log(response)
-                console.log(response.data);
-                dispatch({type: 'ON_LOGIN', payload: response.data.token})
-            },3000)
+                dispatch({type: 'ON_LOGIN', payload: await response.data.token})
+            // },3000)
         }
         catch(e){
             console.error(e);
         }
         finally {
-            setTimeout(() => dispatch({type : 'SET_IN_PROGRESS',payload : false}),3000)
+            // setTimeout(() =>
+                dispatch({type : 'SET_IN_PROGRESS',payload : false})
+                // ,3000)
         }
     }
 }
@@ -77,8 +78,12 @@ export const onRegister = (body : any) => {
             dispatch({type :'SET_IN_PROGRESS',payload:true})
             setTimeout(async () => {
                 const response = await ApiService.post('register', {...body})
+                console.log('response');
                 console.log(response)
+                console.log('response data');
                 console.log(response.data);
+                console.log('token')
+                console.log(response.data.token)
                 dispatch({type: 'ON_REGISTER', payload: response.data.token})
             },3000)
         }

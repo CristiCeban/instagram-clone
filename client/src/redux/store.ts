@@ -1,4 +1,4 @@
-import {applyMiddleware, createStore} from "redux";
+\import {applyMiddleware, createStore} from "redux";
 import {composeWithDevTools} from "redux-devtools-extension";
 import thunk from "redux-thunk";
 import {rootReducer} from "./reducers";
@@ -15,8 +15,10 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig,rootReducer);
 
+const composeEnhancers = composeWithDevTools({trace:true,traceLimit:25})
 const store = createStore(
     persistedReducer,
+    // rootReducer,
     composeWithDevTools(applyMiddleware(thunk,logger))
 )
 

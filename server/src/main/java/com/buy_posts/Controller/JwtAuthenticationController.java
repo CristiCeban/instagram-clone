@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RequestMapping(path = "/api")
 public class JwtAuthenticationController {
-    
+
 	@Autowired
 	private UserRepository userRepository;
 
@@ -60,7 +60,7 @@ public class JwtAuthenticationController {
 
 		return ResponseEntity.ok(new JwtResponse(token));
     }
-    
+
     @RequestMapping(value = "/register", method = RequestMethod.POST)
 	public ResponseEntity<?> saveUser(@RequestBody UserDto user) throws Exception {
         userDetailsService.save(user);
@@ -68,7 +68,7 @@ public class JwtAuthenticationController {
         final String token = jwtTokenUtil.generateToken(userdetails);
 		return ResponseEntity.ok(new JwtResponse(token));
     }
-    
+
 	private void authenticate(String username, String password) throws Exception {
 		Objects.requireNonNull(username);
 		Objects.requireNonNull(password);
@@ -85,7 +85,7 @@ public class JwtAuthenticationController {
 	private UserDao getProf(Authentication authenticate){
 		String username = authenticate.getName();
 		UserDao user = userRepository.findByEmail(username);
-
+		System.out.println(user);
 		return user;
 	}
  }

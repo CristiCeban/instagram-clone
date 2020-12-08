@@ -30,17 +30,19 @@ public class JwtUserDetailsService implements UserDetailsService {
         UserDao user = userDao.findByEmail(username);
         if (user == null) {
             throw new UsernameNotFoundException("User not found with username: " + username);
-        } 
+        }
         return new User(user.getEmail(),user.getPassword(), new ArrayList<>());
     }
-    
-    
+
+
 
     public UserDao save(UserDto user){
         UserDao newUser = new UserDao();
         newUser.setEmail(user.getEmail());
         newUser.setUserName(user.getUsername());
         newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
+        newUser.setName(user.getName());
+        newUser.setPhone(user.getPhone());
         return userDao.save(newUser);
     }
 }

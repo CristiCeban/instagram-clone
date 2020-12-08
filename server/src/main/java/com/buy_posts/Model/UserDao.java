@@ -35,5 +35,10 @@ public class UserDao {
   @JsonIgnore
   private String role;
 
- 
+  @Column
+  private String phone;
+
+  @Column
+  private String name;
+
 }
