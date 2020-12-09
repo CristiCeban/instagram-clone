@@ -12,19 +12,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity(name = "product-images")
+@Entity(name = "product_images")
 @NoArgsConstructor
 public class ProductPhotoDao {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(name = "image-name")
+    @Column(name = "image_path")
     private String imagePath;
 
     private  String imageName;
 
     @ManyToOne
-    @JoinColumn(name = "product-id")
+    @JoinColumn(name = "product_id")
     private ProductDao product;
 }
