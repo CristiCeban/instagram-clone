@@ -55,18 +55,14 @@ export const onLogin=(body : LoginModel) => {
     return async (dispatch : Dispatch<AuthActions>) =>{
         try {
             dispatch({type :'SET_IN_PROGRESS',payload:true})
-            setTimeout(async () => {
-                const response = await ApiService.post('authenticate', {...body})
-                console.log(response)
-                console.log(response.data);
-                dispatch({type: 'ON_LOGIN', payload: response.data.token})
-            },3000)
+            const response = await ApiService.post('authenticate', {...body})
+            dispatch({type: 'ON_LOGIN', payload: response.data.token})
         }
         catch(e){
             console.error(e);
         }
         finally {
-            setTimeout(() => dispatch({type : 'SET_IN_PROGRESS',payload : false}),3000)
+            dispatch({type : 'SET_IN_PROGRESS',payload : false})
         }
     }
 }

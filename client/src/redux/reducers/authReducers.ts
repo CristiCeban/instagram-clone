@@ -12,7 +12,7 @@ type AuthState = {
 const initialState = {
     inProgress : false,
     isLogged : false,
-    token : undefined,
+    token : 'domething',
     userType : undefined,
     error : undefined,
     errorRegister : undefined,
@@ -20,12 +20,13 @@ const initialState = {
 
 const AuthReducer = (state : AuthState = initialState,action : AuthActions) => {
     switch (action.type) {
-        case 'ON_LOGIN' :
+        case 'ON_LOGIN' :{
             return {
                 ...state,
-                token:action.payload.token,
-                isLogged : true,
+                token : action.payload,
+                isLogged: true
             }
+        }
         case "ON_LOGOUT":
             return {
                 ...state,

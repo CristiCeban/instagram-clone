@@ -1,7 +1,14 @@
-import React from "react";
+import React, {useEffect} from "react";
 import ProfileHeader from "../../components/profile/ProfileHeader";
+import {useDispatch} from "react-redux";
+import {onGetProfileData} from "../../redux/actions/profileActions";
 
 const ProfileScreen = () => {
+    const dispatch = useDispatch();
+
+    useEffect(()=>{
+        dispatch(onGetProfileData())
+    },[])
     return(
         <>
             <ProfileHeader/>

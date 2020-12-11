@@ -10,7 +10,7 @@ const history = createBrowserHistory()
 export const App = () => {
     return (
         <Provider store={store}>
-            <PersistGate persistor={persistor}>
+            <PersistGate loading={null} persistor={persistor}>
                 <Navigation history={history}/>
             </PersistGate>
         </Provider>
