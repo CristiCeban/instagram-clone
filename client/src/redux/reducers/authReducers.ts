@@ -3,8 +3,7 @@ import {AuthActions} from "../actions/authActions";
 type AuthState = {
     inProgress : boolean,
     isLogged : boolean,
-    // token : string | undefined,
-    token : string,
+    token : string | undefined,
     userType : string | undefined,
     error : string | undefined,
     errorRegister : any,
@@ -13,7 +12,7 @@ type AuthState = {
 const initialState = {
     inProgress : false,
     isLogged : false,
-    token : '',
+    token : 'domething',
     userType : undefined,
     error : undefined,
     errorRegister : undefined,
@@ -21,13 +20,13 @@ const initialState = {
 
 const AuthReducer = (state : AuthState = initialState,action : AuthActions) => {
     switch (action.type) {
-        case "ON_LOGIN" :
+        case 'ON_LOGIN' :{
             return {
                 ...state,
-                token:action.payload,
-                // token : 'pula',
-                isLogged : true,
+                token : action.payload,
+                isLogged: true
             }
+        }
         case "ON_LOGOUT":
             return {
                 ...state,
@@ -43,7 +42,7 @@ const AuthReducer = (state : AuthState = initialState,action : AuthActions) => {
         case "ON_REGISTER":
             return {
                 ...state,
-                token: action.payload,
+                token: action.payload.token,
                 isLogged: true,
             }
         default :

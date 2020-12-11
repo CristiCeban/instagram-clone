@@ -4,13 +4,15 @@ import useWindowDimensions from "../../hooks/useWindowDimenstions";
 import {Button} from "react-bootstrap";
 import {useDispatch} from "react-redux";
 import {onLogout} from "../../redux/actions/authActions";
+import {persistor} from "../../redux/store";
 
 const ProfileHeader = () => {
     const dispatch = useDispatch();
     const {height,width} = useWindowDimensions();
     const classes = useStyles({width,height})();
 
-    const logout = () => {
+    const logout = async () => {
+        await persistor.purge()
         dispatch(onLogout());
     }
     return(
