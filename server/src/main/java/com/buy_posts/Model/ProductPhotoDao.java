@@ -27,4 +27,12 @@ public class ProductPhotoDao {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private ProductDao product;
+
+    public ProductPhotoDao(String imagePath, String imageName, ProductDao product) {
+        this.imagePath = imagePath;
+        this.imageName = imageName;
+        this.product = product;
+    }
+
+    
 }

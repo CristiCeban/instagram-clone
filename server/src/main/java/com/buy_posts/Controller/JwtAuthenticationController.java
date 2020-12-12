@@ -85,7 +85,6 @@ public class JwtAuthenticationController {
 	private UserDao getProf(Authentication authenticate){
 		String username = authenticate.getName();
 		UserDao user = userRepository.findByEmail(username);
-		System.out.println(user);
 		return user;
 	}
  }
