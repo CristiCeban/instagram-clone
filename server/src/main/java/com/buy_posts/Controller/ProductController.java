@@ -11,10 +11,10 @@ import com.buy_posts.Service.ProductService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,10 +28,13 @@ import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin("http://localhost:1234")
 @RestController(value = "/api/products")
 public class ProductController {
     @Autowired
@@ -41,19 +44,23 @@ public class ProductController {
     private UserRepository userRepository;
 
     @PostMapping(value="/add")
-    public void  postMethodName(@RequestParam("files") MultipartFile[] photos, Authentication authenticate,ProductDto product)
+    public List<String>  postMethodName(@RequestParam("files") MultipartFile[] photos, Authentication authenticate)
             throws IOException {
         String username = authenticate.getName();
 		UserDao user = userRepository.findByEmail(username);
         Integer userId = user.getId();
+        List<String> fileNames = new ArrayList<>();
+        Arrays.asList(photos).stream().forEach(file -> {
+            fileNames.add(file.getOriginalFilename());
+          });
         
-        System.out.println(userId);
-        for (MultipartFile multipartFile : photos) {
-            System.out.println(multipartFile.getOriginalFilename()); 
-        }
+        // System.out.println(userId);
+        // for (MultipartFile multipartFile : photos) {
+        //     System.out.println(multipartFile.getOriginalFilename()); 
+        // }
 
         
-        
+        return fileNames;
 
         
     }
