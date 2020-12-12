@@ -3,6 +3,7 @@ package com.buy_posts.Controller;
 import java.io.IOException;
 
 import com.buy_posts.DTO.ProductDto;
+import com.buy_posts.Model.ProductPhotoDao;
 import com.buy_posts.Model.UserDao;
 import com.buy_posts.Repository.UserRepository;
 import com.buy_posts.Service.ProductService;
@@ -40,12 +41,18 @@ public class ProductController {
     private UserRepository userRepository;
 
     @PostMapping(value="/add")
-    public void  postMethodName(@RequestParam("files") MultipartFile[] photos, Authentication authenticate,ProductDto product) {
+    public void  postMethodName(@RequestParam("files") MultipartFile[] photos, Authentication authenticate,ProductDto product)
+            throws IOException {
         String username = authenticate.getName();
 		UserDao user = userRepository.findByEmail(username);
         Integer userId = user.getId();
 
-        
+
+        List<ProductPhotoDao> photo = new List<ProductPhotoDao>();
+        for (MultipartFile multipartFile : photos) {
+            String name = saveImage(multipartFile);
+            
+        }
 
         
     }
