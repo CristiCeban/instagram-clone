@@ -46,34 +46,39 @@ public class ProductController {
         String username = authenticate.getName();
 		UserDao user = userRepository.findByEmail(username);
         Integer userId = user.getId();
-
-
-        List<ProductPhotoDao> photo = new List<ProductPhotoDao>();
+        
+        System.out.println(userId);
         for (MultipartFile multipartFile : photos) {
-            String name = saveImage(multipartFile);
-            
+            System.out.println(multipartFile.getOriginalFilename()); 
         }
+
+        
+        
 
         
     }
     
 
-    private String saveImage(@RequestParam("image") MultipartFile img) throws IOException {
-        Path path = Paths.get("products");
-        if (!Files.exists(path)) {
-            Files.createDirectory(path);
-        }
+    // private String[] saveImage(@RequestParam("images") MultipartFile[] imgs) throws IOException {
+    //     Path path = Paths.get("products");
+    //     if (!Files.exists(path)) {
+    //         Files.createDirectory(path);
+    //     }
+        
 
-        String randomString = RandomString.make(10);
-        String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
-        String hex = DigestUtils.sha256Hex(sessionId);
-        String extension = img.getOriginalFilename().split("\\.")[1];
-        String filename = "products/" + randomString + hex + "." + extension;
-        File upl = new File(filename);
-        upl.createNewFile();
-        FileOutputStream os = new FileOutputStream(upl);
-        os.write(img.getBytes());
-        os.close();
-        return filename;
-    }
+    //     for (MultipartFile img : imgs) {
+    //         String randomString = RandomString.make(10);
+    //         String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
+    //         String hex = DigestUtils.sha256Hex(sessionId);
+    //         String extension = img.getOriginalFilename().split("\\.")[1];
+    //         String filename = "products/" + randomString + hex + "." + extension;
+    //         File upl = new File(filename);
+    //         upl.createNewFile();
+    //         FileOutputStream os = new FileOutputStream(upl);
+    //         os.write(img.getBytes());
+    //         os.close();
+    //     }
+        
+    //     return filename;
+    // }
 }
