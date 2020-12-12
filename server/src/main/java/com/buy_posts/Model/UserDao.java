@@ -46,7 +46,7 @@ public class UserDao {
   private String name;
 
 
-  @OneToMany(mappedBy = "userDao")
+  @OneToMany(mappedBy = "userId")
   private List<ProductDao> products;
 
 

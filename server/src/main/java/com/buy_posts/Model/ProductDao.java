@@ -41,7 +41,7 @@ public class ProductDao {
     @JoinColumn(name = "categoryId",referencedColumnName = "id")
     private CategoryDao category;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "productId")
     private List<ProductPhotoDao> photos;
     //Photos
 
@@ -50,7 +50,7 @@ public class ProductDao {
     @ManyToOne
     @JoinColumn(name = "userId")
     @NonNull
-    private UserDao userDao;
+    private UserDao userId;
     //userId
 
     public ProductDao(String name, String longDescription, String shortDescription, Double price, CategoryDao category,
@@ -61,7 +61,7 @@ public class ProductDao {
         this.price = price;
         this.category = category;
         this.photos = photos;
-        this.userDao = user;
+        this.userId = user;
     }
 
     
