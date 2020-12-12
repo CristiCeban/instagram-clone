@@ -12,7 +12,7 @@ type AuthState = {
 const initialState = {
     inProgress : false,
     isLogged : false,
-    token : 'domething',
+    token : undefined,
     userType : undefined,
     error : undefined,
     errorRegister : undefined,

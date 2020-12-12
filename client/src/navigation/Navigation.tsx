@@ -15,6 +15,7 @@ import ProfileScreen from "../screens/profile/ProfileScreen";
 import ProductsScreen from "../screens/products/ProductsScreen";
 import PageNotFound from "../screens/pageNotFound/PageNotFound";
 import Footer from "../components/footer/Footer";
+import AddProductScreen from "../screens/addProduct/AddProductScreen";
 
 
 const Navigation = ({history} : any) => {
@@ -58,6 +59,14 @@ const Navigation = ({history} : any) => {
                             <>
                                 <NavBar/>
                                 <Route component={ProductsScreen}/>
+                                <Footer/>
+                            </>)}
+                        />
+
+                        <Route exact path={'/add'} render={()=>(
+                            <>
+                                <NavBar/>
+                                <Route component={AddProductScreen}/>
                                 <Footer/>
                             </>)}
                         />
