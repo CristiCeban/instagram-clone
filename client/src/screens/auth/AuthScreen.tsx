@@ -1,5 +1,4 @@
 import React, {useRef, useState} from 'react';
-import {render} from 'react-dom'
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -33,7 +32,7 @@ const validationSchema = yup.object().shape({
         .required('Please enter an email'),
     password: yup.string()
         .label('Password')
-        .required()
+        .required('Please enter your password')
         .min(4, 'Password must have at least 4 characters '),
 });
 

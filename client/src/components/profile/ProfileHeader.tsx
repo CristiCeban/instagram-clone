@@ -2,39 +2,51 @@ import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import useWindowDimensions from "../../hooks/useWindowDimenstions";
 import {Button} from "react-bootstrap";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {onLogout} from "../../redux/actions/authActions";
 import {persistor} from "../../redux/store";
+import {ApplicationState} from "../../redux/reducers";
+import Loader from 'react-loader-spinner';
+
 
 const ProfileHeader = () => {
     const dispatch = useDispatch();
     const {height,width} = useWindowDimensions();
     const classes = useStyles({width,height})();
+    const {inProgress,name,email,phone,products} = useSelector((state:ApplicationState) => state.profileReducers)
 
     const logout = async () => {
         await persistor.purge()
         dispatch(onLogout());
     }
+
     return(
         <div className={classes.mainDiv}>
-            <div className={classes.line}/>
-            <div className={classes.flexDiv}>
-                <div>
-                    {/*@ts-ignore*/}
-                    <img className={classes.thumbnail} src={require('../../assets/temp.jpg')} alt={''}/>
-                </div>
-                <div className={classes.info}>
-                    <h4>Name</h4>
-                    <h5>Email</h5>
-                    <div className={classes.postsInfo}>
-                        <h6>Nr of Posts</h6>
-                        <h6>0 Followers</h6>
-                        <h6>0 Following</h6>
+            {inProgress ?
+                <Loader type={'Rings'}/>
+                :
+                <>
+                    <div className={classes.line}/>
+                    <div className={classes.flexDiv}>
+                        <div>
+                            {/*// @ts-ignore*/}
+                            <img className={classes.thumbnail} src={require('../../assets/temp.jpg')} alt={''}/>
+                        </div>
+                        <div className={classes.info}>
+                            <h4>{name}</h4>
+                            <h5>{email}</h5>
+                            <h5>{phone}</h5>
+                            <div className={classes.postsInfo}>
+                                <h6>{products.length} Posts</h6>
+                                <h6>0 Followers</h6>
+                                <h6>0 Following</h6>
+                            </div>
+                            <Button onClick={logout}/>
+                        </div>
                     </div>
-                    <Button onClick={logout}/>
-                </div>
-            </div>
-            <div className={classes.line}/>
+                    <div className={classes.line}/>
+                </>
+            }
         </div>
     )
 }

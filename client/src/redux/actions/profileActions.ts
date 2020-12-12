@@ -19,7 +19,7 @@ export const onGetProfileData = () => {
         try {
             dispatch({type:'SET_PROFILE_IN_PROGRESS',payload:true})
             const response = await ApiService.get('me',{});
-            console.log(response)
+            dispatch({type:'GET_PROFILE_DATA',payload:response})
         }
         catch (e) {
             console.log(e)
@@ -29,3 +29,4 @@ export const onGetProfileData = () => {
         }
     }
 }
+

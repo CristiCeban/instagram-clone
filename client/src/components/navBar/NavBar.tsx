@@ -1,14 +1,14 @@
 import React from 'react';
 import { fade, makeStyles } from '@material-ui/core/styles';
-import {AccountCircle, Favorite, Home, Search, ShoppingCart, Store} from "@material-ui/icons";
+import {AccountCircle, Add, Favorite, Home, Search, ShoppingCart, Store} from "@material-ui/icons";
 import {AppBar, IconButton, InputBase, Link, Toolbar, Typography} from "@material-ui/core";
 import { useLocation } from 'react-router-dom'
 
 enum routerEnum {
     main = '/',
     profile = '/profile',
+    add = '/add',
     favorites = '/favorites',
-    cart = '/cart',
     products = '/products'
 }
 
@@ -63,6 +63,16 @@ const NavBar = () =>{
                         </IconButton>
                     </Link>
 
+                    <Link href={'/add'}>
+                        <IconButton>
+                            <Add className={pathname === routerEnum.add
+                                ? classes.selectedNavIcon
+                                :
+                                undefined }
+                            />
+                        </IconButton>
+                    </Link>
+
                     <Link href={'/favorites'}>
                         <IconButton>
                                 <Favorite className={pathname === routerEnum.favorites
@@ -72,6 +82,7 @@ const NavBar = () =>{
                                 />
                         </IconButton>
                     </Link>
+
 
                     <Link href={'/profile'}>
                         <IconButton>
