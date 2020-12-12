@@ -11,4 +11,7 @@ public class ProductPhotoDto {
     
     private String path;
     private String imageName;
+    // private long product_id;
+
+
 }

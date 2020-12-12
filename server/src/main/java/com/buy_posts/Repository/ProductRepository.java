@@ -1,5 +1,7 @@
 package com.buy_posts.Repository;
 
+import java.util.List;
+
 import com.buy_posts.Model.ProductDao;
 
 import org.springframework.data.domain.Page;
@@ -11,4 +13,6 @@ public interface ProductRepository extends PagingAndSortingRepository<ProductDao
     Page<ProductDao> findAllByOrderByIdDesc(Pageable pageable);
 
     Page<ProductDao> findAllByCategoryId(Pageable pageable, Long categoryId);
+
+    List<ProductDao> findAllByUserId(int id);
 }

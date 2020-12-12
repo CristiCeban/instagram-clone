@@ -9,7 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 public interface ProductPhotoRepository extends CrudRepository<ProductPhotoDao,Long> {
     
     
-    List<ProductPhotoDao> findProductPhotosById(long id);
+    List<ProductPhotoDao> findAllByProductId(long id);
 
 
 
