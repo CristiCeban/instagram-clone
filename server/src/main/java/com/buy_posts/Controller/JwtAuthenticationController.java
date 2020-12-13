@@ -95,7 +95,7 @@ public class JwtAuthenticationController {
 		UserDao user = userRepository.findByEmail(username);
 		int userId = user.getId();
 		
-        List<ProductDao> userProducts = productRepository.findAllByUserId(userId);
+        List<ProductDao> userProducts = productRepository.findAllByUserId(user);
 
         return new ProfileResponse(user,userProducts);
 		
