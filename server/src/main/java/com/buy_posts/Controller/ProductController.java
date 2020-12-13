@@ -55,7 +55,7 @@ public class ProductController {
 
     // @RequestParam("productInfo") String productInfo 
     @PostMapping(value="/add")
-    public List<String>  postMethodName(@RequestParam("files") MultipartFile[] photos, Authentication authenticate,String name,String long_description,String short_description,String price,String categoryId)
+    public ResponseEntity<String>  postMethodName(@RequestParam("files") MultipartFile[] photos, Authentication authenticate,String name,String long_description,String short_description,String price,String categoryId)
             throws IOException {
         String username = authenticate.getName();
 		UserDao user = userRepository.findByEmail(username);
@@ -68,19 +68,14 @@ public class ProductController {
             try {
                 fileNames.add(saveImage(file));
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
            
           });
 
-        
-
-
         // ProductDto productDTO = new ObjectMapper().readValue(productInfo, ProductDto.class);
         // ProductDto productDTO = new ObjectMapper().readValue(productInfo, ProductDto.class);
         
-
         ProductDao product = productService.addProduct(prod, userId);
 
         List<ProductPhotoDao> productPhotos = new ArrayList<>();
@@ -92,16 +87,18 @@ public class ProductController {
         // product.setPhotos(productPhotos);
         // long productId = product.getId();
 
-
         // System.out.println(userId);
         // for (MultipartFile multipartFile : photos) {
         //     System.out.println(multipartFile.getOriginalFilename()); 
         // }
+       
+        return ResponseEntity.ok("Product added");
 
-        
-        return fileNames;
+    }
 
-        
+    @GetMapping(value = "/delete/{id}")
+    public void deleteProduct(@PathVariable("id") Long id){
+        productService.deleteProduct(id);
     }
     
     @GetMapping(value = "{id}")
