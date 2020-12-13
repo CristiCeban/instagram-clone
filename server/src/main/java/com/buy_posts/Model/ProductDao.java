@@ -49,7 +49,7 @@ public class ProductDao {
     //Photos
 
 
-    @JsonIgnore
+   
     @ManyToOne
     @JoinColumn(name = "userId")
     @NonNull

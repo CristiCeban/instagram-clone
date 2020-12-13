@@ -1,12 +1,17 @@
 package com.buy_posts.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.buy_posts.DTO.UserDto;
+import com.buy_posts.Model.ProductDao;
+import com.buy_posts.Model.ProfileResponse;
 import com.buy_posts.Model.UserDao;
+import com.buy_posts.Repository.ProductRepository;
 import com.buy_posts.Repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,6 +27,8 @@ public class JwtUserDetailsService implements UserDetailsService {
     @Autowired
     private PasswordEncoder bcryptEncoder;
 
+    @Autowired
+    private ProductRepository productRepository;
 
 
 
@@ -35,6 +42,7 @@ public class JwtUserDetailsService implements UserDetailsService {
     }
 
 
+    
 
     public UserDao save(UserDto user){
         UserDao newUser = new UserDao();

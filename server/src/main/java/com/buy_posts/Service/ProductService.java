@@ -1,7 +1,9 @@
 package com.buy_posts.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.buy_posts.DTO.ProductDto;
 import com.buy_posts.DTO.ProductsDto;
@@ -9,10 +11,12 @@ import com.buy_posts.Model.CategoryDao;
 import com.buy_posts.Model.ProductDao;
 import com.buy_posts.Model.ProductPhotoDao;
 import com.buy_posts.Model.UserDao;
+import com.buy_posts.Model.WishList;
 import com.buy_posts.Repository.CategoryRepository;
 import com.buy_posts.Repository.ProductPhotoRepository;
 import com.buy_posts.Repository.ProductRepository;
 import com.buy_posts.Repository.UserRepository;
+import com.buy_posts.Repository.WishListRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,6 +36,9 @@ public class ProductService {
 
     @Autowired
     private ProductPhotoRepository productPhotoRepository;
+
+    @Autowired
+    private WishListRepository wishListRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -88,22 +95,22 @@ public class ProductService {
     }
 
     
-    // public void addProductToBasket(Long productId, Long userId) {
-    //     BasketProduct basketProduct = new BasketProduct(userId, productId);
-    //     basketProductRepository.save(basketProduct);
-    // }
+    public void addProductToWishList(Long productId, Integer userId) {
+        WishList wishList = new WishList(userId, productId);
+        wishListRepository.save(wishList);
+    }
 
-    // public void deleteProductFromBasket(Long productId, Long userId) {
-    //     BasketProduct basketProduct = basketProductRepository.findByUserIdAndProductId(userId, productId);
-    //     basketProductRepository.delete(basketProduct);
-    // }
+    public void deleteProductFromWishList(Long productId, Integer userId) {
+        WishList wishedProduct = wishListRepository.findByUserIdAndProductId(userId, productId);
+        wishListRepository.delete(wishedProduct);
+    }
 
-    // public List<Product> getAllFromBasket(Long userId) {
-    //     List<BasketProduct> allByUserId = basketProductRepository.findAllByUserId(userId);
-    //     List<Long> list = allByUserId.stream().map(a -> a.getProductId()).collect(Collectors.toList());
-    //     Iterable<Product> products = productRepository.findAllById(list);
-    //     List<Product> result = new ArrayList<>();
-    //     products.forEach(result::add);
-    //     return result;
-    // }
+    public List<ProductDao> getAllFromWishList(Integer userId) {
+        List<WishList> allByUserId = wishListRepository.findAllByUserId(userId);
+        List<Long> list = allByUserId.stream().map(a -> a.getProductId()).collect(Collectors.toList());
+        Iterable<ProductDao> products = productRepository.findAllById(list);
+        List<ProductDao> result = new ArrayList<>();
+        products.forEach(result::add);
+        return result;
+    }
 }

@@ -15,4 +15,6 @@ public interface ProductRepository extends PagingAndSortingRepository<ProductDao
     Page<ProductDao> findAllByCategoryId(Pageable pageable, Long categoryId);
 
     List<ProductDao> findAllByUserId(int id);
+
+    Page<ProductDao> findAllByOrderByPriceDesc(Pageable pageable);
 }

@@ -10,15 +10,20 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import com.buy_posts.Configuration.JwtTokenUtil;
 import com.buy_posts.DTO.UserDto;
 import com.buy_posts.Model.JwtRequest;
 import com.buy_posts.Model.JwtResponse;
+import com.buy_posts.Model.ProductDao;
+import com.buy_posts.Model.ProfileResponse;
 import com.buy_posts.Model.UserDao;
+import com.buy_posts.Repository.ProductRepository;
 import com.buy_posts.Repository.UserRepository;
 import com.buy_posts.Service.JwtUserDetailsService;
+import com.buy_posts.Service.ProductPhotoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +50,10 @@ public class JwtAuthenticationController {
     private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    private JwtUserDetailsService userDetailsService;
+	private JwtUserDetailsService userDetailsService;
+	
+	@Autowired
+	private ProductRepository productRepository;
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
 	public ResponseEntity<?> generateAuthenticationToken(@RequestBody JwtRequest authenticationRequest)
@@ -82,9 +90,14 @@ public class JwtAuthenticationController {
 	}
 
 	@GetMapping(value= "/me")
-	private UserDao getProf(Authentication authenticate){
+	private ProfileResponse getProf(Authentication authenticate){
 		String username = authenticate.getName();
 		UserDao user = userRepository.findByEmail(username);
-		return user;
+		int userId = user.getId();
+		
+        List<ProductDao> userProducts = productRepository.findAllByUserId(userId);
+
+        return new ProfileResponse(user,userProducts);
+		
 	}
  }

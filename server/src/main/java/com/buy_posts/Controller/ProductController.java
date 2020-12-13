@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -122,6 +123,47 @@ public class ProductController {
         return productService.getProducts(page, size);
     }
 
+     /**
+     * Add product to wish list.
+     * @param productId given product Id.
+     * @param userId current user Id.
+     */
+    @PostMapping(path = "/api/wish")
+    public void addProductToWishList(@RequestParam("productId") Long productId,Authentication authentication) {
+        String username = authentication.getName();
+        UserDao user = userRepository.findByEmail(username);
+        Integer userId = user.getId();
+
+        productService.addProductToWishList(productId, userId);
+    }
+
+    /**
+     * @param userId list owner Id.
+     * @return List of {@link ProductDao}'s from list.
+     */
+    @GetMapping(path = "/api/wish")
+    public List<ProductDao> getAllFromWishList(Authentication authentication) {
+        String username = authentication.getName();
+        UserDao user = userRepository.findByEmail(username);
+        Integer userId = user.getId();
+        return productService.getAllFromWishList(userId);
+    }
+
+    
+
+     /**
+     * Delete form wish.
+     * @param productId The given product.
+     * @param userId list owner Id.
+     */
+    @DeleteMapping(path = "/api/wish")
+    public void deleteProductFromBasket(@RequestParam("productId") Long productId, Authentication authentication) {
+        String username = authentication.getName();
+        UserDao user = userRepository.findByEmail(username);
+        Integer userId = user.getId();
+        productService.deleteProductFromWishList(productId, userId);
+    }
+    
     private String saveImage(@RequestParam("files") MultipartFile img) throws IOException {
         Path path = Paths.get("products");
         if (!Files.exists(path)) {
