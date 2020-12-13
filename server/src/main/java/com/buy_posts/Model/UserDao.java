@@ -45,7 +45,7 @@ public class UserDao {
   @Column
   private String name;
 
-  
+  @JsonIgnore
   @OneToMany(mappedBy = "userId")
   private List<ProductDao> products;
 
