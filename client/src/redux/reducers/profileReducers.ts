@@ -37,13 +37,13 @@ const ProfileReducer = (state : ProfileState = initialState,action : ProfileActi
         case "GET_PROFILE_DATA":
             return {
                 ...state,
-                email:action.payload.email,
-                id : action.payload.id,
-                name : action.payload.name,
-                phone : action.payload.phone,
-                userName :action.payload.userName,
-                products : action.payload.products,
-                thumbnail : action.payload.thumbnail,
+                email:action.payload.profile.email,
+                id : action.payload.profile.id,
+                name : action.payload.profile.name,
+                phone : action.payload.profile.phone,
+                userName :action.payload.profile.userName,
+                products : action.payload.userProducts,
+                thumbnail : action.payload.profile.thumbnail,
             }
         case "SET_IN_PROGRESS_DELETING_PRODUCT":
             return {

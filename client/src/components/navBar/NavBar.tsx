@@ -1,6 +1,6 @@
 import React from 'react';
 import { fade, makeStyles } from '@material-ui/core/styles';
-import {AccountCircle, Add, Favorite, Home, Search, ShoppingCart, Store} from "@material-ui/icons";
+import {AccountCircle, Add, Favorite, Home, Search, Store} from "@material-ui/icons";
 import {AppBar, IconButton, InputBase, Link, Toolbar, Typography} from "@material-ui/core";
 import { useLocation } from 'react-router-dom'
 
