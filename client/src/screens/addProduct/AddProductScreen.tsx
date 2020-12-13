@@ -18,8 +18,8 @@ import {onUploadProduct} from "../../redux/actions/productsActions";
 const initFormValue = {
     name: '',
     price : '',
-    short_description: '',
-    long_description: '',
+    shortDescription: '',
+    longDescription: '',
     categoryId : '',
     files : []
 }
@@ -52,13 +52,13 @@ const validationSchema = yup.object().shape({
         .label('price')
         .required('Please enter the product price')
         .min(1,'Products price must be at least 1'),
-    short_description : yup.string()
-        .label('short_description')
+    shortDescription : yup.string()
+        .label('shortDescription')
         .required('Please enter an short description of the product')
         .min(1,'Product short description must be at least 10 characters')
         .max(100,'Product short description must be at most 100 characters'),
-    long_description : yup.string()
-        .label('long_description')
+    longDescription : yup.string()
+        .label('longDescription')
         .required('Please enter an long description of the product')
         .min(5,'Product long description must be at least 50 characters')
         .max(1000,'Product long description must be at most 1000 characters'),
@@ -124,15 +124,15 @@ const AddProductScreen = () => {
                                     variant="outlined"
                                     margin="normal"
                                     fullWidth
-                                    name="short_description"
+                                    name="shortDescription"
                                     label="short description"
-                                    type="short_description"
-                                    id="short_description"
+                                    type="shortDescription"
+                                    id="shortDescription"
                                     multiline
-                                    value={values.short_description}
+                                    value={values.shortDescription}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    helperText={(errors.short_description&&touched.short_description) && errors.short_description}
+                                    helperText={(errors.shortDescription&&touched.shortDescription) && errors.shortDescription}
                                     FormHelperTextProps={{
                                         className : classes.helperText
                                     }}
@@ -141,15 +141,15 @@ const AddProductScreen = () => {
                                     variant="outlined"
                                     margin="normal"
                                     fullWidth
-                                    name="long_description"
+                                    name="longDescription"
                                     label="long description"
-                                    type="long_description"
-                                    id="long_description"
+                                    type="longDescription"
+                                    id="longDescription"
                                     multiline
-                                    value={values.long_description}
+                                    value={values.longDescription}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    helperText={(errors.long_description&&touched.long_description) && errors.long_description}
+                                    helperText={(errors.longDescription&&touched.longDescription) && errors.longDescription}
                                     FormHelperTextProps={{
                                         className : classes.helperText
                                     }}
