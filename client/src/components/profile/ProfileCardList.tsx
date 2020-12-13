@@ -1,19 +1,20 @@
 import React from "react";
-import CardItem from "../../components/product/CardItem";
 import {Container, Grid} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
+import ProfileCardItem from "./ProfileCardItem";
 
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8];
 
-const ProductsScreen = () => {
+const ProfileCardList = () => {
     const classes = useStyles();
     return(
-        <div style={{marginTop:30}}>
+        <div>
             <main>
                 <Container className={classes.cardGrid} maxWidth="md">
+                    <div className={classes.line}/>
                     <Grid container spacing={4}>
-                        {cards.map((card,index) => <CardItem key={index.toString()}/>)}
+                        {cards.map((card,index) => <ProfileCardItem key={index.toString()}/>)}
                     </Grid>
                 </Container>
             </main>
@@ -24,10 +25,14 @@ const ProductsScreen = () => {
 
 const useStyles = makeStyles((theme) => ({
     cardGrid: {
-        paddingTop: theme.spacing(8),
+        // paddingTop: theme.spacing(8),
         paddingBottom: theme.spacing(8),
+    },
+    line : {
+        margin:'18px 0px',
+        borderBottom:'1px solid grey',
     },
 }));
 
 
-export default ProductsScreen;
+export default ProfileCardList;
