@@ -58,7 +58,7 @@ public class ProductService {
         return productsPage.getContent();
     }
 
-    public void addProduct(ProductDto productInfo,Integer userId) {
+    public ProductDao addProduct(ProductDto productInfo,Integer userId) {
         String name = productInfo.getName();
         String longDescription = productInfo.getLong_description();
         String shortDescription = productInfo.getLong_description();
@@ -73,12 +73,12 @@ public class ProductService {
 
         
             
-            UserDao user = userRepository.findById(userId).get();
+        UserDao user = userRepository.findById(userId).get();
             
         
 
         ProductDao newProduct = new ProductDao(name, longDescription, shortDescription,price, category, photos,user);
-        productRepository.save(newProduct);
+        return productRepository.save(newProduct);
         
     }
     // public void addProductToBasket(Long productId, Long userId) {
