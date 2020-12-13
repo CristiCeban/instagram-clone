@@ -55,7 +55,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(HttpSecurity http) throws Exception{
         http
-            .csrf().disable().cors().and()
+            .cors().and().csrf().disable()
             .authorizeRequests()
             .antMatchers("/").permitAll()
             .antMatchers("/admin/**").hasRole("ADMIN")
@@ -102,21 +102,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(Arrays.asList("*"));
-    configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH"));
-    configuration.setAllowCredentials(true);
-    //the below three lines will add the relevant CORS response headers
-    configuration.addAllowedOrigin("*");
-    configuration.addAllowedHeader("*");
-    configuration.addAllowedMethod("*");
-    configuration.addAllowedOriginPattern();
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", configuration);
-    return source;
-}
+//     @Bean
+// CorsConfigurationSource corsConfigurationSource() {
+//     CorsConfiguration configuration = new CorsConfiguration();
+//     configuration.setAllowedOrigins(Arrays.asList("*"));
+//     configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH"));
+//     configuration.setAllowCredentials(true);
+//     //the below three lines will add the relevant CORS response headers
+//     configuration.addAllowedOrigin("*");
+//     configuration.addAllowedHeader("*");
+//     configuration.addAllowedMethod("*");
+//     configuration.addAllowedOriginPattern();
+//     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//     source.registerCorsConfiguration("/**", configuration);
+//     return source;
+// }
 
 // @Bean
 // public CorsFilter corsFilter() {
