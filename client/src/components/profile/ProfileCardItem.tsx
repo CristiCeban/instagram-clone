@@ -5,15 +5,21 @@ import Button from '@material-ui/core/Button';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import SwipeableViews from 'react-swipeable-views';
-import { autoPlay } from 'react-swipeable-views-utils';
 import {Card, CardActions, CardContent, CardMedia, Grid, IconButton, Typography} from "@material-ui/core";
 import Config from "../../config/config";
-import {Delete, Favorite, Share, Visibility} from "@material-ui/icons";
+import {Delete, Visibility} from "@material-ui/icons";
+//@ts-ignore
+import { autoPlay } from 'react-swipeable-views-utils';
+import {useDispatch, useSelector} from "react-redux";
+import {ApplicationState} from "../../redux/reducers";
+import Loader from "react-loader-spinner";
+import {onDeleteProduct} from "../../redux/actions/profileActions";
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 export interface profileCardItemInterface {
     card : {
+        id : number,
         name: string,
         longDescription : string,
         shortDescription : string,
@@ -26,16 +32,19 @@ export interface profileCardItemInterface {
     }
 }
 
-const ProfileCardItem = ({card:{price,
+const ProfileCardItem = ({card:{id,
+                                price,
                                 photos,
                                 name,
                                 shortDescription,
                                 category}} : profileCardItemInterface) => {
 
     const classes = useStyles();
+    const dispatch = useDispatch();
     const theme = useTheme();
     const [activeStep, setActiveStep] = useState(0);
     const maxSteps = photos.length;
+    const {inProgressDeleting,deletingProductId} = useSelector((state : ApplicationState) => state.profileReducers)
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -48,6 +57,10 @@ const ProfileCardItem = ({card:{price,
     const handleStepChange = (step: number) => {
         setActiveStep(step);
     };
+
+    const onDeleteClicked = () => {
+        dispatch(onDeleteProduct(id))
+    }
 
     return (
         <Grid item xs={12} sm={6} md={4}>
@@ -88,8 +101,12 @@ const ProfileCardItem = ({card:{price,
                     <IconButton aria-label="see">
                         <Visibility />
                     </IconButton>
-                    <IconButton aria-label="share" className={classes.deleteIcon}>
-                        <Delete />
+                    <IconButton aria-label="share" className={classes.deleteIcon} onClick={onDeleteClicked}>
+                        {deletingProductId === id ?
+                            <Loader type={'ThreeDots'} height={24} width={24}/>
+                            :
+                            <Delete/>
+                        }
                     </IconButton>
                 </CardActions>
                 {photos.length > 1 ?

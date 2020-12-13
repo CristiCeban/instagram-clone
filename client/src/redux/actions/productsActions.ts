@@ -15,9 +15,11 @@ export interface SetInProgressProduct {
     payload : boolean,
 }
 
+
 export type ProductsActions =
     | UploadProduct
     | SetInProgressProduct
+
 
 export const onUploadProduct = (values : UploadProductType) => {
     return async(dispatch : Dispatch<ProductsActions>) => {
@@ -29,10 +31,12 @@ export const onUploadProduct = (values : UploadProductType) => {
             console.log(response)
         }
         catch (e) {
-
+            console.log(e)
         }
         finally {
-            dispatch({type:'SET_IN_PROGRESS_PRODUCT',payload:false})
+            setTimeout(() => dispatch({type:'SET_IN_PROGRESS_PRODUCT',payload:false}),1000)
         }
     }
 }
+
+

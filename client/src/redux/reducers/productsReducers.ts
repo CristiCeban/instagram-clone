@@ -15,7 +15,6 @@ const ProductsReducer = (state : ProductsState = initialState,action : ProductsA
                 ...state,
                 inProgress : action.payload
             }
-
         default :
             return state
     }

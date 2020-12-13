@@ -1,9 +1,9 @@
-import React, {useRef} from "react";
+import React, {useEffect, useRef} from "react";
 import Container from "@material-ui/core/Container";
 import {Formik} from "formik";
 import * as yup from 'yup'
 import {makeStyles} from "@material-ui/core/styles";
-import {CssBaseline, MenuItem, Typography} from "@material-ui/core";
+import {CssBaseline, InputAdornment, MenuItem, Typography} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
 import { DropzoneArea } from 'material-ui-dropzone';
 import Button from "@material-ui/core/Button";
@@ -11,9 +11,9 @@ import {useDispatch, useSelector} from "react-redux";
 import {ApplicationState} from "../../redux/reducers";
 import { Bounce } from 'react-activity';
 import {onUploadProduct} from "../../redux/actions/productsActions";
-
-
-
+import {onGetAllCategories} from "../../redux/actions/generalActions";
+import {AccountCircle} from "@material-ui/icons";
+import Loader from "react-loader-spinner";
 
 const initFormValue = {
     name: '',
@@ -23,25 +23,6 @@ const initFormValue = {
     categoryId : '',
     files : []
 }
-
-const currencies = [
-    {
-        value: 1,
-        label: '$',
-    },
-    {
-        value: 2,
-        label: '€',
-    },
-    {
-        value: 3,
-        label: '฿',
-    },
-    {
-        value: 4,
-        label: '¥',
-    },
-];
 
 const validationSchema = yup.object().shape({
     name: yup.string()
@@ -77,10 +58,16 @@ const AddProductScreen = () => {
     const formikRef = useRef(null);
     const classes = useStyles();
     const {inProgress} = useSelector((state: ApplicationState) => state.productsReducers);
+    const {isLoadingAllCategories,allCategories} = useSelector((state : ApplicationState) => state.generalReducers)
+
+    useEffect(() => {
+        dispatch(onGetAllCategories())
+    },[])
 
     const onAddProduct = (values : any) => {
         dispatch(onUploadProduct(values))
     }
+
     return (
         <Container component="main" maxWidth="xs" style={{marginTop:100}}>
             <Formik
@@ -182,7 +169,15 @@ const AddProductScreen = () => {
                                     select
                                     id="categoryId"
                                     InputLabelProps={{
-                                        shrink: true,
+                                        shrink: !isLoadingAllCategories,
+                                    }}
+                                    InputProps={{
+                                        readOnly: isLoadingAllCategories,
+                                        startAdornment: isLoadingAllCategories ? (
+                                            <InputAdornment position="start">
+                                                <Loader height={15} width={15} type={"Circles"} color={'#a50101'}/>
+                                            </InputAdornment>
+                                        ) : null,
                                     }}
                                     value={values.categoryId}
                                     onChange={handleChange}
@@ -192,9 +187,9 @@ const AddProductScreen = () => {
                                         className : classes.helperText
                                     }}
                                 >
-                                    {currencies.map((option) => (
-                                        <MenuItem key={option.value} value={option.value}>
-                                            {option.label}
+                                    {allCategories.map((option) => (
+                                        <MenuItem key={option.id} value={option.id}>
+                                            {option.name}
                                         </MenuItem>
                                     ))}
                                 </TextField>
@@ -218,7 +213,9 @@ const AddProductScreen = () => {
                                 >
                                     <div style={{minHeight:25}}>
                                         {inProgress ?
-                                            <Bounce style={{marginTop:25}}/>
+                                            <div style={{paddingTop:10}}>
+                                                <Bounce />
+                                            </div>
                                             :
                                             'Add Product'
                                         }
