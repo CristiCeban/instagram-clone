@@ -26,5 +26,9 @@ public class ProductPhotoService {
     @Autowired
     private ProductPhotoRepository photoRepository;
 
-   
+    public ProductPhotoDao addPhotoToProduct(String path,ProductDao product){
+        ProductPhotoDao photoDao = new ProductPhotoDao(path, product);
+
+        return photoRepository.save(photoDao);
+    }
 }

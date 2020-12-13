@@ -69,7 +69,7 @@ public class ProductService {
         CategoryDao category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new RuntimeException("Invalid Category"));
 
-        List<ProductPhotoDao> photos = productPhotoRepository.findAllByProductId(userId);
+        // List<ProductPhotoDao> photos = productPhotoRepository.findAllByProductId(userId);
 
         
             
@@ -77,7 +77,7 @@ public class ProductService {
             
         
 
-        ProductDao newProduct = new ProductDao(name, longDescription, shortDescription,price, category, photos,user);
+        ProductDao newProduct = new ProductDao(name, longDescription, shortDescription,price, category,user);
         return productRepository.save(newProduct);
         
     }

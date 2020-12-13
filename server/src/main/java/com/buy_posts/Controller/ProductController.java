@@ -7,6 +7,7 @@ import com.buy_posts.Model.ProductDao;
 import com.buy_posts.Model.ProductPhotoDao;
 import com.buy_posts.Model.UserDao;
 import com.buy_posts.Repository.UserRepository;
+import com.buy_posts.Service.ProductPhotoService;
 import com.buy_posts.Service.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -47,6 +48,9 @@ public class ProductController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ProductPhotoService photoService;
+
     // @RequestParam("productInfo") String productInfo 
     @PostMapping(value="/add")
     public List<String>  postMethodName(@RequestParam("files") MultipartFile[] photos, Authentication authenticate,String name,String long_description,String short_description,String price,String categoryId)
@@ -76,12 +80,14 @@ public class ProductController {
         
 
         ProductDao product = productService.addProduct(prod, userId);
+
         List<ProductPhotoDao> productPhotos = new ArrayList<>();
         for (String string : fileNames) {
-            productPhotos.add(new ProductPhotoDao(string, product));
+            // productPhotos.add(new ProductPhotoDao(string, product));
+            productPhotos.add(photoService.addPhotoToProduct(string, product));
         }
 
-        product.setPhotos(productPhotos);
+        // product.setPhotos(productPhotos);
         // long productId = product.getId();
 
 
