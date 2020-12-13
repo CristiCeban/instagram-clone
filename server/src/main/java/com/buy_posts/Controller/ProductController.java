@@ -57,7 +57,7 @@ public class ProductController {
 
     // @RequestParam("productInfo") String productInfo
     @PostMapping(value = "/add")
-    public ResponseEntity<String> postMethodName(@RequestParam("files") MultipartFile[] photos,
+    public ResponseEntity<String> addProduct(@RequestParam("files") MultipartFile[] photos,
             Authentication authenticate, String name, String long_description, String short_description, String price,
             String categoryId) throws IOException {
         String username = authenticate.getName();
@@ -119,8 +119,8 @@ public class ProductController {
     }
 
     @GetMapping
-    public ProductsDto getProducts(@RequestParam("page") int page, @RequestParam("size") int size) {
-        return productService.getProducts(page, size);
+    public List<ProductDao> getProducts(@RequestParam("page") int page, @RequestParam("size") int size) {
+        return productService.getProductsAsc(page, size);
     }
 
      /**

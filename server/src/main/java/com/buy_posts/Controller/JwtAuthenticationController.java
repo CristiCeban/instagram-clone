@@ -93,7 +93,6 @@ public class JwtAuthenticationController {
 	private ProfileResponse getProf(Authentication authenticate){
 		String username = authenticate.getName();
 		UserDao user = userRepository.findByEmail(username);
-		int userId = user.getId();
 		
         List<ProductDao> userProducts = productRepository.findAllByUserId(user);
 
