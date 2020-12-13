@@ -20,15 +20,16 @@ const ProfileHeader = () => {
 
     return(
         <div className={classes.mainDiv}>
-            {inProgress ?
+            {inProgress && products.length?
                 <Loader type={'Rings'}/>
                 :
                 <>
                     <div className={classes.line}/>
                     <div className={classes.flexDiv}>
                         <div>
-                            {/*// @ts-ignore*/}
+                            // @ts-ignore
                             <img className={classes.thumbnail} src={require('../../assets/temp.jpg')} alt={''}/>
+                            {/*<img className={classes.thumbnail} src={} alt={''}/>*/}
                         </div>
                         <div className={classes.info}>
                             <h4>{userName}</h4>
