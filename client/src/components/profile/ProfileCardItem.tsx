@@ -27,7 +27,7 @@ export default function ProfileCardItem() {
                         View
                     </Button>
                     <Button size="small" color="primary">
-                        Edit
+                        Delete
                     </Button>
                 </CardActions>
             </Card>

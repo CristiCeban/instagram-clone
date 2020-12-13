@@ -1,11 +1,11 @@
 import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import useWindowDimensions from "../../hooks/useWindowDimenstions";
-import {Button} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
 import {ApplicationState} from "../../redux/reducers";
 import Loader from 'react-loader-spinner';
 import {onLogout} from "../../redux/actions/generalActions";
+import {Button} from "@material-ui/core";
 
 
 const ProfileHeader = () => {
@@ -37,15 +37,15 @@ const ProfileHeader = () => {
                             <h5>{phone}</h5>
                             <div className={classes.postsInfo}>
                                 <h6>{products.length} Posts</h6>
-                                <h6>0 Followers</h6>
-                                <h6>0 Following</h6>
+                                <div style={{paddingTop:15,paddingBottom:15}}>
+                                    <Button variant="contained" onClick={logout} color="primary" >Exit</Button>
+                                </div>
                             </div>
-                            <Button onClick={logout}/>
                         </div>
                     </div>
-                    {/*<div className={classes.line}/>*/}
                 </>
             }
+
         </div>
     )
 }

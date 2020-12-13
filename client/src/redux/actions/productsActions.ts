@@ -23,6 +23,7 @@ export const onUploadProduct = (values : UploadProductType) => {
     return async(dispatch : Dispatch<ProductsActions>) => {
         try {
             dispatch({type:'SET_IN_PROGRESS_PRODUCT',payload:true})
+            console.log(values)
             const formData = createUploadProductFormData(values);
             const response = await ApiService.postFormData('products/add',formData)
             console.log(response)

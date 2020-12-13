@@ -20,25 +20,25 @@ const initFormValue = {
     price : '',
     short_description: '',
     long_description: '',
-    category_id : '',
+    categoryId : '',
     files : []
 }
 
 const currencies = [
     {
-        value: 'USD',
+        value: 1,
         label: '$',
     },
     {
-        value: 'EUR',
+        value: 2,
         label: '€',
     },
     {
-        value: 'BTC',
+        value: 3,
         label: '฿',
     },
     {
-        value: 'JPY',
+        value: 4,
         label: '¥',
     },
 ];
@@ -62,8 +62,8 @@ const validationSchema = yup.object().shape({
         .required('Please enter an long description of the product')
         .min(5,'Product long description must be at least 50 characters')
         .max(1000,'Product long description must be at most 1000 characters'),
-    category_id : yup.string()
-        .label('category_id')
+    categoryId : yup.string()
+        .label('categoryId')
         .required('Please select a category'),
     files : yup.array()
         .label('files')
@@ -177,17 +177,17 @@ const AddProductScreen = () => {
                                     variant="outlined"
                                     margin="normal"
                                     fullWidth
-                                    name="category_id"
+                                    name="categoryId"
                                     label="category"
                                     select
-                                    id="category_id"
+                                    id="categoryId"
                                     InputLabelProps={{
                                         shrink: true,
                                     }}
-                                    value={values.category_id}
+                                    value={values.categoryId}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    helperText={(errors.category_id&&touched.category_id) && errors.category_id}
+                                    helperText={(errors.categoryId&&touched.categoryId) && errors.categoryId}
                                     FormHelperTextProps={{
                                         className : classes.helperText
                                     }}

@@ -4,5 +4,5 @@ export type UploadProductType = {
     price : number,
     short_description : string,
     longDescription : string,
-    category_id : number,
+    categoryId : number,
 }
