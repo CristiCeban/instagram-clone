@@ -61,7 +61,7 @@ public class ProductService {
     public ProductDao addProduct(ProductDto productInfo,Integer userId) {
         String name = productInfo.getName();
         String longDescription = productInfo.getLong_description();
-        String shortDescription = productInfo.getLong_description();
+        String shortDescription = productInfo.getShort_description();
         double price = productInfo.getPrice();
         long categoryId = productInfo.getCategoryId();
         
@@ -70,12 +70,7 @@ public class ProductService {
                 .orElseThrow(() -> new RuntimeException("Invalid Category"));
 
         // List<ProductPhotoDao> photos = productPhotoRepository.findAllByProductId(userId);
-
-        
-            
         UserDao user = userRepository.findById(userId).get();
-            
-        
 
         ProductDao newProduct = new ProductDao(name, longDescription, shortDescription,price, category,user);
         return productRepository.save(newProduct);
@@ -85,6 +80,14 @@ public class ProductService {
     public ProductDao getProduct(long id){
         return productRepository.findById(id).orElseThrow();
     }
+
+    
+    public void deleteProduct(long id){
+        ProductDao product = getProduct(id);
+        productRepository.delete(product);
+    }
+
+    
     // public void addProductToBasket(Long productId, Long userId) {
     //     BasketProduct basketProduct = new BasketProduct(userId, productId);
     //     basketProductRepository.save(basketProduct);
