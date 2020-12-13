@@ -31,4 +31,8 @@ public class ProductPhotoService {
 
         return photoRepository.save(photoDao);
     }
+
+    public List<ProductPhotoDao> getPhotos(long productId){
+        return photoRepository.findAllByProductId(productId);
+    }
 }
