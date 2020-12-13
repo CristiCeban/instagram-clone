@@ -1,40 +1,121 @@
-import React from 'react';
-import {Button, Card, CardActions, CardContent, CardMedia, Grid, Typography} from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
+import React, {useState} from 'react';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import MobileStepper from '@material-ui/core/MobileStepper';
+import Button from '@material-ui/core/Button';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import SwipeableViews from 'react-swipeable-views';
+import { autoPlay } from 'react-swipeable-views-utils';
+import {Card, CardActions, CardContent, CardMedia, Grid, IconButton, Typography} from "@material-ui/core";
+import Config from "../../config/config";
+import {Delete, Favorite, Share, Visibility} from "@material-ui/icons";
 
+const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
-export default function ProfileCardItem() {
+export interface profileCardItemInterface {
+    card : {
+        name: string,
+        longDescription : string,
+        shortDescription : string,
+        price : number,
+        category : {
+            id : number,
+            name : string
+        }
+        photos : any[]
+    }
+}
+
+const ProfileCardItem = ({card:{price,
+                                photos,
+                                name,
+                                shortDescription,
+                                category}} : profileCardItemInterface) => {
+
     const classes = useStyles();
+    const theme = useTheme();
+    const [activeStep, setActiveStep] = useState(0);
+    const maxSteps = photos.length;
+
+    const handleNext = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    };
+
+    const handleBack = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    };
+
+    const handleStepChange = (step: number) => {
+        setActiveStep(step);
+    };
 
     return (
         <Grid item xs={12} sm={6} md={4}>
             <Card className={classes.card}>
-                <CardMedia
-                    className={classes.cardMedia}
-                    image="https://source.unsplash.com/random"
-                    title="Image title"
-                />
+                <AutoPlaySwipeableViews
+                    axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                    index={activeStep}
+                    onChangeIndex={handleStepChange}
+                    enableMouseEvents
+                >
+                    {photos.map((step, index) => (
+                        <div key={step.id}>
+                            {Math.abs(activeStep - index) <= 2 ? (
+                                <CardMedia
+                                    className={classes.cardMedia}
+                                    image={`${Config.sourceUrl}/${step.imagePath}`}
+                                    title="Image title"
+                                />
+                            ) : null}
+                        </div>
+                    ))}
+                </AutoPlaySwipeableViews>
                 <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="h5" component="h2">
-                        Heading
+                    <Typography gutterBottom variant='h5' component='h2'>
+                        {name}
                     </Typography>
                     <Typography>
-                        This is a media card. You can use this section to describe the content.
+                        {shortDescription}
+                    </Typography>
+                    <Typography>
+                        {price}
                     </Typography>
                 </CardContent>
-                <CardActions>
-                    <Button size="small" color="primary">
-                        View
+                <CardActions disableSpacing>
+                    <Button>
+                        <Typography>#{category.name}</Typography>
                     </Button>
-                    <Button size="small" color="primary">
-                        Delete
-                    </Button>
+                    <IconButton aria-label="see">
+                        <Visibility />
+                    </IconButton>
+                    <IconButton aria-label="share" className={classes.deleteIcon}>
+                        <Delete />
+                    </IconButton>
                 </CardActions>
+                {photos.length > 1 ?
+                    <MobileStepper
+                        steps={maxSteps}
+                        position="static"
+                        variant="text"
+                        activeStep={activeStep}
+                        nextButton={
+                            <Button size="small" onClick={handleNext} disabled={activeStep === maxSteps - 1}>
+                                Next
+                                {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+                            </Button>
+                        }
+                        backButton={
+                            <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+                                {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+                                Back
+                            </Button>
+                        }
+                    />
+                    : null}
             </Card>
         </Grid>
     );
 }
-
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -48,4 +129,10 @@ const useStyles = makeStyles((theme) => ({
     cardContent: {
         flexGrow: 1,
     },
+    deleteIcon: {
+        marginLeft: 'auto'
+    }
 }));
+
+
+export default ProfileCardItem;

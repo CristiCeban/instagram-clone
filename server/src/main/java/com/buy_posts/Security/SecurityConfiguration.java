@@ -28,7 +28,7 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
-    
+
     @Autowired
 	private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
@@ -37,7 +37,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 
 	@Autowired
     private JwtRequestFilter jwtRequestFilter;
-    
+
     @Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		// configure AuthenticationManager so that it knows from where to load
@@ -45,7 +45,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 		// Use BCryptPasswordEncoder
 		auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
     }
-    
+
     @Bean
 	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -58,6 +58,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
             .cors().and().csrf().disable()
             .authorizeRequests()
             .antMatchers("/").permitAll()
+            .antMatchers("/products/**").permitAll()
             .antMatchers("/admin/**").hasRole("ADMIN")
             .antMatchers("/api/**").permitAll()
             .anyRequest().authenticated()
@@ -81,7 +82,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
             //     .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login");
 
 
-    }   
+    }
 
     // @Bean
 	// @Override
@@ -95,7 +96,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 
 	// 	return new InMemoryUserDetailsManager(user);
     // }
-    
+
 
     @Bean
     public PasswordEncoder passwordEncoder(){

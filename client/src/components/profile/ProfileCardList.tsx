@@ -1,20 +1,28 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {Container, Grid} from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
+import {onGetProfileData} from "../../redux/actions/profileActions";
+import {useDispatch, useSelector} from "react-redux";
+import {ApplicationState} from "../../redux/reducers";
 import ProfileCardItem from "./ProfileCardItem";
+import {makeStyles} from "@material-ui/core/styles";
 
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8];
 
 const ProfileCardList = () => {
     const classes = useStyles();
+    const dispatch = useDispatch();
+    const {products} = useSelector((state:ApplicationState) => state.profileReducers)
+    useEffect(()=>{
+        dispatch(onGetProfileData())
+    },[])
     return(
         <div>
             <main>
                 <Container className={classes.cardGrid} maxWidth="md">
                     <div className={classes.line}/>
                     <Grid container spacing={4}>
-                        {cards.map((card,index) => <ProfileCardItem key={index.toString()}/>)}
+                        {(products as any[]).map((card) => <ProfileCardItem  card={card}/>)}
                     </Grid>
                 </Container>
             </main>
