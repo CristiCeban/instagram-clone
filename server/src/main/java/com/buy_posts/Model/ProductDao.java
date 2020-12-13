@@ -55,13 +55,13 @@ public class ProductDao {
     //userId
 
     public ProductDao(String name, String longDescription, String shortDescription, Double price, CategoryDao category,
-            List<ProductPhotoDao> photos, UserDao user) {
+             UserDao user) {
         this.name = name;
         this.longDescription = longDescription;
         this.shortDescription = shortDescription;
         this.price = price;
         this.category = category;
-        this.photos = photos;
+        
         this.userId = user;
     }
 
