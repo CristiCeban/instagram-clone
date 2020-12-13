@@ -9,6 +9,9 @@ type ProfileState = {
     products : any[],
     userName : string,
     thumbnail : string | undefined,
+    inProgressDeleting : boolean,
+    deletingProductId : number | undefined,
+
 }
 
 const initialState = {
@@ -20,6 +23,8 @@ const initialState = {
     products : [],
     userName: '',
     thumbnail : undefined,
+    inProgressDeleting : false,
+    deletingProductId : undefined
 }
 
 const ProfileReducer = (state : ProfileState = initialState,action : ProfileActions) =>{
@@ -39,6 +44,17 @@ const ProfileReducer = (state : ProfileState = initialState,action : ProfileActi
                 userName :action.payload.userName,
                 products : action.payload.products,
                 thumbnail : action.payload.thumbnail,
+            }
+        case "SET_IN_PROGRESS_DELETING_PRODUCT":
+            return {
+                ...state,
+                inProgressDeleting : action.payload.inProgress,
+                deletingProductId : action.payload.id
+            }
+        case "SET_NEW_PRODUCTS_PROFILE":
+            return {
+                ...state,
+                products: state.products.filter(el => el.id!==action.payload)
             }
 
         default:
