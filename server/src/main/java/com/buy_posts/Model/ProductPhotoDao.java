@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -25,7 +27,7 @@ public class ProductPhotoDao {
     private String imagePath;
 
     
-
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "product_id")
     private ProductDao productId;

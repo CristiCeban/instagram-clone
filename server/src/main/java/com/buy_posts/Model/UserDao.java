@@ -45,7 +45,7 @@ public class UserDao {
   @Column
   private String name;
 
-
+  
   @OneToMany(mappedBy = "userId")
   private List<ProductDao> products;
 

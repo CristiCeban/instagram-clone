@@ -81,6 +81,10 @@ public class ProductService {
         return productRepository.save(newProduct);
         
     }
+
+    public ProductDao getProduct(long id){
+        return productRepository.findById(id).orElseThrow();
+    }
     // public void addProductToBasket(Long productId, Long userId) {
     //     BasketProduct basketProduct = new BasketProduct(userId, productId);
     //     basketProductRepository.save(basketProduct);

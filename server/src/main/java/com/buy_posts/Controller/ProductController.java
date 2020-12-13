@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,13 +65,13 @@ public class ProductController {
         long categoryParsed = Long.parseLong(categoryId);
         ProductDto prod = new ProductDto(name,long_description,short_description,priceParsed,categoryParsed);
         Arrays.asList(photos).stream().forEach(file -> {
-            fileNames.add(file.getOriginalFilename());
             try {
-                saveImage(file);
+                fileNames.add(saveImage(file));
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+           
           });
 
         
@@ -102,6 +104,10 @@ public class ProductController {
         
     }
     
+    @GetMapping(value = "{id}")
+    public ProductDao getProduct(@PathVariable("id") Long id) {
+        return productService.getProduct(id);
+    }
 
     private String saveImage(@RequestParam("files") MultipartFile img) throws IOException {
         Path path = Paths.get("products");
