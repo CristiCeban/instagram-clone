@@ -1,5 +1,7 @@
 package com.buy_posts.Model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,17 +24,19 @@ public class ProductPhotoDao {
     @Column(name = "image_path")
     private String imagePath;
 
-    private  String imageName;
+    
 
     @ManyToOne
     @JoinColumn(name = "product_id")
     private ProductDao productId;
 
-    public ProductPhotoDao(String imagePath, String imageName, ProductDao product) {
+    public ProductPhotoDao(String imagePath,  ProductDao product) {
         this.imagePath = imagePath;
-        this.imageName = imageName;
+        
         this.productId = product;
     }
+
+	
 
     
 }

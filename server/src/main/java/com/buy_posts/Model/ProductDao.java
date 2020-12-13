@@ -3,6 +3,7 @@ package com.buy_posts.Model;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -41,7 +42,7 @@ public class ProductDao {
     @JoinColumn(name = "categoryId",referencedColumnName = "id")
     private CategoryDao category;
 
-    @OneToMany(mappedBy = "productId")
+    @OneToMany(mappedBy = "productId",cascade = CascadeType.ALL)
     private List<ProductPhotoDao> photos;
     //Photos
 

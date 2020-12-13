@@ -1,5 +1,7 @@
 package com.buy_posts.DTO;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,9 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProductPhotoDto {
     
-    private String path;
-    private String imageName;
-    // private long product_id;
+    
+
+	private String path;
+    private long product_id;
 
 
 }
