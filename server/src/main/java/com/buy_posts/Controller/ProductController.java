@@ -119,8 +119,8 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<ProductDao> getProducts(@RequestParam("page") int page, @RequestParam("size") int size) {
-        return productService.getProductsAsc(page, size);
+    public ProductsDto getProducts(@RequestParam("page") int page, @RequestParam("size") int size) {
+        return productService.getProducts(page, size);
     }
 
      /**
