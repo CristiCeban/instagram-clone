@@ -88,8 +88,3 @@ export const onRegister = (body : any) => {
     }
 }
 
-export const onLogout = () => {
-    return async (dispatch: Dispatch<AuthActions>) => {
-        dispatch({type:'ON_LOGOUT',payload:undefined})
-    }
-}

@@ -1,5 +1,8 @@
 import {Dispatch} from "react";
 import ApiService from '../../services/api'
+import {UploadProductType} from "../types/productTypes";
+import {createUploadProductFormData} from "../../functions/createFormData";
+
 
 
 export interface UploadProduct {
@@ -16,13 +19,13 @@ export type ProductsActions =
     | UploadProduct
     | SetInProgressProduct
 
-export const onUploadProduct = (values : any) => {
+export const onUploadProduct = (values : UploadProductType) => {
     return async(dispatch : Dispatch<ProductsActions>) => {
         try {
             dispatch({type:'SET_IN_PROGRESS_PRODUCT',payload:true})
-            console.log(values)
-            const response = ApiService.post('products/add',values)
-            console.log(values)
+            const formData = createUploadProductFormData(values);
+            const response = await ApiService.postFormData('products/add',formData)
+            console.log(response)
         }
         catch (e) {
 

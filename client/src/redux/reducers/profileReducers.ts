@@ -7,7 +7,8 @@ type ProfileState = {
     name : string,
     phone : string,
     products : any[],
-    userName : string
+    userName : string,
+    thumbnail : string | undefined,
 }
 
 const initialState = {
@@ -18,6 +19,7 @@ const initialState = {
     phone: '',
     products : [],
     userName: '',
+    thumbnail : undefined,
 }
 
 const ProfileReducer = (state : ProfileState = initialState,action : ProfileActions) =>{
@@ -36,6 +38,7 @@ const ProfileReducer = (state : ProfileState = initialState,action : ProfileActi
                 phone : action.payload.phone,
                 userName :action.payload.userName,
                 products : action.payload.products,
+                thumbnail : action.payload.thumbnail,
             }
 
         default:

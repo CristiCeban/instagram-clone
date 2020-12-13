@@ -21,7 +21,7 @@ const initFormValue = {
     short_description: '',
     long_description: '',
     category_id : '',
-    images : []
+    files : []
 }
 
 const currencies = [
@@ -65,8 +65,8 @@ const validationSchema = yup.object().shape({
     category_id : yup.string()
         .label('category_id')
         .required('Please select a category'),
-    images : yup.array()
-        .label('images')
+    files : yup.array()
+        .label('files')
         .required('Please upload an image')
         .min(1,'Please upload at least 1 image')
         .max(10,'Please upload at most 10 images')
@@ -202,11 +202,11 @@ const AddProductScreen = () => {
                                     acceptedFiles={['image/*']}
                                     filesLimit={10}
                                     dropzoneText={"Drag and drop an image here or click"}
-                                    onChange={(images) => formikRef?.current?.setFieldValue('images',images)}
+                                    onChange={(images) => formikRef?.current?.setFieldValue('files',images)}
                                 />
-                                {(errors.images&&touched.images) && errors.images ?
+                                {(errors.files&&touched.files) && errors.files ?
                                 <p className={classes.helperText} style={{paddingLeft:15,fontSize:12,marginBottom:-15}}>
-                                    {(errors.images&&touched.images) && errors.images}
+                                    {(errors.files&&touched.files) && errors.files}
                                 </p>
                                 : null}
                                 <Button
