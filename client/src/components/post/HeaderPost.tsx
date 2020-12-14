@@ -3,7 +3,11 @@ import {Box, IconButton, Link} from "@material-ui/core";
 import {AccountCircle, MoreHoriz} from "@material-ui/icons";
 import {makeStyles} from "@material-ui/core/styles";
 
-const HeaderPost = () => {
+interface HeaderInterface  {
+    name : string,
+}
+
+const HeaderPost = ({name} : HeaderInterface) => {
     const classes = useStyles();
     return (
         <div className={classes.mainDiv}>
@@ -11,7 +15,7 @@ const HeaderPost = () => {
                 <IconButton>
                     <AccountCircle/>
                 </IconButton>
-                <p>Name</p>
+                <p>{name}</p>
             </div>
             <IconButton>
                 <MoreHoriz/>

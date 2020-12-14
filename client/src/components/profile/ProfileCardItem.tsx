@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import SwipeableViews from 'react-swipeable-views';
-import {Card, CardActions, CardContent, CardMedia, Grid, IconButton, Typography} from "@material-ui/core";
+import {Card, CardActions, CardContent, CardMedia, Grid, IconButton, Link, Typography} from "@material-ui/core";
 import Config from "../../config/config";
 import {Delete, Visibility} from "@material-ui/icons";
 //@ts-ignore
@@ -98,9 +98,11 @@ const ProfileCardItem = ({card:{id,
                     <Button>
                         <Typography>#{category.name}</Typography>
                     </Button>
-                    <IconButton aria-label="see">
-                        <Visibility />
-                    </IconButton>
+                    <Link href={`/products/${id}`}>
+                        <IconButton aria-label="see">
+                            <Visibility />
+                        </IconButton>
+                    </Link>
                     <IconButton aria-label="share" className={classes.deleteIcon} onClick={onDeleteClicked}>
                         {deletingProductId === id ?
                             <Loader type={'ThreeDots'} height={24} width={24}/>
