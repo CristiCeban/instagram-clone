@@ -16,6 +16,7 @@ import ProductsScreen from "../screens/products/ProductsScreen";
 import PageNotFound from "../screens/pageNotFound/PageNotFound";
 import Footer from "../components/footer/Footer";
 import AddProductScreen from "../screens/addProduct/AddProductScreen";
+import ProductDetailsScreen from "../screens/products/ProductsDetailsScreen";
 
 
 const Navigation = ({history} : any) => {
@@ -86,6 +87,13 @@ const Navigation = ({history} : any) => {
                                 <Footer/>
                             </>)}
                         />
+                        <Route path={'/products'} render={() => (
+                            <>
+                                <NavBar/>
+                                <ProductDetailsScreen/>
+                                <Footer/>
+                            </>
+                        )}/>
                         <Route path={'/*'} component={PageNotFound}/>
                     </Switch>
                 }

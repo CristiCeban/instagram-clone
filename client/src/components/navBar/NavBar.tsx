@@ -55,7 +55,7 @@ const NavBar = () =>{
 
                     <Link href={'/products'}>
                         <IconButton>
-                            <Store className={pathname === routerEnum.products
+                            <Store className={pathname.includes(routerEnum.products)
                                 ? classes.selectedNavIcon
                                 :
                                 undefined}

@@ -119,8 +119,8 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<ProductDao> getProducts(@RequestParam("page") int page, @RequestParam("size") int size) {
-        return productService.getProductsAsc(page, size);
+    public ProductsDto getProducts(@RequestParam("page") int page, @RequestParam("size") int size) {
+        return productService.getProducts(page, size);
     }
 
      /**
@@ -149,7 +149,7 @@ public class ProductController {
         return productService.getAllFromWishList(userId);
     }
 
-    
+
 
      /**
      * Delete form wish.
@@ -163,7 +163,7 @@ public class ProductController {
         Integer userId = user.getId();
         productService.deleteProductFromWishList(productId, userId);
     }
-    
+
     private String saveImage(@RequestParam("files") MultipartFile img) throws IOException {
         Path path = Paths.get("products");
         if (!Files.exists(path)) {

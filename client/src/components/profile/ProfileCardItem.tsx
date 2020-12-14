@@ -98,7 +98,7 @@ const ProfileCardItem = ({card:{id,
                     <Button>
                         <Typography>#{category.name}</Typography>
                     </Button>
-                    <Link href={'/products'}>
+                    <Link href={`/products/${id}`}>
                         <IconButton aria-label="see">
                             <Visibility />
                         </IconButton>
