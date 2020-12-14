@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -98,5 +99,14 @@ public class JwtAuthenticationController {
 
         return new ProfileResponse(user,userProducts);
 		
+	}
+
+	@GetMapping(value = "/profile/{id}")
+	private ProfileResponse getProf(@PathVariable("id") Integer id){
+		UserDao user = userRepository.findById(id).orElseThrow();
+
+		List<ProductDao> userProducts = productRepository.findAllByUserId(user);
+
+		return new ProfileResponse(user, userProducts);
 	}
  }
