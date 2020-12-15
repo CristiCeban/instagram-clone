@@ -26,10 +26,6 @@ const HeaderPost = ({name} : HeaderInterface) => {
 
 
 const useStyles = makeStyles((theme) => ({
-    header: {
-        flex:1,
-        flexDirection:'row'
-    },
     mainDiv: {
         display : 'flex',
         flexDirection: 'row',

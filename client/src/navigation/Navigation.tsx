@@ -17,6 +17,7 @@ import PageNotFound from "../screens/pageNotFound/PageNotFound";
 import Footer from "../components/footer/Footer";
 import AddProductScreen from "../screens/addProduct/AddProductScreen";
 import ProductDetailsScreen from "../screens/products/ProductsDetailsScreen";
+import ProfileForeignScreen from "../screens/profile/ProfileForeignScreen";
 
 
 const Navigation = ({history} : any) => {
@@ -91,6 +92,13 @@ const Navigation = ({history} : any) => {
                             <>
                                 <NavBar/>
                                 <ProductDetailsScreen/>
+                                <Footer/>
+                            </>
+                        )}/>
+                        <Route path={'/profile'} render={() => (
+                            <>
+                                <NavBar/>
+                                <ProfileForeignScreen/>
                                 <Footer/>
                             </>
                         )}/>

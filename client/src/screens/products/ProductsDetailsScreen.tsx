@@ -4,7 +4,8 @@ import {useDispatch} from "react-redux";
 import ApiService from '../../services/api'
 import {makeStyles} from "@material-ui/core/styles";
 import Loader from "react-loader-spinner";
-import Post from "../../components/post/Post";
+import PostItem from "../../components/post/PostItem";
+import {useHistory} from "react-router";
 
 export interface ProductPublicPostInterface {
     category: {
@@ -31,11 +32,12 @@ export interface ProductPublicPostInterface {
 const ProductDetailsScreen = () => {
     const dispatch = useDispatch();
     const location = useLocation();
+    const history = useHistory()
     const {pathname} = location;
     const classes = useStyles();
 
 
-    const [isLoading,setIsLoading] = useState<boolean>(false)
+    const [isLoading,setIsLoading] = useState<boolean>(true)
     const [product,setProduct] = useState<ProductPublicPostInterface>()
 
     useEffect( () => {
@@ -48,7 +50,7 @@ const ProductDetailsScreen = () => {
                 setProduct(response)
             }
             catch (e) {
-
+                history.replace('/pageNotFound')
             }
             finally {
                 setTimeout(() => setIsLoading(false),500)
@@ -56,13 +58,13 @@ const ProductDetailsScreen = () => {
         })()
     },[pathname])
     return(
-        isLoading && !product?
+        isLoading?
             <div className={classes.center}>
                 <Loader type={'Puff'}/>
             </div>
             :
             <div style={{marginTop:100}}>
-                <Post
+                <PostItem
                     name={product?.name}
                     category={product?.category}
                     id={product?.id}
@@ -72,6 +74,19 @@ const ProductDetailsScreen = () => {
                     shortDescription={product?.shortDescription}
                     userId={product?.userId}/>
             </div>
+
+
+            // <div style={{marginTop:100}}>
+            //     <Post
+            //         name={product?.name}
+            //         category={product?.category}
+            //         id={product?.id}
+            //         longDescription={product?.longDescription}
+            //         photos={product?.photos}
+            //         price={product?.price}
+            //         shortDescription={product?.shortDescription}
+            //         userId={product?.userId}/>
+            // </div>
 
     )
 }

@@ -9,11 +9,13 @@ import { DropzoneArea } from 'material-ui-dropzone';
 import Button from "@material-ui/core/Button";
 import {useDispatch, useSelector} from "react-redux";
 import {ApplicationState} from "../../redux/reducers";
-import { Bounce } from 'react-activity';
 import {onUploadProduct} from "../../redux/actions/productsActions";
 import {onGetAllCategories} from "../../redux/actions/generalActions";
-import {AccountCircle} from "@material-ui/icons";
 import Loader from "react-loader-spinner";
+//@ts-ignore
+import { Bounce } from 'react-activity';
+import {useHistory} from "react-router";
+
 
 const initFormValue = {
     name: '',
@@ -55,6 +57,7 @@ const validationSchema = yup.object().shape({
 
 const AddProductScreen = () => {
     const dispatch = useDispatch();
+    const history = useHistory();
     const formikRef = useRef(null);
     const classes = useStyles();
     const {inProgress} = useSelector((state: ApplicationState) => state.productsReducers);
@@ -64,8 +67,9 @@ const AddProductScreen = () => {
         dispatch(onGetAllCategories())
     },[])
 
-    const onAddProduct = (values : any) => {
-        dispatch(onUploadProduct(values))
+    const onAddProduct = async (values: any) => {
+        await dispatch(onUploadProduct(values))
+        history.push('/')
     }
 
     return (

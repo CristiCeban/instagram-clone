@@ -19,12 +19,12 @@ export interface LogoutAction {
 
 export interface ErrorAction {
     readonly type : 'ON_ERROR',
-    payload : any,
+    payload : string,
 }
 
 export interface ErrorRegister {
     readonly type : 'ON_ERROR_REGISTER',
-    payload : any,
+    payload : string,
 }
 
 export interface InProgress {
@@ -56,13 +56,14 @@ export const onLogin=(body : LoginModel) => {
         try {
             dispatch({type :'SET_IN_PROGRESS',payload:true})
             const response = await ApiService.post('authenticate', {...body})
-            dispatch({type: 'ON_LOGIN', payload: response.data.token})
+            setTimeout(() => dispatch({type: 'ON_LOGIN', payload: response.data.token}),1500)
         }
         catch(e){
             console.error(e);
+            dispatch({type:'ON_ERROR',payload:"Email or password doesn't match"})
         }
         finally {
-            dispatch({type : 'SET_IN_PROGRESS',payload : false})
+            setTimeout(() => dispatch({type : 'SET_IN_PROGRESS',payload : false}),1500)
         }
     }
 }
@@ -71,19 +72,18 @@ export const onRegister = (body : any) => {
     return async (dispatch : Dispatch<AuthActions>) => {
         try{
             dispatch({type :'SET_IN_PROGRESS',payload:true})
-            setTimeout(async () => {
-                const response = await ApiService.post('register', {...body})
-                console.log(response)
-                console.log(response.data);
-                dispatch({type: 'ON_REGISTER', payload: response.data.token})
-            },3000)
+            const response = await ApiService.post('register', {...body})
+            console.log(response)
+            console.log(response.data);
+            setTimeout(() => dispatch({type: 'ON_REGISTER', payload: response.data.token})
+            ,1500)
         }
         catch (e) {
-            console.log('error')
             console.log(e);
+            dispatch({type:'ON_ERROR_REGISTER',payload:"This email is already taken"})
         }
         finally {
-            setTimeout(() => dispatch({type : 'SET_IN_PROGRESS',payload : false}),3000)
+            setTimeout(() => dispatch({type : 'SET_IN_PROGRESS',payload : false}),1500)
         }
     }
 }

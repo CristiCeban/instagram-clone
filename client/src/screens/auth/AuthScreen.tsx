@@ -40,7 +40,7 @@ const validationSchema = yup.object().shape({
 const AuthScreen = () =>{
     const dispatch = useDispatch();
     const classes = useStyles();
-    const {inProgress} = useSelector((state: ApplicationState) => state.authReducer);
+    const {inProgress,error} = useSelector((state: ApplicationState) => state.authReducer);
     const formikRef = useRef(null);
 
 
@@ -126,8 +126,10 @@ const AuthScreen = () =>{
                                          'Sign in'
                                          }
                                      </div>
-
                                 </Button>
+                                {error ?
+                                <p className={classes.helperText} style={{paddingLeft:15,fontSize:12,marginTop:-5}}>{error}</p>
+                                :null}
                                 <Grid container>
                                     <Grid item xs>
                                         <Link href="#" variant="body2">

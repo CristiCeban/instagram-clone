@@ -24,7 +24,8 @@ const AuthReducer = (state : AuthState = initialState,action : AuthActions) => {
             return {
                 ...state,
                 token : action.payload,
-                isLogged: true
+                isLogged: true,
+                error:undefined,
             }
         }
         case "ON_LOGOUT":
@@ -39,11 +40,21 @@ const AuthReducer = (state : AuthState = initialState,action : AuthActions) => {
                 ...state,
                 inProgress : action.payload
             }
+        case "ON_ERROR":
+            return {
+                ...state,
+                error : action.payload;
+            }
         case "ON_REGISTER":
             return {
                 ...state,
-                token: action.payload.token,
+                token: action.payload,
                 isLogged: true,
+            }
+        case "ON_ERROR_REGISTER":
+            return {
+                ...state,
+                errorRegister : action.payload
             }
         default :
             return state;

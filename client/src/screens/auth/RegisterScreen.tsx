@@ -18,7 +18,7 @@ import Link from "@material-ui/core/Link";
 import Box from "@material-ui/core/Box";
 // @ts-ignore
 import { Bounce } from 'react-activity';
-import {onLogin, onRegister} from "../../redux/actions/authActions";
+import {onRegister} from "../../redux/actions/authActions";
 
 
 
@@ -56,7 +56,7 @@ const validationSchema = yup.object().shape({
 const RegisterScreen = () => {
     const dispatch = useDispatch();
     const classes = useStyles();
-    const {inProgress} = useSelector((state: ApplicationState) => state.authReducer);
+    const {inProgress,errorRegister} = useSelector((state: ApplicationState) => state.authReducer);
     const formikRef = useRef(null);
 
     const onSignUp= (values : any) => {
@@ -193,6 +193,9 @@ const RegisterScreen = () => {
                                     </div>
 
                                 </Button>
+                                {errorRegister ?
+                                    <p className={classes.helperText} style={{paddingLeft:15,fontSize:12,marginTop:-5}}>{errorRegister}</p>
+                                    :null}
                                 <Grid container>
                                     <Grid item xs>
                                         <Link href="#" variant="body2">

@@ -86,7 +86,7 @@ const NavBar = () =>{
 
                     <Link href={'/profile'}>
                         <IconButton>
-                                <AccountCircle className={pathname === routerEnum.profile
+                                <AccountCircle className={pathname.includes(routerEnum.profile)
                                     ? classes.selectedNavIcon
                                     :
                                     undefined}
