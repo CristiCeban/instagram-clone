@@ -14,7 +14,14 @@ public class UserDto {
     private String role;
     private String imagePath;
 
+    public UserDto(String username, String name, String phone, String imagePath) {
+        this.username = username;
+        this.name = name;
+        this.phone = phone;
+        this.imagePath = imagePath;
+    }
 
+    
 
 
 }

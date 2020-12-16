@@ -164,7 +164,7 @@ public class ProductController {
         productService.deleteProductFromWishList(productId, userId);
     }
 
-    private String saveImage(@RequestParam("files") MultipartFile img) throws IOException {
+    public String saveImage(@RequestParam("files") MultipartFile img) throws IOException {
         Path path = Paths.get("products");
         if (!Files.exists(path)) {
             Files.createDirectory(path);

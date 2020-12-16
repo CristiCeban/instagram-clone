@@ -8,7 +8,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -30,11 +32,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 
 @RestController
 @CrossOrigin
@@ -44,39 +47,41 @@ public class JwtAuthenticationController {
 	@Autowired
 	private UserRepository userRepository;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+	@Autowired
+	private AuthenticationManager authenticationManager;
 
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+	@Autowired
+	private JwtTokenUtil jwtTokenUtil;
 
-    @Autowired
+	@Autowired
 	private JwtUserDetailsService userDetailsService;
-	
+
 	@Autowired
 	private ProductRepository productRepository;
 
-    @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+	@Autowired
+	private ProductController productController;
+
+	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
 	public ResponseEntity<?> generateAuthenticationToken(@RequestBody JwtRequest authenticationRequest)
 			throws Exception {
 
 		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
-		final UserDetails userDetails = userDetailsService
-				.loadUserByUsername(authenticationRequest.getUsername());
+		final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 
 		final String token = jwtTokenUtil.generateToken(userDetails);
 
 		return ResponseEntity.ok(new JwtResponse(token));
-    }
+	}
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public ResponseEntity<?> saveUser(@RequestBody UserDto user) throws Exception {
-        userDetailsService.save(user);
-        final UserDetails userdetails = new User(user.getEmail(),user.getPassword(), new ArrayList<>());
-        final String token = jwtTokenUtil.generateToken(userdetails);
+		userDetailsService.save(user);
+		final UserDetails userdetails = new User(user.getEmail(), user.getPassword(), new ArrayList<>());
+		final String token = jwtTokenUtil.generateToken(userdetails);
 		return ResponseEntity.ok(new JwtResponse(token));
-    }
+	}
 
 	private void authenticate(String username, String password) throws Exception {
 		Objects.requireNonNull(username);
@@ -90,23 +95,46 @@ public class JwtAuthenticationController {
 		}
 	}
 
-	@GetMapping(value= "/me")
-	private ProfileResponse getProf(Authentication authenticate){
+	@GetMapping(value = "/me")
+	private ProfileResponse getProf(Authentication authenticate) {
 		String username = authenticate.getName();
 		UserDao user = userRepository.findByEmail(username);
-		
-        List<ProductDao> userProducts = productRepository.findAllByUserId(user);
 
-        return new ProfileResponse(user,userProducts);
-		
+		List<ProductDao> userProducts = productRepository.findAllByUserId(user);
+
+		return new ProfileResponse(user, userProducts);
+
 	}
 
 	@GetMapping(value = "/profile/{id}")
-	private ProfileResponse getProf(@PathVariable("id") Integer id){
+	private ProfileResponse getProf(@PathVariable("id") Integer id) {
 		UserDao user = userRepository.findById(id).orElseThrow();
 
 		List<ProductDao> userProducts = productRepository.findAllByUserId(user);
 
 		return new ProfileResponse(user, userProducts);
+	}
+
+	@PostMapping(value = "/me/update")
+	private void updateProf(Authentication authentication,
+			@RequestParam(required = false, name = "fotka") MultipartFile fotka,
+			@RequestParam(required = false, name = "name") String name,@RequestParam(required = false, name = "phone") String phone,@RequestParam(required = false, name = "username") String username) throws IOException {
+		String profUsername = authentication.getName();
+		UserDao user = userRepository.findByEmail(profUsername);
+		UserDto updatedUser = new UserDto();
+		if (fotka != null) {
+			String imagePath = productController.saveImage(fotka);
+			updatedUser.setImagePath(imagePath);
+		}
+		if(name != null){
+			updatedUser.setName(name);
+		}
+		if (phone != null) {
+			updatedUser.setPhone(phone);
+		}
+		if (username != null) {
+			updatedUser.setUsername(username);;
+		}
+		userDetailsService.updateProf(user, updatedUser);
 	}
  }

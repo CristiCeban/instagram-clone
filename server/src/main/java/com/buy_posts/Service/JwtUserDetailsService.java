@@ -2,6 +2,7 @@ package com.buy_posts.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.buy_posts.DTO.UserDto;
 import com.buy_posts.Model.ProductDao;
@@ -32,6 +33,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
 
 
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserDao user = userDao.findByEmail(username);
@@ -42,7 +44,22 @@ public class JwtUserDetailsService implements UserDetailsService {
     }
 
 
-    
+    public void updateProf(UserDao user ,UserDto userInfo){
+         
+        if (userInfo.getImagePath() != null) {
+            user.setImagePath(userInfo.getImagePath());
+        }
+        if (userInfo.getName() != null) {
+            user.setName(userInfo.getName());;
+        }
+        if (userInfo.getPhone() != null) {
+            user.setPhone(userInfo.getPhone());;
+        }
+        if (userInfo.getUsername() != null) {
+            user.setUserName(userInfo.getUsername());;
+        }
+        userDao.save(user);
+    }
 
     public UserDao save(UserDto user){
         UserDao newUser = new UserDao();

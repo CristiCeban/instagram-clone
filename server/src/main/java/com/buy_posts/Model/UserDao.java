@@ -33,7 +33,7 @@ public class UserDao {
   @Column
   private String password;
 
-  @JsonIgnore
+  
   private String imagePath;
 
   @JsonIgnore
