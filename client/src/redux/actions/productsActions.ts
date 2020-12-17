@@ -61,16 +61,18 @@ export const onGetProductsMain = (params:any = {},initialLoading = true) =>{
     return async(dispatch : Dispatch<ProductsActions>) => {
         try {
             dispatch({type:loadingType,payload:true})
-            console.log(params)
-            // const response = await ApiService.get('products',params)
             const response = await ApiService.getWithBody('products',params);
-            console.log(response)
+            const payload = {
+                ...response,
+                initialLoading,
+            }
+            setTimeout(() => dispatch({type:'GET_PRODUCTS_MAIN',payload:payload}),1500)
         }
         catch (e) {
             console.log(e);
         }
         finally {
-            setTimeout(() =>dispatch({type:loadingType,payload:true}),1000)
+            setTimeout(() =>dispatch({type:loadingType,payload:false}),1500)
         }
     }
 

@@ -6,6 +6,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import Loader from "react-loader-spinner";
 import PostItem from "../../components/post/PostItem";
 import {useHistory} from "react-router";
+import {Color} from "../../config/Colors";
 
 export interface ProductPublicPostInterface {
     category: {
@@ -21,6 +22,7 @@ export interface ProductPublicPostInterface {
         id:number,
         imagePath:string}[],
     userId: {
+        imagePath: string;
         email : string,
         id : number,
         name : string,
@@ -60,7 +62,7 @@ const ProductDetailsScreen = () => {
     return(
         isLoading?
             <div className={classes.center}>
-                <Loader type={'Puff'}/>
+                <Loader type={'Puff'} color={Color.secondaryColor}/>
             </div>
             :
             <div style={{marginTop:100}}>

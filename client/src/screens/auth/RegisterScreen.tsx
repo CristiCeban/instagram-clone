@@ -188,7 +188,7 @@ const RegisterScreen = () => {
                                         {inProgress ?
                                             <Bounce style={{marginTop:25}}/>
                                             :
-                                            'Sign in'
+                                            'Sign Up'
                                         }
                                     </div>
 

@@ -9,6 +9,7 @@ import ProfileForeignHeader from "../../components/profile/ProfileForeignHeader"
 import ProfileForeignCardList from "../../components/profile/ProfileForeignCardList";
 import {onGetProfileData} from "../../redux/actions/profileActions";
 import {ApplicationState} from "../../redux/reducers";
+import {Color} from "../../config/Colors";
 
 export interface ProfileInterface {
     profile:{
@@ -17,6 +18,7 @@ export interface ProfileInterface {
         name : string,
         phone : string,
         userName : string,
+        imagePath : string,
     }
     userProducts : {
         category : {
@@ -38,6 +40,7 @@ export interface ProfileInterface {
             email : string,
             phone : string,
             name : string,
+            imagePath : string,
         }
     }[]
 }
@@ -81,7 +84,7 @@ const ProfileForeignScreen = () => {
     return(
         isLoading?
             <div className={classes.center}>
-                <Loader type={'Puff'}/>
+                <Loader type={'Puff'} color={Color.secondaryColor}/>
             </div>
             :
             <div>
@@ -91,6 +94,7 @@ const ProfileForeignScreen = () => {
                     email={profile?.profile.email}
                     phone={profile?.profile.phone}
                     productsLength={profile?.userProducts.length}
+                    imagePath = {profile?.profile?.imagePath}
                 />
                 <ProfileForeignCardList
                     userProductsList={profile?.userProducts}

@@ -2,8 +2,9 @@ import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import useWindowDimensions from "../../hooks/useWindowDimenstions";
 import {Button} from "@material-ui/core";
+import Config from "../../config/config";
 
-const ProfileForeignHeader = ({userName,name,email,phone,productsLength} : any) => {
+const ProfileForeignHeader = ({userName,name,email,phone,productsLength,imagePath} : any) => {
     const {height,width} = useWindowDimensions();
     const classes = useStyles({width,height})();
 
@@ -13,7 +14,7 @@ const ProfileForeignHeader = ({userName,name,email,phone,productsLength} : any) 
             <div className={classes.flexDiv}>
                 <div>
                     {/* @ts-ignore*/}
-                    <img className={classes.thumbnail} src={require('../../assets/temp.jpg')} alt={''}/>
+                    <img className={classes.thumbnail} src={imagePath ? `${Config.sourceUrl}/${imagePath}` : require('../../assets/placeholder.svg')} alt={''}/>
                 </div>
                 <div className={classes.info}>
                     <h4>{userName}</h4>

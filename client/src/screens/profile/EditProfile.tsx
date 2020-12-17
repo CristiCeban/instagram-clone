@@ -150,7 +150,7 @@ const EditProfile = () => {
                                                 <Bounce />
                                             </div>
                                             :
-                                            'Add Product'
+                                            'Edit Profile'
                                         }
                                     </div>
                                 </Button>

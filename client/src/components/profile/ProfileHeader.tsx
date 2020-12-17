@@ -7,6 +7,7 @@ import {onLogout} from "../../redux/actions/generalActions";
 import {IconButton, Typography} from "@material-ui/core";
 import {Edit, ExitToApp} from "@material-ui/icons";
 import {useHistory} from "react-router";
+import Config from "../../config/config";
 
 
 
@@ -15,7 +16,7 @@ const ProfileHeader = () => {
     const navigation = useHistory();
     const {height,width} = useWindowDimensions();
     const classes = useStyles({width,height})();
-    const {name,email,phone,products,userName} = useSelector((state:ApplicationState) => state.profileReducers)
+    const {name,email,phone,products,userName,imagePath} = useSelector((state:ApplicationState) => state.profileReducers)
 
     const logout = async () => {
         dispatch(onLogout());
@@ -27,7 +28,7 @@ const ProfileHeader = () => {
             <div className={classes.flexDiv}>
                 <div>
                     {/* @ts-ignore*/}
-                    <img className={classes.thumbnail} src={require('../../assets/temp.jpg')} alt={''}/>
+                    <img className={classes.thumbnail} src={imagePath ? `${Config.sourceUrl}/${imagePath}` : require('../../assets/placeholder.svg')}/>
                 </div>
                 <div className={classes.info}>
                     <div className={classes.userName}>

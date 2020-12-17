@@ -122,9 +122,11 @@ public class JwtAuthenticationController {
 		String profUsername = authentication.getName();
 		UserDao user = userRepository.findByEmail(profUsername);
 		UserDto updatedUser = new UserDto();
+		System.out.println("S-a intrat");
 		if (fotka != null) {
 			String imagePath = productController.saveImage(fotka);
 			updatedUser.setImagePath(imagePath);
+			System.out.println("Saved");
 		}
 		if(name != null){
 			updatedUser.setName(name);

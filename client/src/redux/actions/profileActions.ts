@@ -68,6 +68,8 @@ export const onUpdateProfile = (values : any) => {
         try {
             dispatch({type:'SET_PROFILE_IN_PROGRESS',payload:true})
             const formData = createUpdateProfileFormData(values)
+            console.log(values)
+            console.log(formData);
             const response = await ApiService.postFormData('me/update',formData)
             console.log(response)
         }

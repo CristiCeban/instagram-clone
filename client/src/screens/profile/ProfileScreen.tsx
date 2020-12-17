@@ -6,6 +6,7 @@ import ProfileCardList from "../../components/profile/ProfileCardList";
 import {makeStyles} from "@material-ui/core/styles";
 import {ApplicationState} from "../../redux/reducers";
 import Loader from "react-loader-spinner";
+import {Color} from "../../config/Colors";
 
 const ProfileScreen = () => {
     const dispatch = useDispatch();
@@ -15,11 +16,12 @@ const ProfileScreen = () => {
     useEffect(()=>{
         dispatch(onGetProfileData())
     },[])
+
     return(
         <>
             {inProgress ?
                 <div className={classes.center}>
-                    <Loader type={'Puff'}/>
+                    <Loader type={'Puff'} color={Color.secondaryColor}/>
                 </div>
                 :
                 <>

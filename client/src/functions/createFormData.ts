@@ -15,9 +15,11 @@ export const createUploadProductFormData = ({name,price,shortDescription,longDes
 export const createUpdateProfileFormData = ({name,userName,phone,imagePath} : any) => {
     const formData = new FormData();
     formData.append('name',name);
-    formData.append('userName',userName);
+    formData.append('username',userName);
     formData.append('phone',phone);
-    if(imagePath)
-        formData.append('imagePath',imagePath)
+    if(imagePath) {
+        console.log('ImagePath')
+        formData.append('imagePath', imagePath[0])
+    }
     return formData
 }

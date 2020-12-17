@@ -34,6 +34,7 @@ export interface UserProducts {
         email : string,
         phone : string,
         name : string,
+        imagePath : string,
     }
 }
 
@@ -62,9 +63,11 @@ const ProfileForeignCardItem = ({name,longDescription,shortDescription,price,id,
             <Card className={classes.card}>
                 <div className={classes.cardHeader}>
                     <div className={classes.detailDiv}>
-                        <IconButton>
-                            <AccountCircle/>
-                        </IconButton>
+                        <Link href={`/profile/${userId?.id}`}>
+                            <IconButton>
+                                <img className={classes.thumbnail} src={userId.imagePath ? `${Config.sourceUrl}/${userId?.imagePath}` : require('../../assets/placeholder.svg')}/>
+                            </IconButton>
+                        </Link>
                         <p>{userId?.userName}</p>
                     </div>
                     <IconButton>
@@ -167,6 +170,11 @@ const useStyles = makeStyles((theme) => ({
         display : 'flex',
         flexDirection: 'row',
     },
+    thumbnail: {
+        width: 25,
+        height:25,
+        borderRadius:35,
+    }
 }));
 
 
