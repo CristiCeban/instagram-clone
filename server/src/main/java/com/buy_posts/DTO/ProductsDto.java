@@ -2,6 +2,7 @@ package com.buy_posts.DTO;
 
 import java.util.List;
 
+import com.buy_posts.Model.LikedProduct;
 import com.buy_posts.Model.ProductDao;
 
 import lombok.AllArgsConstructor;
@@ -23,5 +24,6 @@ public class ProductsDto {
     /**
      * Current page of Products.
      */
-    private List<ProductDao> products;
+    // private List<ProductDao> products;
+    private List<LikedProduct> products;
 }

@@ -119,8 +119,10 @@ public class ProductController {
     }
 
     @GetMapping
-    public ProductsDto getProducts(@RequestParam("page") int page, @RequestParam("size") int size) {
-        return productService.getProducts(page, size);
+    public ProductsDto getProducts(@RequestParam("page") int page, @RequestParam("size") int size,Authentication authentication) {
+        String username = authentication.getName();
+        UserDao user = userRepository.findByEmail(username);
+        return productService.getProducts(page, size, user);
     }
 
      /**

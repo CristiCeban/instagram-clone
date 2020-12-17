@@ -11,4 +11,5 @@ import org.springframework.stereotype.Repository;
 public interface WishListRepository extends CrudRepository<WishList,Long>{
     List<WishList> findAllByUserId(Integer userId);
     WishList findByUserIdAndProductId(Integer userId, Long productId);
+    boolean existsByUserIdAndProductId(Integer userId, long productId);
 }

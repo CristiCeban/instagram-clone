@@ -1,6 +1,7 @@
 package com.buy_posts.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -8,6 +9,7 @@ import java.util.stream.Collectors;
 import com.buy_posts.DTO.ProductDto;
 import com.buy_posts.DTO.ProductsDto;
 import com.buy_posts.Model.CategoryDao;
+import com.buy_posts.Model.LikedProduct;
 import com.buy_posts.Model.ProductDao;
 import com.buy_posts.Model.ProductPhotoDao;
 import com.buy_posts.Model.UserDao;
@@ -43,14 +45,22 @@ public class ProductService {
     @Autowired
     private UserRepository userRepository;
 
-    public ProductsDto getProducts(int page, int size) {
+    public ProductsDto getProducts(int page, int size,UserDao user) {
         Pageable pageRequest = PageRequest.of(page, size);
         Page<ProductDao> productsPage = productRepository.findAll(pageRequest);
         List<ProductDao> productList = productsPage.getContent();
+
+        List<LikedProduct> likedProducts = new ArrayList<>();
+
+        for (ProductDao product : productList) {
+            boolean isLiked = wishListRepository.existsByUserIdAndProductId(user.getId(), product.getId());
+            likedProducts.add(new LikedProduct(product,isLiked));
+        }
+
         long totalElements = productsPage.getTotalElements();
         int totalPages = productsPage.getTotalPages();
 
-        return new ProductsDto(totalElements, totalPages, productList);
+        return new ProductsDto(totalElements, totalPages, likedProducts);
     }
 
     public List<ProductDao> getProductsAsc(int page, int size) {
@@ -59,7 +69,7 @@ public class ProductService {
         return productsPage.getContent();
     }
 
-    public List<ProductDao> getProducts(int page, int size, Long categoryId) {
+    public List<ProductDao> getProducts(int page, int size, long categoryId) {
         Pageable pageRequest = PageRequest.of(page, size);
         Page<ProductDao> productsPage = productRepository.findAllByCategoryId(pageRequest, categoryId);
         return productsPage.getContent();
@@ -113,4 +123,11 @@ public class ProductService {
         products.forEach(result::add);
         return result;
     }
+
+    // public boolean isLikedByUser(UserDao user,ProductDao product){
+    //     if(wishListRepository.existsByUserIdAndProductId(user.getId(), product.getId())){
+    //         return true;
+    //     }
+    //     return false;
+    // }
 }
