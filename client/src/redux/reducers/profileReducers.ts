@@ -8,7 +8,7 @@ type ProfileState = {
     phone : string,
     products : any[],
     userName : string,
-    thumbnail : string | undefined,
+    imagePath : string | undefined,
     inProgressDeleting : boolean,
     deletingProductId : number | undefined,
 
@@ -22,7 +22,7 @@ const initialState = {
     phone: '',
     products : [],
     userName: '',
-    thumbnail : undefined,
+    imagePath : undefined,
     inProgressDeleting : false,
     deletingProductId : undefined
 }
@@ -43,7 +43,7 @@ const ProfileReducer = (state : ProfileState = initialState,action : ProfileActi
                 phone : action.payload.profile.phone,
                 userName :action.payload.profile.userName,
                 products : action.payload.userProducts,
-                thumbnail : action.payload.profile.thumbnail,
+                imagePath : action.payload.profile.imagePath,
             }
         case "SET_IN_PROGRESS_DELETING_PRODUCT":
             return {

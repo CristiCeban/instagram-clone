@@ -117,7 +117,7 @@ public class JwtAuthenticationController {
 
 	@PostMapping(value = "/me/update")
 	private void updateProf(Authentication authentication,
-			@RequestParam(required = false, name = "fotka") MultipartFile fotka,
+			@RequestParam(required = false, name = "imagePath") MultipartFile fotka,
 			@RequestParam(required = false, name = "name") String name,@RequestParam(required = false, name = "phone") String phone,@RequestParam(required = false, name = "username") String username) throws IOException {
 		String profUsername = authentication.getName();
 		UserDao user = userRepository.findByEmail(profUsername);

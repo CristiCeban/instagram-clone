@@ -18,6 +18,7 @@ import Footer from "../components/footer/Footer";
 import AddProductScreen from "../screens/addProduct/AddProductScreen";
 import ProductDetailsScreen from "../screens/products/ProductsDetailsScreen";
 import ProfileForeignScreen from "../screens/profile/ProfileForeignScreen";
+import EditProfile from "../screens/profile/EditProfile";
 
 
 const Navigation = ({history} : any) => {
@@ -88,6 +89,15 @@ const Navigation = ({history} : any) => {
                                 <Footer/>
                             </>)}
                         />
+
+                        <Route exact path={'/profile/edit'} render={()=>(
+                            <>
+                                <NavBar/>
+                                <Route component={EditProfile}/>
+                                <Footer/>
+                            </>)}
+                        />
+
                         <Route path={'/products'} render={() => (
                             <>
                                 <NavBar/>

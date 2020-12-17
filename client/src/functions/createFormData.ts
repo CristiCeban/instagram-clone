@@ -11,3 +11,13 @@ export const createUploadProductFormData = ({name,price,shortDescription,longDes
     files.map(file => formData.append('files',file))
     return formData;
 }
+
+export const createUpdateProfileFormData = ({name,userName,phone,imagePath} : any) => {
+    const formData = new FormData();
+    formData.append('name',name);
+    formData.append('userName',userName);
+    formData.append('phone',phone);
+    if(imagePath)
+        formData.append('imagePath',imagePath)
+    return formData
+}

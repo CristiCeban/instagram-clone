@@ -35,6 +35,10 @@ export default {
         return apiClient.get(`/${path}`,params)
             .then(response=>response.data);
     },
+    getWithBody(path:string,body:any){
+        return apiClient.get(`/${path}`,{params : body})
+            .then(response=>response.data)
+    },
     post(path:string,body : any) {
         return apiClient.post(`/${path}`,body,{
             headers: {

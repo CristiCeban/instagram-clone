@@ -162,7 +162,7 @@ const RegisterScreen = () => {
                                     fullWidth
                                     name="phone"
                                     label="phone"
-                                    type="phone"
+                                    type="number"
                                     id="phone"
                                     autoComplete="current-phone"
                                     value={values.phone}

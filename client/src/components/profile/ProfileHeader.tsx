@@ -1,15 +1,18 @@
-import React from "react";
+import React, {useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import useWindowDimensions from "../../hooks/useWindowDimenstions";
 import {useDispatch, useSelector} from "react-redux";
 import {ApplicationState} from "../../redux/reducers";
 import {onLogout} from "../../redux/actions/generalActions";
-import {Button} from "@material-ui/core";
+import {IconButton, Typography} from "@material-ui/core";
+import {Edit, ExitToApp} from "@material-ui/icons";
+import {useHistory} from "react-router";
 
 
 
 const ProfileHeader = () => {
     const dispatch = useDispatch();
+    const navigation = useHistory();
     const {height,width} = useWindowDimensions();
     const classes = useStyles({width,height})();
     const {name,email,phone,products,userName} = useSelector((state:ApplicationState) => state.profileReducers)
@@ -27,16 +30,19 @@ const ProfileHeader = () => {
                     <img className={classes.thumbnail} src={require('../../assets/temp.jpg')} alt={''}/>
                 </div>
                 <div className={classes.info}>
-                    <h4>{userName}</h4>
+                    <div className={classes.userName}>
+                        <Typography style={{marginTop:0}} variant={'h4'}>{userName}</Typography>
+                        <IconButton onClick={() => navigation.push('/profile/edit')}>
+                            <Edit/>
+                        </IconButton>
+                        <IconButton onClick={logout}>
+                            <ExitToApp/>
+                        </IconButton>
+                    </div>
                     <h4>{name}</h4>
                     <h5>{email}</h5>
                     <h5>{phone}</h5>
-                    <div className={classes.postsInfo}>
-                        <h6>{products.length} Posts</h6>
-                        <div style={{paddingTop:15,paddingBottom:15}}>
-                            <Button variant="contained" onClick={logout} color="primary" >Exit</Button>
-                        </div>
-                    </div>
+                    <h6>{products.length} Posts</h6>
                 </div>
             </div>
         </div>
@@ -71,6 +77,19 @@ const useStyles = ({width=0,height=0} : any) => makeStyles(() => ({
         display:'flex',
         justifyContent:'space-between',
         width:'108%'
+    },
+    userName: {
+        display:'flex',
+        justifyContent:'space-between',
+        width:'108%'
+    },
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    textModal:{
+        color:'white'
     }
 }));
 export default ProfileHeader;

@@ -55,14 +55,15 @@ export const onUploadProduct = (values : UploadProductType) => {
 }
 
 export const onGetProductsMain = (params:any = {},initialLoading = true) =>{
-    const param = {page : 0,size:10};
+    const param = {page : 0,size:5};
     params = Object.assign(param,params)
     const loadingType = initialLoading ? 'SET_IN_PROGRESS_PRODUCTS_MAIN' : 'SET_IN_PROGRESS_LAZY_PRODUCTS_MAIN'
     return async(dispatch : Dispatch<ProductsActions>) => {
         try {
             dispatch({type:loadingType,payload:true})
             console.log(params)
-            const response = await ApiService.get('products',params)
+            // const response = await ApiService.get('products',params)
+            const response = await ApiService.getWithBody('products',params);
             console.log(response)
         }
         catch (e) {

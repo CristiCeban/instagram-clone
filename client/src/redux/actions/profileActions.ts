@@ -1,6 +1,6 @@
 import {Dispatch} from "react";
 import ApiService from '../../services/api'
-import {ProductsActions} from "./productsActions";
+import {createUpdateProfileFormData} from "../../functions/createFormData";
 
 export interface getProfileData {
     readonly type : 'GET_PROFILE_DATA'
@@ -24,6 +24,7 @@ export interface SetNewProductsProfile {
     payload : number
 }
 
+
 export type ProfileActions =
     | getProfileData
     | setProfileInProgress
@@ -35,14 +36,13 @@ export const onGetProfileData = () => {
         try {
             dispatch({type:'SET_PROFILE_IN_PROGRESS',payload:true})
             const response = await ApiService.get('me',{});
-            console.log(response)
-            dispatch({type:'GET_PROFILE_DATA',payload:response})
+            setTimeout(() =>dispatch({type:'GET_PROFILE_DATA',payload:response}),1500)
         }
         catch (e) {
             console.log(e)
         }
         finally {
-            dispatch({type:'SET_PROFILE_IN_PROGRESS',payload:false})
+            setTimeout(() =>dispatch({type:'SET_PROFILE_IN_PROGRESS',payload:false}),1500)
         }
     }
 }
@@ -59,6 +59,23 @@ export const onDeleteProduct = (id : number) => {
         }
         finally {
             setTimeout(() => dispatch({type:'SET_IN_PROGRESS_DELETING_PRODUCT',payload:{inProgress:false,id:undefined}}),1000)
+        }
+    }
+}
+
+export const onUpdateProfile = (values : any) => {
+    return async(dispatch : Dispatch<ProfileActions>) =>{
+        try {
+            dispatch({type:'SET_PROFILE_IN_PROGRESS',payload:true})
+            const formData = createUpdateProfileFormData(values)
+            const response = await ApiService.postFormData('me/update',formData)
+            console.log(response)
+        }
+        catch (e) {
+            console.log(e);
+        }
+        finally {
+            setTimeout(() =>dispatch({type:'SET_PROFILE_IN_PROGRESS',payload:false}),1500)
         }
     }
 }

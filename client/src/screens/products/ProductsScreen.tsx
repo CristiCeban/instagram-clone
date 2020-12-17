@@ -11,9 +11,7 @@ const cards = [1, 2, 3, 4, 5, 6, 7, 8];
 const ProductsScreen = () => {
     const dispatch = useDispatch();
     const classes = useStyles();
-    useEffect(() => {
-        dispatch(onGetProductsMain())
-    },[])
+
     return(
         <div style={{marginTop:30}}>
             <main>
