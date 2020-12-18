@@ -47,7 +47,7 @@ public class ProductService {
 
     public ProductsDto getProducts(int page, int size,UserDao user) {
         Pageable pageRequest = PageRequest.of(page, size);
-        Page<ProductDao> productsPage = productRepository.findAll(pageRequest);
+        Page<ProductDao> productsPage = productRepository.findAllByOrderByIdDesc(pageRequest);
         List<ProductDao> productList = productsPage.getContent();
 
         List<LikedProduct> likedProducts = new ArrayList<>();
