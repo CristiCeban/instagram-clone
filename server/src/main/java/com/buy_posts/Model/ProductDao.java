@@ -27,7 +27,7 @@ public class ProductDao {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long Id;
+    private long id;
 
     private String name;
     
