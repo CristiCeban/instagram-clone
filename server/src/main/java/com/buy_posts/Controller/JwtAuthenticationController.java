@@ -119,7 +119,9 @@ public class JwtAuthenticationController {
 	}
 
 	@GetMapping(value = "/profile/{id}")
-	private ProfileResponse getProf(@PathVariable("id") Integer id) {
+	private ProfileResponse getProf(@PathVariable("id") Integer id,Authentication authentication) {
+		String username = authentication.getName();
+		UserDao currentUser = userRepository.findByEmail(username);
 		UserDao user = userRepository.findById(id).orElseThrow();
 
 		List<ProductDao> userProducts = productRepository.findAllByUserId(user);
@@ -127,7 +129,7 @@ public class JwtAuthenticationController {
 		List<LikedProduct> likedProducts = new ArrayList<>();
 
         for (ProductDao product : userProducts) {
-            boolean isLiked = wishListRepository.existsByUserIdAndProductId(user.getId(), product.getId());
+            boolean isLiked = wishListRepository.existsByUserIdAndProductId(currentUser.getId(), product.getId());
             likedProducts.add(new LikedProduct(product,isLiked));
         }
 

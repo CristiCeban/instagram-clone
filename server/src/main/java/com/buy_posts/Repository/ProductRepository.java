@@ -24,4 +24,10 @@ public interface ProductRepository extends PagingAndSortingRepository<ProductDao
     Page<ProductDao> findAllByCategoryIdAndPriceBetween(Pageable pageable,Long categoryId, Double p1,Double p2);
 
     Page<ProductDao> findAllByCategoryIdAndNameContaining(Pageable pageable,Long categoryId, String search);
+
+    Page<ProductDao> findAllByNameContainingAndPriceBetween(Pageable pageable, String search, Double p1,Double p2);
+
+    Page<ProductDao> findAllByPriceBetween(Pageable pageable, Double p1,Double p2);
+
+    Page<ProductDao> findAllByNameContaining(Pageable pageable, String search);
 }

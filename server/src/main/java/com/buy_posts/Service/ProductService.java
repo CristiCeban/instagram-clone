@@ -122,8 +122,9 @@ public class ProductService {
         wishListRepository.delete(wishedProduct);
     }
 
-    public List<ProductDao> getAllFromWishList(Integer userId) {
-        List<WishList> allByUserId = wishListRepository.findAllByUserId(userId);
+    public List<ProductDao> getAllFromWishList(int page, int size,Integer userId) {
+        Pageable wishPage = PageRequest.of(page, size);
+        Page<WishList> allByUserId = wishListRepository.findAllByUserId(wishPage,userId);
         List<Long> list = allByUserId.stream().map(a -> a.getProductId()).collect(Collectors.toList());
         Iterable<ProductDao> products = productRepository.findAllById(list);
         List<ProductDao> result = new ArrayList<>();
@@ -158,6 +159,42 @@ public class ProductService {
         if (searchTerm != null && price1 != null && price2 != null) {
              productsPage = productRepository.findAllByCategoryIdAndNameContainingAndPriceBetween(sortedByPrice,
                      categoryId, searchTerm, price1, price2);
+        }
+       
+        List<ProductDao> productList = productsPage.getContent();
+
+        List<LikedProduct> likedProducts = new ArrayList<>();
+
+        for (ProductDao product : productList) {
+            boolean isLiked = wishListRepository.existsByUserIdAndProductId(user.getId(), product.getId());
+            likedProducts.add(new LikedProduct(product,isLiked));
+        }
+
+        long totalElements = productsPage.getTotalElements();
+        int totalPages = productsPage.getTotalPages();
+
+        return new ProductsDto(totalElements, totalPages, likedProducts);
+    }
+
+    public ProductsDto searchInProducts(UserDao user, String searchTerm,
+            Double price1, Double price2, int page, int size, String sort) {
+        
+        Pageable sortedByPrice = PageRequest.of(page, size, Sort.by("price"));
+        
+        if(sort == "desc"){
+            sortedByPrice = PageRequest.of(page, size, Sort.by("price").descending());
+        }
+        Page<ProductDao> productsPage = productRepository.findAll(sortedByPrice);
+        if(searchTerm == null && price1 != null && price2 != null){
+            productsPage = productRepository.findAllByPriceBetween(sortedByPrice,  price1, price2);
+        }
+        if (searchTerm != null && price1 == null && price2 == null) {
+            productsPage = productRepository.findAllByNameContaining(sortedByPrice,
+                    searchTerm);
+        } 
+        if (searchTerm != null && price1 != null && price2 != null) {
+             productsPage = productRepository.findAllByNameContainingAndPriceBetween(sortedByPrice,
+                      searchTerm, price1, price2);
         }
        
         List<ProductDao> productList = productsPage.getContent();
