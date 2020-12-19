@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
@@ -136,4 +137,39 @@ public class ProductService {
     //     }
     //     return false;
     // }
+
+
+    public ProductsDto searchInCategoryProducts(UserDao user,Long categoryId, String searchTerm,
+            Double price1, Double price2, int page, int size, String sort) {
+        
+        Pageable sortedByPrice = PageRequest.of(page, size, Sort.by("price"));
+        
+        if(sort == "desc"){
+            sortedByPrice = PageRequest.of(page, size, Sort.by("price").descending());
+        }
+        Page<ProductDao> productsPage = productRepository.findAll(sortedByPrice);
+        if(searchTerm == null && price1 != null && price2 != null){
+            productsPage = productRepository.findAllByCategoryIdAndPriceBetween(sortedByPrice, categoryId, price1, price2);
+        }
+        if (searchTerm != null && price1 == null && price2 == null) {
+            productsPage = productRepository.findAllByCategoryIdAndNameLike(sortedByPrice, categoryId, searchTerm);
+        } 
+        if (searchTerm != null && price1 != null && price2 != null) {
+             productsPage = productRepository.findAllByCategoryIdAndNameLikeAndPriceBetween(sortedByPrice,categoryId, searchTerm, price1, price2);
+        }
+       
+        List<ProductDao> productList = productsPage.getContent();
+
+        List<LikedProduct> likedProducts = new ArrayList<>();
+
+        for (ProductDao product : productList) {
+            boolean isLiked = wishListRepository.existsByUserIdAndProductId(user.getId(), product.getId());
+            likedProducts.add(new LikedProduct(product,isLiked));
+        }
+
+        long totalElements = productsPage.getTotalElements();
+        int totalPages = productsPage.getTotalPages();
+
+        return new ProductsDto(totalElements, totalPages, likedProducts);
+    }
 }

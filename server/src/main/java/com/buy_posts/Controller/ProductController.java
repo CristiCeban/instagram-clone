@@ -121,6 +121,8 @@ public class ProductController {
         return productService.getProducts(page, size, categoryId);
     }
 
+   
+
     @GetMapping
     public ProductsDto getProducts(@RequestParam("page") int page, @RequestParam("size") int size,Authentication authentication) {
         String username = authentication.getName();
