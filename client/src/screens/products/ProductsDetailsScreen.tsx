@@ -30,6 +30,7 @@ export interface ProductPublicPostInterface {
         phone : string,
         userName : string
     }
+    favoriteScreen : boolean
 }
 
 const ProductDetailsScreen = () => {
@@ -79,6 +80,7 @@ const ProductDetailsScreen = () => {
                     shortDescription={product?.shortDescription}
                     userId={product?.userId}
                     liked={isLiked}
+                    favoriteScreen={false}
                 />
             </div>
 

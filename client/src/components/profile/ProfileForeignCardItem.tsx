@@ -3,49 +3,78 @@ import {makeStyles, useTheme} from "@material-ui/core/styles";
 import {Card, CardActions, CardContent, CardMedia, Grid, IconButton, Link, Typography} from "@material-ui/core";
 import SwipeableViews from "react-swipeable-views";
 import { autoPlay } from 'react-swipeable-views-utils';
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import Config from "../../config/config";
 import Button from "@material-ui/core/Button";
-import {AccountCircle, Delete, Favorite, MoreHoriz, Visibility} from "@material-ui/icons";
+import {Delete, Favorite, MoreHoriz, Visibility} from "@material-ui/icons";
 import MobileStepper from "@material-ui/core/MobileStepper";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
+import {addToFavorite, deleteFromFavorite} from "../../redux/actions/productsActions";
+import {ApplicationState} from "../../redux/reducers";
+import Loader from "react-loader-spinner";
+import {Color} from "../../config/Colors";
 
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 export interface UserProducts {
-    name : string,
-    longDescription : string,
-    shortDescription : string,
-    price : number,
-    id : number,
-    category : {
-        id: number,
-        name: string,
-    },
-    photos: {
-        id : number,
-        imagePath : string,
-    }[],
-    userId : {
-        id : number,
-        userName : string,
-        email : string,
-        phone : string,
-        name : string,
-        imagePath : string,
+    card: {
+        product: {
+            name: string,
+            longDescription: string,
+            shortDescription: string,
+            price: number,
+            id: number,
+            category: {
+                id: number,
+                name: string,
+            },
+            photos: {
+                id: number,
+                imagePath: string,
+            }[],
+            userId: {
+                id: number,
+                userName: string,
+                email: string,
+                phone: string,
+                name: string,
+                imagePath: string,
+            }
+        }
+        liked: boolean
     }
 }
 
-const ProfileForeignCardItem = ({name,longDescription,shortDescription,price,id,category,photos,userId} : UserProducts) => {
+const ProfileForeignCardItem = ({ card:
+    {product :
+        {
+            name,
+            longDescription,
+            shortDescription,
+            price,
+            id,
+            category,
+            photos,
+            userId
+        },
+        liked
+    }
+} : UserProducts) => {
     const dispatch = useDispatch();
     const classes = useStyles();
     const theme = useTheme();
 
+    const [isLiked,setLiked] = useState<boolean>(liked);
+    const {inProgressAddingToWish,addingIdToWishList} = useSelector((state: ApplicationState) => state.productsReducers)
     const [activeStep, setActiveStep] = useState(0);
     const maxSteps = photos.length
 
+    const addToWishList = () => {
+        !isLiked ? dispatch(addToFavorite(id)) : dispatch(deleteFromFavorite(id));
+        setLiked(!isLiked)
+    }
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -115,8 +144,12 @@ const ProfileForeignCardItem = ({name,longDescription,shortDescription,price,id,
                             <Visibility />
                         </IconButton>
                     </Link>
-                    <IconButton aria-label="share" className={classes.likeIcon}>
-                        <Favorite/>
+                    <IconButton aria-label="share" className={classes.likeIcon} onClick={addToWishList} disabled={inProgressAddingToWish&&addingIdToWishList == id}>
+                        {addingIdToWishList == id ?
+                            <Loader type={'TailSpin'} color={Color.secondaryColor} width={24} height={24}/>
+                            :
+                            <Favorite color={isLiked ? 'secondary' : 'inherit'}/>
+                        }
                     </IconButton>
                 </CardActions>
 

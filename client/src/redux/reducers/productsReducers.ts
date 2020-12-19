@@ -5,11 +5,15 @@ type ProductsState = {
     inProgressProductsMain : boolean,
     inProgressLazyProductsMain : boolean,
     productsMain : any[],
-    productsFavorite : any[],
     productsMainNextPage : number,
     productsMainLastPage : number,
     inProgressAddingToWish : boolean,
     addingIdToWishList: number | undefined,
+    productsFavorite : any[],
+    productsFavoriteNextPage : number,
+    productsFavoriteLastPage : number,
+    inProgressFavoritesProducts : boolean,
+    inProgressFavoritesProductsLazy : boolean,
 }
 
 const initialState = {
@@ -22,6 +26,10 @@ const initialState = {
     productsMainLastPage : 0,
     inProgressAddingToWish: false,
     addingIdToWishList : undefined,
+    inProgressFavoritesProducts : false,
+    inProgressFavoritesProductsLazy : false,
+    productsFavoriteNextPage : 0,
+    productsFavoriteLastPage : 0,
 }
 
 const ProductsReducer = (state : ProductsState = initialState,action : ProductsActions) => {
@@ -57,6 +65,22 @@ const ProductsReducer = (state : ProductsState = initialState,action : ProductsA
                     productsMainLastPage : parseInt(action.payload.totalPages) -1,
                 }
             }
+        case "GET_FAVORITES_PRODUCTS":
+            if(action.payload.initialLoading)
+                return {
+                    ...state,
+                    productsFavorite : action.payload.products,
+                    productsFavoriteNextPage : 1,
+                    productsFavoriteLastPage : parseInt(action.payload.totalPages) -1,
+                }
+            else {
+                return{
+                    ...state,
+                    productsFavorite : [...state.productsFavorite,...action.payload.products],
+                    productsFavoriteNextPage : state.productsFavoriteNextPage +1,
+                    productsFavoriteLastPage : parseInt(action.payload.totalPages) -1
+                }
+            }
         case "SET_IN_PROGRESS_ADDING_TO_WISH":
             return {
                 ...state,
@@ -64,10 +88,28 @@ const ProductsReducer = (state : ProductsState = initialState,action : ProductsA
                 addingIdToWishList : action.payload.id
             }
         case "DELETE_PRODUCT_FROM_WISH":
+            if(state.productsFavorite.some(el => el.product.id === action.payload))
+                return {
+                    ...state,
+                    productsFavorite : state.productsFavorite.filter((el : any) => el.product.id !==action.payload)
+                }
+            else{
+                return {
+                    ...state,
+                }
+            }
+        case "SET_IN_PROGRESS_PRODUCTS_FAVORITES":
             return {
                 ...state,
-
+                inProgressFavoritesProducts : action.payload
             }
+        case "SET_IN_PROGRESS_PRODUCTS_FAVORITES_LAZY":
+            return {
+                ...state,
+                inProgressFavoritesProductsLazy : action.payload
+            }
+
+
         default :
             return state
     }

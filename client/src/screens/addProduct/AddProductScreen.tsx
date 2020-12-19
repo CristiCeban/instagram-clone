@@ -38,12 +38,12 @@ const validationSchema = yup.object().shape({
     shortDescription : yup.string()
         .label('shortDescription')
         .required('Please enter an short description of the product')
-        .min(1,'Product short description must be at least 10 characters')
+        .min(10,'Product short description must be at least 10 characters')
         .max(100,'Product short description must be at most 100 characters'),
     longDescription : yup.string()
         .label('longDescription')
         .required('Please enter an long description of the product')
-        .min(5,'Product long description must be at least 50 characters')
+        .min(50,'Product long description must be at least 50 characters')
         .max(1000,'Product long description must be at most 1000 characters'),
     categoryId : yup.string()
         .label('categoryId')

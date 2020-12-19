@@ -18,17 +18,7 @@ const ProfileForeignCardList = ({userProductsList} : ProfileForeignCardListInter
                     <div className={classes.line}/>
                     <Grid container spacing={4}>
                         {userProductsList.map((card) =>
-                            <ProfileForeignCardItem
-                                key={card.id.toString()}
-                                category={card.category}
-                                id={card.id}
-                                longDescription={card.longDescription}
-                                name={card.name}
-                                photos={card.photos}
-                                price={card.price}
-                                shortDescription={card.shortDescription}
-                                userId={card.userId}
-                            />)}
+                            <ProfileForeignCardItem card={card}/>)}
                     </Grid>
                 </Container>
             </main>
