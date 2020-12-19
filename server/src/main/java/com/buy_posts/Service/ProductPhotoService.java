@@ -1,10 +1,7 @@
 package com.buy_posts.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import com.buy_posts.DTO.ProductPhotoDto;
 import com.buy_posts.Model.ProductDao;
 import com.buy_posts.Model.ProductPhotoDao;
 import com.buy_posts.Repository.ProductPhotoRepository;
@@ -17,11 +14,7 @@ import org.springframework.stereotype.Service;
 public class ProductPhotoService {
     
 
-    @Autowired
-    private ProductRepository productRepository;
 
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private ProductPhotoRepository photoRepository;
