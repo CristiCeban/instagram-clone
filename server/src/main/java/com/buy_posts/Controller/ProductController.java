@@ -58,9 +58,9 @@ public class ProductController {
 
     // @RequestParam("productInfo") String productInfo
     @PostMapping(value = "/add")
-    public ResponseEntity<String> addProduct(@RequestParam("files") MultipartFile[] photos,
-            Authentication authenticate, String name, String long_description, String short_description, String price,
-            String categoryId) throws IOException {
+    public ResponseEntity<String> addProduct(@RequestParam("files") MultipartFile[] photos, Authentication authenticate,
+            String name, String long_description, String short_description, String price, String categoryId)
+            throws IOException {
         String username = authenticate.getName();
         UserDao user = userRepository.findByEmail(username);
         Integer userId = user.getId();
@@ -108,10 +108,10 @@ public class ProductController {
     }
 
     @GetMapping(value = "{id}")
-    public LikedProduct getProduct(@PathVariable("id") Long id,Authentication authentication) {
+    public LikedProduct getProduct(@PathVariable("id") Long id, Authentication authentication) {
         String username = authentication.getName();
         UserDao user = userRepository.findByEmail(username);
-        return productService.getProduct(id,user);
+        return productService.getProduct(id, user);
     }
 
     @GetMapping(value = "/category")
@@ -121,22 +121,38 @@ public class ProductController {
         return productService.getProducts(page, size, categoryId);
     }
 
-   
+    @GetMapping(path = "/category/search")
+    public ProductsDto getProductsCategoryAndSearch(@RequestParam("page") int page, 
+                                                    @RequestParam("size") int size,
+                                                    @RequestParam("sort") String sort,
+                                                    Authentication authentication,
+                                                    @RequestParam(required = false, name = "search") String search,
+                                                    @RequestParam(required = false, name = "priceStart") Double priceStart,
+                                                    @RequestParam(required = false, name = "priceEnd") Double priceEnd,
+                                                    @RequestParam("categoryId") Long categoryId)
+    {
+        String username = authentication.getName();
+        UserDao user = userRepository.findByEmail(username);
+
+        return productService.searchInCategoryProducts(user, categoryId, search, priceStart, priceEnd, page, size, sort);
+    }
 
     @GetMapping
-    public ProductsDto getProducts(@RequestParam("page") int page, @RequestParam("size") int size,Authentication authentication) {
+    public ProductsDto getProducts(@RequestParam("page") int page, @RequestParam("size") int size,
+            Authentication authentication) {
         String username = authentication.getName();
         UserDao user = userRepository.findByEmail(username);
         return productService.getProducts(page, size, user);
     }
 
-     /**
+    /**
      * Add product to wish list.
+     * 
      * @param productId given product Id.
-     * @param userId current user Id.
+     * @param userId    current user Id.
      */
     @PostMapping(path = "/wish")
-    public void addProductToWishList(@RequestParam("productId") Long productId,Authentication authentication) {
+    public void addProductToWishList(@RequestParam("productId") Long productId, Authentication authentication) {
         String username = authentication.getName();
         UserDao user = userRepository.findByEmail(username);
         Integer userId = user.getId();
@@ -156,12 +172,11 @@ public class ProductController {
         return productService.getAllFromWishList(userId);
     }
 
-
-
-     /**
+    /**
      * Delete form wish.
+     * 
      * @param productId The given product.
-     * @param userId list owner Id.
+     * @param userId    list owner Id.
      */
     @DeleteMapping(path = "/wish")
     public void deleteProductFromBasket(@RequestParam("productId") Long productId, Authentication authentication) {
@@ -177,16 +192,16 @@ public class ProductController {
             Files.createDirectory(path);
         }
 
-            String randomString = RandomString.make(10);
-            String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
-            String hex = DigestUtils.sha256Hex(sessionId);
-            String extension = img.getOriginalFilename().split("\\.")[1];
-            String filename = "products/" + randomString + hex + "." + extension;
-            File upl = new File(filename);
-            upl.createNewFile();
-            FileOutputStream os = new FileOutputStream(upl);
-            os.write(img.getBytes());
-            os.close();
+        String randomString = RandomString.make(10);
+        String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
+        String hex = DigestUtils.sha256Hex(sessionId);
+        String extension = img.getOriginalFilename().split("\\.")[1];
+        String filename = "products/" + randomString + hex + "." + extension;
+        File upl = new File(filename);
+        upl.createNewFile();
+        FileOutputStream os = new FileOutputStream(upl);
+        os.write(img.getBytes());
+        os.close();
 
         return filename;
     }

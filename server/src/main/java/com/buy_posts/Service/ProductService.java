@@ -152,10 +152,12 @@ public class ProductService {
             productsPage = productRepository.findAllByCategoryIdAndPriceBetween(sortedByPrice, categoryId, price1, price2);
         }
         if (searchTerm != null && price1 == null && price2 == null) {
-            productsPage = productRepository.findAllByCategoryIdAndNameLike(sortedByPrice, categoryId, searchTerm);
+            productsPage = productRepository.findAllByCategoryIdAndNameContaining(sortedByPrice, categoryId,
+                    searchTerm);
         } 
         if (searchTerm != null && price1 != null && price2 != null) {
-             productsPage = productRepository.findAllByCategoryIdAndNameLikeAndPriceBetween(sortedByPrice,categoryId, searchTerm, price1, price2);
+             productsPage = productRepository.findAllByCategoryIdAndNameContainingAndPriceBetween(sortedByPrice,
+                     categoryId, searchTerm, price1, price2);
         }
        
         List<ProductDao> productList = productsPage.getContent();
