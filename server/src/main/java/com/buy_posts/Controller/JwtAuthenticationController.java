@@ -102,8 +102,8 @@ public class JwtAuthenticationController {
 
 	@GetMapping(value = "/me")
 	private ProfileResponse getProf(Authentication authenticate) {
-		String username = authenticate.getName();
-		UserDao user = userRepository.findByEmail(username);
+		
+		UserDao user = userDetailsService.currentUser(authenticate);
 
 		List<ProductDao> userProducts = productRepository.findAllByUserId(user);
 		
@@ -120,8 +120,9 @@ public class JwtAuthenticationController {
 
 	@GetMapping(value = "/profile/{id}")
 	private ProfileResponse getProf(@PathVariable("id") Integer id,Authentication authentication) {
-		String username = authentication.getName();
-		UserDao currentUser = userRepository.findByEmail(username);
+		
+		UserDao currentUser = userDetailsService.currentUser(authentication);
+
 		UserDao user = userRepository.findById(id).orElseThrow();
 
 		List<ProductDao> userProducts = productRepository.findAllByUserId(user);
@@ -140,10 +141,13 @@ public class JwtAuthenticationController {
 	private void updateProf(Authentication authentication,
 			@RequestParam(required = false, name = "imagePath") MultipartFile fotka,
 			@RequestParam(required = false, name = "name") String name,@RequestParam(required = false, name = "phone") String phone,@RequestParam(required = false, name = "username") String username) throws IOException {
-		String profUsername = authentication.getName();
-		UserDao user = userRepository.findByEmail(profUsername);
+		
+		
+		UserDao user = userDetailsService.currentUser(authentication);
+
 		UserDto updatedUser = new UserDto();
-		System.out.println("S-a intrat");
+
+		
 		if (fotka != null) {
 			String imagePath = productController.saveImage(fotka);
 			updatedUser.setImagePath(imagePath);

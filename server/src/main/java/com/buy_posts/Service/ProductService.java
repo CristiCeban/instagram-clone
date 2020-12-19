@@ -1,9 +1,7 @@
 package com.buy_posts.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.buy_posts.DTO.ProductDto;
@@ -11,11 +9,9 @@ import com.buy_posts.DTO.ProductsDto;
 import com.buy_posts.Model.CategoryDao;
 import com.buy_posts.Model.LikedProduct;
 import com.buy_posts.Model.ProductDao;
-import com.buy_posts.Model.ProductPhotoDao;
 import com.buy_posts.Model.UserDao;
 import com.buy_posts.Model.WishList;
 import com.buy_posts.Repository.CategoryRepository;
-import com.buy_posts.Repository.ProductPhotoRepository;
 import com.buy_posts.Repository.ProductRepository;
 import com.buy_posts.Repository.UserRepository;
 import com.buy_posts.Repository.WishListRepository;
@@ -37,8 +33,6 @@ public class ProductService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @Autowired
-    private ProductPhotoRepository productPhotoRepository;
 
     @Autowired
     private WishListRepository wishListRepository;
@@ -51,12 +45,7 @@ public class ProductService {
         Page<ProductDao> productsPage = productRepository.findAllByOrderByIdDesc(pageRequest);
         List<ProductDao> productList = productsPage.getContent();
 
-        List<LikedProduct> likedProducts = new ArrayList<>();
-
-        for (ProductDao product : productList) {
-            boolean isLiked = wishListRepository.existsByUserIdAndProductId(user.getId(), product.getId());
-            likedProducts.add(new LikedProduct(product,isLiked));
-        }
+        List<LikedProduct> likedProducts = getLikedList(productList,user);
 
         long totalElements = productsPage.getTotalElements();
         int totalPages = productsPage.getTotalPages();
@@ -64,16 +53,20 @@ public class ProductService {
         return new ProductsDto(totalElements, totalPages, likedProducts);
     }
 
-    public List<ProductDao> getProductsAsc(int page, int size) {
-        Pageable pageRequest = PageRequest.of(page, size);
-        Page<ProductDao> productsPage = productRepository.findAllByOrderByIdDesc(pageRequest);
-        return productsPage.getContent();
-    }
 
-    public List<ProductDao> getProducts(int page, int size, long categoryId) {
+
+    public ProductsDto getProducts(int page, int size, long categoryId,UserDao user) {
         Pageable pageRequest = PageRequest.of(page, size);
-        Page<ProductDao> productsPage = productRepository.findAllByCategoryId(pageRequest, categoryId);
-        return productsPage.getContent();
+        Page<ProductDao> productsPage = productRepository.findAllByCategoryIdOrderByIdDesc(pageRequest, categoryId);
+
+        List<ProductDao> productList = productsPage.getContent();
+
+        List<LikedProduct> likedProducts = getLikedList(productList,user);
+
+        long totalElements = productsPage.getTotalElements();
+        int totalPages = productsPage.getTotalPages();
+
+        return new ProductsDto(totalElements, totalPages, likedProducts);
     }
 
     public ProductDao addProduct(ProductDto productInfo,Integer userId) {
@@ -87,7 +80,6 @@ public class ProductService {
         CategoryDao category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new RuntimeException("Invalid Category"));
 
-        // List<ProductPhotoDao> photos = productPhotoRepository.findAllByProductId(userId);
         UserDao user = userRepository.findById(userId).get();
 
         ProductDao newProduct = new ProductDao(name, longDescription, shortDescription,price, category,user);
@@ -123,40 +115,38 @@ public class ProductService {
     }
 
     public ProductsDto getAllFromWishList(int page, int size,UserDao user) {
+
         Pageable wishPage = PageRequest.of(page, size);
+
         Page<WishList> allByUserId = wishListRepository.findAllByUserId(wishPage,user.getId());
+
         List<Long> list = allByUserId.stream().map(a -> a.getProductId()).collect(Collectors.toList());
+
         Iterable<ProductDao> products = productRepository.findAllById(list);
+
         List<ProductDao> result = new ArrayList<>();
+
         products.forEach(result::add);
 
         long totalElements = allByUserId.getTotalElements();
         int totalPages = allByUserId.getTotalPages();
 
-        List<LikedProduct> likedProducts = new ArrayList<>();
+        List<LikedProduct> likedProducts = getLikedList(result,user);
 
-        for (ProductDao product : result) {
-            boolean isLiked = wishListRepository.existsByUserIdAndProductId(user.getId(), product.getId());
-            likedProducts.add(new LikedProduct(product,isLiked));
-        }
         return new ProductsDto(totalElements, totalPages, likedProducts);
         
     }
 
-    // public boolean isLikedByUser(UserDao user,ProductDao product){
-    //     if(wishListRepository.existsByUserIdAndProductId(user.getId(), product.getId())){
-    //         return true;
-    //     }
-    //     return false;
-    // }
+    
 
 
     public ProductsDto searchInCategoryProducts(UserDao user,Long categoryId, String searchTerm,
-            Double price1, Double price2, int page, int size, String sort) {
+            Double price1, Double price2, int page, int size, Integer sort) {
         
-        Pageable sortedByPrice = PageRequest.of(page, size, Sort.by("price"));
+        Sort sortOrder = Sort.by("price").ascending(); 
+        Pageable sortedByPrice = PageRequest.of(page, size, sortOrder);
         
-        if(sort == "desc"){
+        if(sort == 0){
             sortedByPrice = PageRequest.of(page, size, Sort.by("price").descending());
         }
         Page<ProductDao> productsPage = productRepository.findAll(sortedByPrice);
@@ -174,12 +164,7 @@ public class ProductService {
        
         List<ProductDao> productList = productsPage.getContent();
 
-        List<LikedProduct> likedProducts = new ArrayList<>();
-
-        for (ProductDao product : productList) {
-            boolean isLiked = wishListRepository.existsByUserIdAndProductId(user.getId(), product.getId());
-            likedProducts.add(new LikedProduct(product,isLiked));
-        }
+        List<LikedProduct> likedProducts = getLikedList(productList,user);
 
         long totalElements = productsPage.getTotalElements();
         int totalPages = productsPage.getTotalPages();
@@ -188,11 +173,12 @@ public class ProductService {
     }
 
     public ProductsDto searchInProducts(UserDao user, String searchTerm,
-            Double price1, Double price2, int page, int size, String sort) {
+            Double price1, Double price2, int page, int size, Integer sort) {
         
-        Pageable sortedByPrice = PageRequest.of(page, size, Sort.by("price"));
+        Sort sortOrder = Sort.by("price").ascending(); 
+        Pageable sortedByPrice = PageRequest.of(page, size,sortOrder);
         
-        if(sort == "desc"){
+        if(sort == 0){
             sortedByPrice = PageRequest.of(page, size, Sort.by("price").descending());
         }
         Page<ProductDao> productsPage = productRepository.findAll(sortedByPrice);
@@ -210,16 +196,22 @@ public class ProductService {
        
         List<ProductDao> productList = productsPage.getContent();
 
-        List<LikedProduct> likedProducts = new ArrayList<>();
-
-        for (ProductDao product : productList) {
-            boolean isLiked = wishListRepository.existsByUserIdAndProductId(user.getId(), product.getId());
-            likedProducts.add(new LikedProduct(product,isLiked));
-        }
+        List<LikedProduct> likedProducts = getLikedList(productList,user);
 
         long totalElements = productsPage.getTotalElements();
         int totalPages = productsPage.getTotalPages();
 
         return new ProductsDto(totalElements, totalPages, likedProducts);
+    }
+
+    private List<LikedProduct> getLikedList(List<ProductDao> list,UserDao user){
+        List<LikedProduct> likedProducts = new ArrayList<>();
+
+        for (ProductDao product : list) {
+            boolean isLiked = wishListRepository.existsByUserIdAndProductId(user.getId(), product.getId());
+            likedProducts.add(new LikedProduct(product,isLiked));
+        }
+
+        return likedProducts;
     }
 }
