@@ -2,34 +2,53 @@ import {ProductsActions} from "../actions/productsActions";
 
 type ProductsState = {
     inProgress : boolean,
+    inProgressAddingToWish : boolean,
+    addingIdToWishList: number | undefined,
+    search : string,
+
     inProgressProductsMain : boolean,
     inProgressLazyProductsMain : boolean,
     productsMain : any[],
     productsMainNextPage : number,
     productsMainLastPage : number,
-    inProgressAddingToWish : boolean,
-    addingIdToWishList: number | undefined,
+
     productsFavorite : any[],
     productsFavoriteNextPage : number,
     productsFavoriteLastPage : number,
     inProgressFavoritesProducts : boolean,
     inProgressFavoritesProductsLazy : boolean,
+
+    productsSearch : any[],
+    inProgressProductsSearch : boolean,
+    inProgressProductsLazySearch : boolean,
+    productsSearchNextPage : number,
+    productsSearchLastPage : number
+
 }
 
 const initialState = {
     inProgress : false,
+    inProgressAddingToWish: false,
+    addingIdToWishList : undefined,
+    search : '',
+
     inProgressProductsMain : false,
     inProgressLazyProductsMain : false,
     productsMain : [],
-    productsFavorite : [],
     productsMainNextPage : 0,
     productsMainLastPage : 0,
-    inProgressAddingToWish: false,
-    addingIdToWishList : undefined,
+
+    productsFavorite : [],
     inProgressFavoritesProducts : false,
     inProgressFavoritesProductsLazy : false,
     productsFavoriteNextPage : 0,
     productsFavoriteLastPage : 0,
+
+    productsSearch : [],
+    inProgressProductsSearch : false,
+    inProgressProductsLazySearch : false,
+    productsSearchNextPage : 0,
+    productsSearchLastPage : 0
 }
 
 const ProductsReducer = (state : ProductsState = initialState,action : ProductsActions) => {
@@ -108,7 +127,37 @@ const ProductsReducer = (state : ProductsState = initialState,action : ProductsA
                 ...state,
                 inProgressFavoritesProductsLazy : action.payload
             }
-
+        case "SET_IN_PROGRESS_PRODUCTS_SEARCH":
+            return {
+                ...state,
+                inProgressProductsSearch : action.payload,
+            }
+        case "SET_IN_PROGRESS_PRODUCTS_LAZY_SEARCH":
+            return {
+                ...state,
+                inProgressProductsLazySearch : action.payload
+            }
+        case "GET_PRODUCTS_BY_SEARCH":
+            if(action.payload.initialLoading)
+                return {
+                    ...state,
+                    productsSearch : action.payload.products,
+                    productsSearchNextPage : 1,
+                    productsSearchLastPage : parseInt(action.payload.totalPages) -1,
+                }
+            else {
+                return{
+                    ...state,
+                    productsSearch : [...state.productsSearch,...action.payload.products],
+                    productsSearchNextPage : state.productsSearchNextPage +1,
+                    productsSearchLastPage : parseInt(action.payload.totalPages) -1
+                }
+            }
+        case "SEARCH_CHANGED":
+            return {
+                ...state,
+                search : action.payload
+            }
 
         default :
             return state

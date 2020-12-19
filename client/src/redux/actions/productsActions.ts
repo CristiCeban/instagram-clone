@@ -43,6 +43,21 @@ export interface SetInProgressProductsFavoritesLazy {
     payload:boolean
 }
 
+export interface SetInProgressProductsSearch {
+    readonly type: 'SET_IN_PROGRESS_PRODUCTS_SEARCH',
+    payload : boolean,
+}
+
+export interface SetInProgressProductsLazySearch {
+    readonly type: 'SET_IN_PROGRESS_PRODUCTS_LAZY_SEARCH',
+    payload:boolean
+}
+
+export interface GetProductsBySearch {
+    readonly type: 'GET_PRODUCTS_BY_SEARCH',
+    payload: any,
+}
+
 export interface AddProductToWish {
     readonly type: 'SET_PRODUCT_TO_WISH',
     payload : number,
@@ -59,7 +74,11 @@ export interface SetInProgressAddingToWish {
 export interface DeleteProductFromWish {
     readonly type : 'DELETE_PRODUCT_FROM_WISH',
     payload:number,
+}
 
+export interface SearchChanged {
+    readonly type: 'SEARCH_CHANGED',
+    payload : string
 }
 
 export type ProductsActions =
@@ -74,6 +93,10 @@ export type ProductsActions =
     | SetInProgressProductsFavorites
     | SetInProgressProductsFavoritesLazy
     | getFavoritesProducts
+    | SetInProgressProductsLazySearch
+    | SetInProgressProductsSearch
+    | GetProductsBySearch
+    | SearchChanged
 
 
 export const onUploadProduct = (values : UploadProductType) => {
@@ -173,4 +196,44 @@ export const deleteFromFavorite = (id : number) => {
     }
 }
 
+export const getProductsBySearch = (params:any = {},initialLoading = true,isCategory = false) => {
+    const param = {
+        page : 0,
+        size:9,
+        sort : 'desc',
+    };
+    params = Object.assign(param,params);
+    const loadingType = initialLoading ? 'SET_IN_PROGRESS_PRODUCTS_SEARCH' : 'SET_IN_PROGRESS_PRODUCTS_LAZY_SEARCH'
+    return async(dispatch : Dispatch<ProductsActions>) =>{
+        try{
+            dispatch({type:loadingType,payload:true})
+            let response
+            if(!isCategory){
+                response = await ApiService.getWithBody('products/search',params);
+            }
+
+            else {
+                response = await ApiService.getWithBody('products/category/search', params)
+            }
+            console.log(response)
+            const payload = {
+                ...response,
+                initialLoading,
+            }
+            setTimeout(() => dispatch({type:'GET_PRODUCTS_BY_SEARCH',payload:payload}),1000)
+        }
+        catch (e) {
+            console.log(e)
+        }
+        finally {
+            setTimeout(() => dispatch({type:loadingType,payload:false}),1000)
+        }
+    }
+}
+
+export const onSearchChanged = (value : string) => {
+    return async(dispatch : Dispatch<ProductsActions>) => {
+        dispatch({type:'SEARCH_CHANGED',payload:value})
+    }
+}
 

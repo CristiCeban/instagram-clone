@@ -69,7 +69,7 @@ const AddProductScreen = () => {
 
     const onAddProduct = async (values: any) => {
         await dispatch(onUploadProduct(values))
-        history.push('/')
+        history.replace('/')
     }
 
     return (

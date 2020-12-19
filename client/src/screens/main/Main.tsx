@@ -1,6 +1,5 @@
 import React, {useEffect} from "react";
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Post from "../../components/post/Post";
 import {onGetProductsMain} from "../../redux/actions/productsActions";
 import {useDispatch, useSelector} from "react-redux";
 import {ApplicationState} from "../../redux/reducers";
@@ -9,7 +8,6 @@ import Loader from "react-loader-spinner";
 import LoadingFooterIndicator from "../../components/product/LoadingFooterIndicator";
 import {Color} from "../../config/Colors";
 import PostItem from "../../components/post/PostItem";
-import {ProductPublicPostInterface} from "../products/ProductsDetailsScreen";
 
 
 const Main = () => {
@@ -83,9 +81,6 @@ const useStyles = makeStyles((theme) => ({
         top: '50%',
         transform: 'translate(-50%, -50%)'
     },
-    footer: {
-        height : 200,
-    }
 }));
 
 export default Main;
