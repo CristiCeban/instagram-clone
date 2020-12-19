@@ -94,11 +94,17 @@ public class ProductService {
         
     }
 
+    public LikedProduct getProduct(long id,UserDao user){
+        ProductDao product = productRepository.findById(id).orElseThrow();
+        boolean isLiked = wishListRepository.existsByUserIdAndProductId(user.getId(), product.getId());
+        return new LikedProduct(product, isLiked);
+    }
+
+    
     public ProductDao getProduct(long id){
         return productRepository.findById(id).orElseThrow();
     }
 
-    
     public void deleteProduct(long id){
         ProductDao product = getProduct(id);
         productRepository.delete(product);
