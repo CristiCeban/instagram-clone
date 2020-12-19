@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.buy_posts.DTO.ProductDto;
 import com.buy_posts.DTO.ProductsDto;
+import com.buy_posts.Model.LikedProduct;
 import com.buy_posts.Model.ProductDao;
 import com.buy_posts.Model.ProductPhotoDao;
 import com.buy_posts.Model.UserDao;
@@ -107,8 +108,10 @@ public class ProductController {
     }
 
     @GetMapping(value = "{id}")
-    public ProductDao getProduct(@PathVariable("id") Long id) {
-        return productService.getProduct(id);
+    public LikedProduct getProduct(@PathVariable("id") Long id,Authentication authentication) {
+        String username = authentication.getName();
+        UserDao user = userRepository.findByEmail(username);
+        return productService.getProduct(id,user);
     }
 
     @GetMapping(value = "/category")
