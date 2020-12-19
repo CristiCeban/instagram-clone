@@ -122,14 +122,25 @@ public class ProductService {
         wishListRepository.delete(wishedProduct);
     }
 
-    public List<ProductDao> getAllFromWishList(int page, int size,Integer userId) {
+    public ProductsDto getAllFromWishList(int page, int size,UserDao user) {
         Pageable wishPage = PageRequest.of(page, size);
-        Page<WishList> allByUserId = wishListRepository.findAllByUserId(wishPage,userId);
+        Page<WishList> allByUserId = wishListRepository.findAllByUserId(wishPage,user.getId());
         List<Long> list = allByUserId.stream().map(a -> a.getProductId()).collect(Collectors.toList());
         Iterable<ProductDao> products = productRepository.findAllById(list);
         List<ProductDao> result = new ArrayList<>();
         products.forEach(result::add);
-        return result;
+
+        long totalElements = allByUserId.getTotalElements();
+        int totalPages = allByUserId.getTotalPages();
+
+        List<LikedProduct> likedProducts = new ArrayList<>();
+
+        for (ProductDao product : result) {
+            boolean isLiked = wishListRepository.existsByUserIdAndProductId(user.getId(), product.getId());
+            likedProducts.add(new LikedProduct(product,isLiked));
+        }
+        return new ProductsDto(totalElements, totalPages, likedProducts);
+        
     }
 
     // public boolean isLikedByUser(UserDao user,ProductDao product){

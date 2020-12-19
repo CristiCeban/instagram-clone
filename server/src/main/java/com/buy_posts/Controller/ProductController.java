@@ -165,11 +165,11 @@ public class ProductController {
      * @return List of {@link ProductDao}'s from list.
      */
     @GetMapping(path = "/wish")
-    public List<ProductDao> getAllFromWishList(Authentication authentication) {
+    public ProductsDto getAllFromWishList(Authentication authentication,@RequestParam("page") int page, @RequestParam("size") int size) {
         String username = authentication.getName();
         UserDao user = userRepository.findByEmail(username);
-        Integer userId = user.getId();
-        return productService.getAllFromWishList(userId);
+        // Integer userId = user.getId();
+        return productService.getAllFromWishList(page,size,user);
     }
 
 
