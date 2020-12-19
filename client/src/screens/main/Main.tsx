@@ -63,6 +63,7 @@ const Main = () => {
                                 price={product.price}
                                 photos={product.photos}
                                 userId={product.userId}
+                                liked={liked}
                             />
                             // <Post/>
                         )

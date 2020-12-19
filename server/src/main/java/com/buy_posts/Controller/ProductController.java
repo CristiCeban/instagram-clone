@@ -135,7 +135,7 @@ public class ProductController {
      * @param productId given product Id.
      * @param userId current user Id.
      */
-    @PostMapping(path = "/api/wish")
+    @PostMapping(path = "/wish")
     public void addProductToWishList(@RequestParam("productId") Long productId,Authentication authentication) {
         String username = authentication.getName();
         UserDao user = userRepository.findByEmail(username);
@@ -148,7 +148,7 @@ public class ProductController {
      * @param userId list owner Id.
      * @return List of {@link ProductDao}'s from list.
      */
-    @GetMapping(path = "/api/wish")
+    @GetMapping(path = "/wish")
     public List<ProductDao> getAllFromWishList(Authentication authentication) {
         String username = authentication.getName();
         UserDao user = userRepository.findByEmail(username);
@@ -163,7 +163,7 @@ public class ProductController {
      * @param productId The given product.
      * @param userId list owner Id.
      */
-    @DeleteMapping(path = "/api/wish")
+    @DeleteMapping(path = "/wish")
     public void deleteProductFromBasket(@RequestParam("productId") Long productId, Authentication authentication) {
         String username = authentication.getName();
         UserDao user = userRepository.findByEmail(username);

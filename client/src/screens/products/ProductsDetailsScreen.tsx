@@ -18,6 +18,7 @@ export interface ProductPublicPostInterface {
     longDescription : string,
     shortDescription : string,
     price : number,
+    liked : boolean,
     photos: {
         id:number,
         imagePath:string}[],
@@ -40,7 +41,7 @@ const ProductDetailsScreen = () => {
 
 
     const [isLoading,setIsLoading] = useState<boolean>(true)
-    const [product,setProduct] = useState<ProductPublicPostInterface>()
+    const [product,setProduct] = useState<ProductPublicPostInterface>(null)
 
     useEffect( () => {
         (async () => {
@@ -74,7 +75,9 @@ const ProductDetailsScreen = () => {
                     photos={product?.photos}
                     price={product?.price}
                     shortDescription={product?.shortDescription}
-                    userId={product?.userId}/>
+                    userId={product?.userId}
+                    liked={false}
+                />
             </div>
 
 
