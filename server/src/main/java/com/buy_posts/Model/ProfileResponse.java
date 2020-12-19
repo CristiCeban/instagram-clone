@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProfileResponse {
     private UserDao profile;
-    private List<ProductDao> userProducts;
+    private List<LikedProduct> userProducts;
 
 }

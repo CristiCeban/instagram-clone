@@ -19,11 +19,13 @@ import com.buy_posts.Configuration.JwtTokenUtil;
 import com.buy_posts.DTO.UserDto;
 import com.buy_posts.Model.JwtRequest;
 import com.buy_posts.Model.JwtResponse;
+import com.buy_posts.Model.LikedProduct;
 import com.buy_posts.Model.ProductDao;
 import com.buy_posts.Model.ProfileResponse;
 import com.buy_posts.Model.UserDao;
 import com.buy_posts.Repository.ProductRepository;
 import com.buy_posts.Repository.UserRepository;
+import com.buy_posts.Repository.WishListRepository;
 import com.buy_posts.Service.JwtUserDetailsService;
 import com.buy_posts.Service.ProductPhotoService;
 
@@ -61,6 +63,9 @@ public class JwtAuthenticationController {
 
 	@Autowired
 	private ProductController productController;
+
+	@Autowired
+	private WishListRepository wishListRepository;
 
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
 	public ResponseEntity<?> generateAuthenticationToken(@RequestBody JwtRequest authenticationRequest)
@@ -101,8 +106,15 @@ public class JwtAuthenticationController {
 		UserDao user = userRepository.findByEmail(username);
 
 		List<ProductDao> userProducts = productRepository.findAllByUserId(user);
+		
+		List<LikedProduct> likedProducts = new ArrayList<>();
 
-		return new ProfileResponse(user, userProducts);
+        for (ProductDao product : userProducts) {
+            boolean isLiked = wishListRepository.existsByUserIdAndProductId(user.getId(), product.getId());
+            likedProducts.add(new LikedProduct(product,isLiked));
+        }
+
+		return new ProfileResponse(user, likedProducts);
 
 	}
 
@@ -112,7 +124,14 @@ public class JwtAuthenticationController {
 
 		List<ProductDao> userProducts = productRepository.findAllByUserId(user);
 
-		return new ProfileResponse(user, userProducts);
+		List<LikedProduct> likedProducts = new ArrayList<>();
+
+        for (ProductDao product : userProducts) {
+            boolean isLiked = wishListRepository.existsByUserIdAndProductId(user.getId(), product.getId());
+            likedProducts.add(new LikedProduct(product,isLiked));
+        }
+
+		return new ProfileResponse(user, likedProducts);
 	}
 
 	@PostMapping(value = "/me/update")
