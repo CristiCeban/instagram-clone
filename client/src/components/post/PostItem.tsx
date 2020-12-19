@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
     Card,
     CardActions,
@@ -20,18 +20,32 @@ import Button from "@material-ui/core/Button";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import {ProductPublicPostInterface} from "../../screens/products/ProductsDetailsScreen";
+import {useDispatch, useSelector} from "react-redux";
+import {ApplicationState} from "../../redux/reducers";
+import {addToFavorite} from "../../redux/actions/productsActions";
+import {Color} from "../../config/Colors";
+import Loader from "react-loader-spinner";
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 
-const PostItem = ({name,category,id,longDescription,photos,price,shortDescription,userId} : ProductPublicPostInterface) => {
+const PostItem = ({name,category,id,longDescription,photos,price,shortDescription,userId,liked} : ProductPublicPostInterface) => {
     const classes = useStyles();
     const theme = useTheme();
+    const dispatch = useDispatch();
+    const {inProgressAddingToWish,addingIdToWishList} = useSelector((state: ApplicationState) => state.productsReducers)
+    const [isLiked,setLiked] = useState<boolean>(liked)
+
 
     const [expanded, setExpanded] = React.useState(false);
 
     const [activeStep, setActiveStep] = React.useState(0);
     const maxSteps = photos.length;
+
+    const addToWishList = () => {
+        dispatch(addToFavorite(id))
+        setLiked(!isLiked)
+    }
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
@@ -87,7 +101,7 @@ const PostItem = ({name,category,id,longDescription,photos,price,shortDescriptio
                     </AutoPlaySwipeableViews>
                     <CardContent className={classes.cardContent}>
                         <Typography gutterBottom variant='h5' component='h2'>
-                            Name:{name}
+                            Product:{name}
                         </Typography>
                         <Typography>
                             Price:{price}:LEI
@@ -95,16 +109,17 @@ const PostItem = ({name,category,id,longDescription,photos,price,shortDescriptio
                         <Typography>
                             {shortDescription}
                         </Typography>
-                        <Typography>
-                            {longDescription}
-                        </Typography>
                     </CardContent>
                     <CardActions disableSpacing>
                         <Button>
                             <Typography>#{category.name}</Typography>
                         </Button>
-                        <IconButton aria-label="add to favorites">
-                            <Favorite />
+                        <IconButton aria-label="add to favorites" onClick={addToWishList}>
+                            {addingIdToWishList == id ?
+                                <Loader type={'TailSpin'} color={Color.secondaryColor} width={24} height={24}/>
+                                :
+                                <Favorite color={isLiked ? 'secondary' : 'inherit'}/>
+                            }
                         </IconButton>
 
                         <IconButton
@@ -121,28 +136,17 @@ const PostItem = ({name,category,id,longDescription,photos,price,shortDescriptio
 
                     <Collapse in={expanded} timeout="auto" unmountOnExit>
                         <CardContent>
-                            <Typography paragraph>Method:</Typography>
                             <Typography paragraph>
-                                Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10
-                                minutes.
+                                Name:{userId?.name}
                             </Typography>
                             <Typography paragraph>
-                                Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet over medium-high
-                                heat. Add chicken, shrimp and chorizo, and cook, stirring occasionally until lightly
-                                browned, 6 to 8 minutes. Transfer shrimp to a large plate and set aside, leaving chicken
-                                and chorizo in the pan. Add pimentón, bay leaves, garlic, tomatoes, onion, salt and
-                                pepper, and cook, stirring often until thickened and fragrant, about 10 minutes. Add
-                                saffron broth and remaining 4 1/2 cups chicken broth; bring to a boil.
+                                Email:{userId?.email}
                             </Typography>
                             <Typography paragraph>
-                                Add rice and stir very gently to distribute. Top with artichokes and peppers, and cook
-                                without stirring, until most of the liquid is absorbed, 15 to 18 minutes. Reduce heat to
-                                medium-low, add reserved shrimp and mussels, tucking them down into the rice, and cook
-                                again without stirring, until mussels have opened and rice is just tender, 5 to 7
-                                minutes more. (Discard any mussels that don’t open.)
+                                Phone:{userId?.phone}
                             </Typography>
-                            <Typography>
-                                Set aside off of the heat to let rest for 10 minutes, and then serve.
+                            <Typography paragraph>
+                                Description:{longDescription}
                             </Typography>
                         </CardContent>
                     </Collapse>

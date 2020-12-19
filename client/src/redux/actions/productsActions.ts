@@ -28,12 +28,36 @@ export interface SetInProgressLazyProductsMain {
     payload : boolean,
 }
 
+export interface AddProductToWish {
+    readonly type: 'SET_PRODUCT_TO_WISH',
+    payload : number,
+}
+
+export interface SetInProgressAddingToWish {
+    readonly type : 'SET_IN_PROGRESS_ADDING_TO_WISH',
+    payload : {
+        id:number | undefined,
+        inProgress : boolean,
+    }
+}
+
+export interface DeleteProductFromWish {
+    readonly type : 'DELETE_PRODUCT_FROM_WISH',
+    payload: {
+        id : number | undefined,
+        inProgress : boolean,
+    }
+}
+
 export type ProductsActions =
     | UploadProduct
     | SetInProgressProduct
     | GetProductsMain
     | SetInProgressProductsMain
     | SetInProgressLazyProductsMain
+    | AddProductToWish
+    | DeleteProductFromWish
+    | SetInProgressAddingToWish
 
 
 export const onUploadProduct = (values : UploadProductType) => {
@@ -77,3 +101,45 @@ export const onGetProductsMain = (params:any = {},initialLoading = true) =>{
     }
 
 }
+
+export const addToFavorite = (id : number) => {
+    return async(dispatch : Dispatch<ProductsActions>) => {
+        try{
+            dispatch({type:'SET_IN_PROGRESS_ADDING_TO_WISH',payload : {id,inProgress:true}})
+            const payload = {productId : id}
+            console.log(payload)
+            const formData = new FormData();
+            formData.append('productId',id.toString())
+            const response = await ApiService.postFormData('products/wish',formData)
+            console.log(response)
+        }
+        catch (e) {
+            console.log(e)
+        }
+        finally {
+            setTimeout(() =>dispatch({type:'SET_IN_PROGRESS_ADDING_TO_WISH',payload : {id:undefined,inProgress:false}}),1000)
+        }
+    }
+}
+
+// export const deleteFromFavorite = (id : number) => {
+//     return async(dispatch : Dispatch<ProductsActions>) => {
+//         try{
+//             dispatch({type:'SET_IN_PROGRESS_ADDING_TO_WISH',payload : {id,inProgress:true}})
+//             const payload = {productId : id}
+//             console.log(payload)
+//             const formData = new FormData();
+//             formData.append('productId',id.toString())
+//             const response = await ApiService.postFormData('products/wish',formData)
+//             console.log(response)
+//         }
+//         catch (e) {
+//             console.log(e)
+//         }
+//         finally {
+//             setTimeout(() =>dispatch({type:'SET_IN_PROGRESS_ADDING_TO_WISH',payload : {id:undefined,inProgress:false}}),1000)
+//         }
+//     }
+// }
+
+

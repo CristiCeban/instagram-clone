@@ -8,6 +8,8 @@ type ProductsState = {
     productsFavorite : any[],
     productsMainNextPage : number,
     productsMainLastPage : number,
+    inProgressAddingToWish : boolean,
+    addingIdToWishList: number | undefined,
 }
 
 const initialState = {
@@ -18,6 +20,8 @@ const initialState = {
     productsFavorite : [],
     productsMainNextPage : 0,
     productsMainLastPage : 0,
+    inProgressAddingToWish: false,
+    addingIdToWishList : undefined,
 }
 
 const ProductsReducer = (state : ProductsState = initialState,action : ProductsActions) => {
@@ -52,6 +56,12 @@ const ProductsReducer = (state : ProductsState = initialState,action : ProductsA
                     productsMainNextPage : state.productsMainNextPage +1,
                     productsMainLastPage : parseInt(action.payload.totalPages) -1,
                 }
+            }
+        case "SET_IN_PROGRESS_ADDING_TO_WISH":
+            return {
+                ...state,
+                inProgressAddingToWish : action.payload.inProgress,
+                addingIdToWishList : action.payload.id
             }
         default :
             return state
