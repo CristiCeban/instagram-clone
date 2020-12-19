@@ -16,7 +16,7 @@ const ProfileCardList = () => {
                 <Container className={classes.cardGrid} maxWidth="md">
                     <div className={classes.line}/>
                     <Grid container spacing={4}>
-                        {(products as any[]).map((card) => <ProfileCardItem key={card.id.toString()} card={card}/>)}
+                        {(products as any[]).map((card) => <ProfileCardItem key={card.product.id.toString()} card={card}/>)}
                     </Grid>
                 </Container>
             </main>

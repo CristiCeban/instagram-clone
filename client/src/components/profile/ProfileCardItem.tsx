@@ -19,25 +19,31 @@ const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 export interface profileCardItemInterface {
     card : {
-        id : number,
-        name: string,
-        longDescription : string,
-        shortDescription : string,
-        price : number,
-        category : {
-            id : number,
-            name : string
+        product: {
+            id: number,
+            name: string,
+            longDescription: string,
+            shortDescription: string,
+            price: number,
+            category: {
+                id: number,
+                name: string
+            }
+            photos: any[]
         }
-        photos : any[]
+        liked : boolean
     }
 }
 
-const ProfileCardItem = ({card:{id,
-                                price,
-                                photos,
-                                name,
-                                shortDescription,
-                                category}} : profileCardItemInterface) => {
+const ProfileCardItem = ({card:{
+    product : {
+        id,
+        price,
+        photos,
+        name,
+        shortDescription,
+        category},
+    liked}} : profileCardItemInterface) => {
 
     const classes = useStyles();
     const dispatch = useDispatch();

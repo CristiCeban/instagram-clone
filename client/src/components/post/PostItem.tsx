@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
     Card,
     CardActions,
@@ -29,13 +29,12 @@ import Loader from "react-loader-spinner";
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 
-const PostItem = ({name,category,id,longDescription,photos,price,shortDescription,userId,liked} : ProductPublicPostInterface) => {
+const PostItem = ({name,category,id,longDescription,photos,price,shortDescription,userId,liked,favoriteScreen} : ProductPublicPostInterface) => {
     const classes = useStyles();
     const theme = useTheme();
     const dispatch = useDispatch();
     const {inProgressAddingToWish,addingIdToWishList} = useSelector((state: ApplicationState) => state.productsReducers)
     const [isLiked,setLiked] = useState<boolean>(liked)
-
 
     const [expanded, setExpanded] = React.useState(false);
 
@@ -44,7 +43,8 @@ const PostItem = ({name,category,id,longDescription,photos,price,shortDescriptio
 
     const addToWishList = () => {
         !isLiked ? dispatch(addToFavorite(id)) : dispatch(deleteFromFavorite(id));
-        setLiked(!isLiked)
+        if(!favoriteScreen)
+            setLiked(!isLiked)
     }
 
     const handleExpandClick = () => {
@@ -114,7 +114,7 @@ const PostItem = ({name,category,id,longDescription,photos,price,shortDescriptio
                         <Button>
                             <Typography>#{category.name}</Typography>
                         </Button>
-                        <IconButton aria-label="add to favorites" onClick={addToWishList} disabled={inProgressAddingToWish}>
+                        <IconButton aria-label="add to favorites" onClick={addToWishList} disabled={inProgressAddingToWish&&addingIdToWishList == id}>
                             {addingIdToWishList == id ?
                                 <Loader type={'TailSpin'} color={Color.secondaryColor} width={24} height={24}/>
                                 :

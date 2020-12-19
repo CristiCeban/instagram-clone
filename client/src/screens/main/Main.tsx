@@ -55,6 +55,7 @@ const Main = () => {
                     {productsMain.map(({product,liked} : any) => {
                         return(
                             <PostItem
+                                key={product.id.toString()}
                                 category={product.category}
                                 id={product.id}
                                 name={product.name}
@@ -64,8 +65,8 @@ const Main = () => {
                                 photos={product.photos}
                                 userId={product.userId}
                                 liked={liked}
+                                favoriteScreen={false}
                             />
-                            // <Post/>
                         )
                     })}
                 </InfiniteScroll>

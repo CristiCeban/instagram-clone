@@ -18,6 +18,11 @@ export interface GetProductsMain {
     payload : any,
 }
 
+export interface getFavoritesProducts {
+    readonly type : 'GET_FAVORITES_PRODUCTS',
+    payload : any,
+}
+
 export interface SetInProgressProductsMain {
     readonly type : 'SET_IN_PROGRESS_PRODUCTS_MAIN',
     payload : boolean,
@@ -26,6 +31,16 @@ export interface SetInProgressProductsMain {
 export interface SetInProgressLazyProductsMain {
     readonly type : 'SET_IN_PROGRESS_LAZY_PRODUCTS_MAIN',
     payload : boolean,
+}
+
+export interface SetInProgressProductsFavorites {
+    readonly type: 'SET_IN_PROGRESS_PRODUCTS_FAVORITES',
+    payload : boolean,
+}
+
+export interface SetInProgressProductsFavoritesLazy {
+    readonly type: 'SET_IN_PROGRESS_PRODUCTS_FAVORITES_LAZY',
+    payload:boolean
 }
 
 export interface AddProductToWish {
@@ -43,10 +58,8 @@ export interface SetInProgressAddingToWish {
 
 export interface DeleteProductFromWish {
     readonly type : 'DELETE_PRODUCT_FROM_WISH',
-    payload: {
-        id : number | undefined,
-        inProgress : boolean,
-    }
+    payload:number,
+
 }
 
 export type ProductsActions =
@@ -58,6 +71,9 @@ export type ProductsActions =
     | AddProductToWish
     | DeleteProductFromWish
     | SetInProgressAddingToWish
+    | SetInProgressProductsFavorites
+    | SetInProgressProductsFavoritesLazy
+    | getFavoritesProducts
 
 
 export const onUploadProduct = (values : UploadProductType) => {
@@ -99,7 +115,29 @@ export const onGetProductsMain = (params:any = {},initialLoading = true) =>{
             setTimeout(() =>dispatch({type:loadingType,payload:false}),1500)
         }
     }
+}
 
+export const onGetProductsFavorites = (params:any = {},initialLoading = true) => {
+    const param = {page : 0,size:5};
+    params = Object.assign(param,params);
+    const loadingType = initialLoading ? 'SET_IN_PROGRESS_PRODUCTS_FAVORITES' : 'SET_IN_PROGRESS_PRODUCTS_FAVORITES_LAZY'
+    return async(dispatch : Dispatch<ProductsActions>) => {
+        try {
+            dispatch({type:loadingType,payload:true})
+            const response = await ApiService.getWithBody('products/wish',params);
+            const payload = {
+                ...response,
+                initialLoading,
+            }
+            setTimeout(() => dispatch({type:'GET_FAVORITES_PRODUCTS',payload:payload}),1500)
+        }
+        catch (e) {
+            console.log(e);
+        }
+        finally {
+            setTimeout(() =>dispatch({type:loadingType,payload:false}),1500)
+        }
+    }
 }
 
 export const addToFavorite = (id : number) => {
@@ -124,6 +162,7 @@ export const deleteFromFavorite = (id : number) => {
         try{
             dispatch({type:'SET_IN_PROGRESS_ADDING_TO_WISH',payload : {id,inProgress:true}})
             const response = ApiService.get(`products/wish/delete/${id}`,{})
+            setTimeout(() => dispatch({type:'DELETE_PRODUCT_FROM_WISH',payload:id}),1000)
         }
         catch (e) {
             console.log(e)
