@@ -63,6 +63,11 @@ const ProductsReducer = (state : ProductsState = initialState,action : ProductsA
                 inProgressAddingToWish : action.payload.inProgress,
                 addingIdToWishList : action.payload.id
             }
+        case "DELETE_PRODUCT_FROM_WISH":
+            return {
+                ...state,
+
+            }
         default :
             return state
     }

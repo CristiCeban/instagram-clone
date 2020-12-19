@@ -42,6 +42,7 @@ const ProductDetailsScreen = () => {
 
     const [isLoading,setIsLoading] = useState<boolean>(true)
     const [product,setProduct] = useState<ProductPublicPostInterface>(null)
+    const [isLiked,setLiked] = useState<boolean>(false)
 
     useEffect( () => {
         (async () => {
@@ -50,7 +51,8 @@ const ProductDetailsScreen = () => {
                 const id = pathname.substring(pathname.lastIndexOf('/')+1)
                 const response = await ApiService.get(`products/${id}`,{})
                 console.log(response)
-                setProduct(response)
+                setProduct(response.product)
+                setLiked(response.liked)
             }
             catch (e) {
                 history.replace('/pageNotFound')
@@ -76,7 +78,7 @@ const ProductDetailsScreen = () => {
                     price={product?.price}
                     shortDescription={product?.shortDescription}
                     userId={product?.userId}
-                    liked={false}
+                    liked={isLiked}
                 />
             </div>
 

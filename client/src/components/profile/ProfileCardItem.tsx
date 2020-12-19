@@ -83,16 +83,18 @@ const ProfileCardItem = ({card:{id,
                         </div>
                     ))}
                 </AutoPlaySwipeableViews>
+
                 <CardContent className={classes.cardContent}>
                     <Typography gutterBottom variant='h5' component='h2'>
-                        {name}
+                        Product's Name:{name}
                     </Typography>
-                    <Typography>
-                        {shortDescription}
+                    <Typography variant='subtitle2' component='h6'>
+                        Short Description:{shortDescription}
                     </Typography>
-                    <Typography>
-                        {price}
+                    <Typography variant='button' paragraph component='h4'>
+                        Price:{price}
                     </Typography>
+
                 </CardContent>
                 <CardActions disableSpacing>
                     <Button>

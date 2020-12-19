@@ -22,7 +22,7 @@ import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import {ProductPublicPostInterface} from "../../screens/products/ProductsDetailsScreen";
 import {useDispatch, useSelector} from "react-redux";
 import {ApplicationState} from "../../redux/reducers";
-import {addToFavorite} from "../../redux/actions/productsActions";
+import {addToFavorite, deleteFromFavorite} from "../../redux/actions/productsActions";
 import {Color} from "../../config/Colors";
 import Loader from "react-loader-spinner";
 
@@ -43,7 +43,7 @@ const PostItem = ({name,category,id,longDescription,photos,price,shortDescriptio
     const maxSteps = photos.length;
 
     const addToWishList = () => {
-        dispatch(addToFavorite(id))
+        !isLiked ? dispatch(addToFavorite(id)) : dispatch(deleteFromFavorite(id));
         setLiked(!isLiked)
     }
 
@@ -114,7 +114,7 @@ const PostItem = ({name,category,id,longDescription,photos,price,shortDescriptio
                         <Button>
                             <Typography>#{category.name}</Typography>
                         </Button>
-                        <IconButton aria-label="add to favorites" onClick={addToWishList}>
+                        <IconButton aria-label="add to favorites" onClick={addToWishList} disabled={inProgressAddingToWish}>
                             {addingIdToWishList == id ?
                                 <Loader type={'TailSpin'} color={Color.secondaryColor} width={24} height={24}/>
                                 :
@@ -137,22 +137,24 @@ const PostItem = ({name,category,id,longDescription,photos,price,shortDescriptio
                     <Collapse in={expanded} timeout="auto" unmountOnExit>
                         <CardContent>
                             <Typography paragraph>
-                                Name:{userId?.name}
-                            </Typography>
-                            <Typography paragraph>
-                                Email:{userId?.email}
-                            </Typography>
-                            <Typography paragraph>
-                                Phone:{userId?.phone}
-                            </Typography>
-                            <Typography paragraph>
                                 Description:{longDescription}
                             </Typography>
+                            <div style={{display:'flex',justifyContent:'space-between'}} >
+                                <Typography paragraph variant='subtitle1' component='h4'>
+                                    {userId?.name}
+                                </Typography>
+                                <Typography paragraph>
+                                    {userId?.email}
+                                </Typography>
+                                <Typography paragraph>
+                                    {userId?.phone}
+                                </Typography>
+                            </div>
                         </CardContent>
                     </Collapse>
 
-
-                    <MobileStepper
+                    {photos.length > 1 ?
+                        <MobileStepper
                         steps={maxSteps}
                         position="static"
                         variant="text"
@@ -169,7 +171,7 @@ const PostItem = ({name,category,id,longDescription,photos,price,shortDescriptio
                                 Back
                             </Button>
                         }
-                    />
+                    /> : null}
                 </Card>
             </Grid>
         </div>

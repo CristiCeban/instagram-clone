@@ -156,18 +156,25 @@ public class ProductController {
 
 
 
-     /**
-     * Delete form wish.
-     * @param productId The given product.
-     * @param userId list owner Id.
-     */
-    @DeleteMapping(path = "/wish")
-    public void deleteProductFromBasket(@RequestParam("productId") Long productId, Authentication authentication) {
+    @GetMapping(value = "wish/delete/{id}")
+    public void deleteProductFromBasket(@PathVariable("id") Long productId, Authentication authentication) {
         String username = authentication.getName();
         UserDao user = userRepository.findByEmail(username);
         Integer userId = user.getId();
         productService.deleteProductFromWishList(productId, userId);
     }
+     /**
+     * Delete form wish.
+     * @param productId The given product.
+     * @param userId list owner Id.
+     */
+//    @DeleteMapping(value = "/wish/{id}")
+//    public void deleteProductFromBasket(@PathVariable("id") Long productId, Authentication authentication) {
+//        String username = authentication.getName();
+//        UserDao user = userRepository.findByEmail(username);
+//        Integer userId = user.getId();
+//        productService.deleteProductFromWishList(productId, userId);
+//    }
 
     public String saveImage(@RequestParam("files") MultipartFile img) throws IOException {
         Path path = Paths.get("products");

@@ -96,13 +96,13 @@ const ProfileForeignCardItem = ({name,longDescription,shortDescription,price,id,
 
                 <CardContent className={classes.cardContent}>
                     <Typography gutterBottom variant='h5' component='h2'>
-                        {name}
+                        Product's Name:{name}
                     </Typography>
-                    <Typography variant='subtitle2'>
-                        {shortDescription}
+                    <Typography variant='subtitle2' component='h6' gutterBottom>
+                        Short Description:{shortDescription}
                     </Typography>
-                    <Typography variant='button'>
-                        {price}
+                    <Typography variant='button' component='h4' paragraph>
+                        Price:{price}
                     </Typography>
                 </CardContent>
 

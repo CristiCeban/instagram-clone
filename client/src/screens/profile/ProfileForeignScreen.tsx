@@ -69,6 +69,7 @@ const ProfileForeignScreen = () => {
                         history.replace('/profile')
                     else {
                         const response = await ApiService.get(`profile/${idUser}`, {})
+                        console.log(response)
                         setProfile(response)
                     }
                 }
