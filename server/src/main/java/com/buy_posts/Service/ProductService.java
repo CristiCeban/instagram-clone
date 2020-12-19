@@ -53,11 +53,7 @@ public class ProductService {
         return new ProductsDto(totalElements, totalPages, likedProducts);
     }
 
-    // public List<ProductDao> getProductsAsc(int page, int size) {
-    //     Pageable pageRequest = PageRequest.of(page, size);
-    //     Page<ProductDao> productsPage = productRepository.findAllByOrderByIdDesc(pageRequest);
-    //     return productsPage.getContent();
-    // }
+
 
     public ProductsDto getProducts(int page, int size, long categoryId,UserDao user) {
         Pageable pageRequest = PageRequest.of(page, size);
@@ -145,11 +141,12 @@ public class ProductService {
 
 
     public ProductsDto searchInCategoryProducts(UserDao user,Long categoryId, String searchTerm,
-            Double price1, Double price2, int page, int size, String sort) {
+            Double price1, Double price2, int page, int size, Integer sort) {
         
-        Pageable sortedByPrice = PageRequest.of(page, size, Sort.by("price"));
+        Sort sortOrder = Sort.by("price").ascending(); 
+        Pageable sortedByPrice = PageRequest.of(page, size, sortOrder);
         
-        if(sort == "desc"){
+        if(sort == 0){
             sortedByPrice = PageRequest.of(page, size, Sort.by("price").descending());
         }
         Page<ProductDao> productsPage = productRepository.findAll(sortedByPrice);
@@ -176,11 +173,12 @@ public class ProductService {
     }
 
     public ProductsDto searchInProducts(UserDao user, String searchTerm,
-            Double price1, Double price2, int page, int size, String sort) {
+            Double price1, Double price2, int page, int size, Integer sort) {
         
-        Pageable sortedByPrice = PageRequest.of(page, size, Sort.by("price"));
+        Sort sortOrder = Sort.by("price").ascending(); 
+        Pageable sortedByPrice = PageRequest.of(page, size,sortOrder);
         
-        if(sort == "desc"){
+        if(sort == 0){
             sortedByPrice = PageRequest.of(page, size, Sort.by("price").descending());
         }
         Page<ProductDao> productsPage = productRepository.findAll(sortedByPrice);

@@ -118,7 +118,7 @@ public class ProductController {
     @GetMapping(path = "/category/search")
     public ProductsDto getProductsCategoryAndSearch(@RequestParam("page") int page,
                                                     @RequestParam("size") int size,
-                                                    @RequestParam("sort") String sort,
+                                                    @RequestParam("sort") Integer sort,
                                                     Authentication authentication,
                                                     @RequestParam(required = false, name = "search") String search,
                                                     @RequestParam(required = false, name = "priceStart") Double priceStart,
@@ -134,7 +134,7 @@ public class ProductController {
     @GetMapping(path = "/search")
     public ProductsDto getProductsAndSearch(@RequestParam("page") int page,
                                                     @RequestParam("size") int size,
-                                                    @RequestParam("sort") String sort,
+                                                    @RequestParam("sort") Integer sort,
                                                     Authentication authentication,
                                                     @RequestParam(required = false, name = "search") String search,
                                                     @RequestParam(required = false, name = "priceStart") Double priceStart,
