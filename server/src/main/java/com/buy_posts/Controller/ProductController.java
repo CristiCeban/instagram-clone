@@ -136,7 +136,21 @@ public class ProductController {
 
         return productService.searchInCategoryProducts(user, categoryId, search, priceStart, priceEnd, page, size, sort);
     }
+    @GetMapping(path = "/search")
+    public ProductsDto getProductsAndSearch(@RequestParam("page") int page,
+                                                    @RequestParam("size") int size,
+                                                    @RequestParam("sort") String sort,
+                                                    Authentication authentication,
+                                                    @RequestParam(required = false, name = "search") String search,
+                                                    @RequestParam(required = false, name = "priceStart") Double priceStart,
+                                                    @RequestParam(required = false, name = "priceEnd") Double priceEnd
+    )
+    {
+        String username = authentication.getName();
+        UserDao user = userRepository.findByEmail(username);
 
+        return productService.searchInProducts(user, search, priceStart, priceEnd, page, size, sort);
+    }
     @GetMapping
     public ProductsDto getProducts(@RequestParam("page") int page, @RequestParam("size") int size,
             Authentication authentication) {
