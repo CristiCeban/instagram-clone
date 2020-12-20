@@ -3,6 +3,10 @@ import { fade, makeStyles } from '@material-ui/core/styles';
 import {AccountCircle, Add, Favorite, Home, Search, Store} from "@material-ui/icons";
 import {AppBar, IconButton, InputBase, Link, Toolbar, Typography} from "@material-ui/core";
 import { useLocation } from 'react-router-dom'
+import {useDispatch, useSelector} from "react-redux";
+import {onSearchChanged} from "../../redux/actions/productsActions";
+import {useHistory} from "react-router";
+import {ApplicationState} from "../../redux/reducers";
 
 enum routerEnum {
     main = '/',
@@ -14,10 +18,21 @@ enum routerEnum {
 
 
 const NavBar = () =>{
+    const dispatch = useDispatch();
     const classes = useStyles();
     const location = useLocation();
     const {pathname} = location;
+    const navigation = useHistory();
+    const {search} = useSelector((state : ApplicationState) => state.productsReducers)
 
+    const onChange = (value : string) => {
+        dispatch(onSearchChanged(value))
+    }
+
+    const keyPress = (e : any) => {
+        if(e.keyCode==13)
+            navigation.replace('/products')
+    }
     return (
         <div className={classes.root}>
             <AppBar position={"fixed"}
@@ -29,6 +44,7 @@ const NavBar = () =>{
                             Instagram Clone
                         </Link>
                     </Typography>
+
                     <div className={classes.search}>
                         <div className={classes.searchIcon}>
                             <Search/>
@@ -40,6 +56,9 @@ const NavBar = () =>{
                                 input: classes.inputInput,
                             }}
                             inputProps={{ 'aria-label': 'search' }}
+                            onChange={(e) => onChange(e.target.value)}
+                            onKeyDown={keyPress}
+                            value={search}
                         />
                     </div>
 
