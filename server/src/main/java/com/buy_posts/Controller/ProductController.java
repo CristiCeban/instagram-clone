@@ -13,6 +13,7 @@ import java.util.List;
 import com.buy_posts.DTO.ProductDto;
 import com.buy_posts.DTO.ProductsDto;
 import com.buy_posts.Model.LikedProduct;
+import com.buy_posts.Model.PriceResponse;
 import com.buy_posts.Model.ProductDao;
 import com.buy_posts.Model.ProductPhotoDao;
 import com.buy_posts.Model.UserDao;
@@ -185,7 +186,7 @@ public class ProductController {
 
 
 
-    @GetMapping(value = "wish/delete/{id}")
+    @GetMapping(value = "/wish/delete/{id}")
     public void deleteProductFromBasket(@PathVariable("id") Long productId, Authentication authentication) {
 
         UserDao user = userService.currentUser(authentication);
@@ -215,5 +216,11 @@ public class ProductController {
         os.close();
 
         return filename;
+    }
+
+
+    @GetMapping(value = "/price")
+    public PriceResponse getPrice(){
+        return productService.getMaxMinPrice();
     }
 }

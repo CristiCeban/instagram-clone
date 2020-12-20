@@ -8,6 +8,7 @@ import com.buy_posts.DTO.ProductDto;
 import com.buy_posts.DTO.ProductsDto;
 import com.buy_posts.Model.CategoryDao;
 import com.buy_posts.Model.LikedProduct;
+import com.buy_posts.Model.PriceResponse;
 import com.buy_posts.Model.ProductDao;
 import com.buy_posts.Model.UserDao;
 import com.buy_posts.Model.WishList;
@@ -137,7 +138,12 @@ public class ProductService {
         
     }
 
-    
+    public PriceResponse getMaxMinPrice(){
+        ProductDao maxPrice = productRepository.findFirstByOrderByPriceDesc();
+        ProductDao minPrice = productRepository.findFirstByOrderByPrice();
+
+        return new PriceResponse(maxPrice.getPrice(),minPrice.getPrice());
+    }
 
 
     public ProductsDto searchInCategoryProducts(UserDao user,Long categoryId, String searchTerm,
