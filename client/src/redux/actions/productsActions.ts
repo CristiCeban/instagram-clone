@@ -81,6 +81,14 @@ export interface SearchChanged {
     payload : string
 }
 
+export interface GetPrice {
+    readonly type : 'GET_PRICE',
+    payload : {
+        maxPrice : number,
+        minPrice : number,
+    }
+}
+
 export type ProductsActions =
     | UploadProduct
     | SetInProgressProduct
@@ -97,6 +105,7 @@ export type ProductsActions =
     | SetInProgressProductsSearch
     | GetProductsBySearch
     | SearchChanged
+    | GetPrice
 
 
 export const onUploadProduct = (values : UploadProductType) => {
@@ -200,9 +209,10 @@ export const getProductsBySearch = (params:any = {},initialLoading = true,isCate
     const param = {
         page : 0,
         size:9,
-        sort : 'desc',
+        sort : 0,
     };
     params = Object.assign(param,params);
+    console.log(params)
     const loadingType = initialLoading ? 'SET_IN_PROGRESS_PRODUCTS_SEARCH' : 'SET_IN_PROGRESS_PRODUCTS_LAZY_SEARCH'
     return async(dispatch : Dispatch<ProductsActions>) =>{
         try{
@@ -236,4 +246,5 @@ export const onSearchChanged = (value : string) => {
         dispatch({type:'SEARCH_CHANGED',payload:value})
     }
 }
+
 

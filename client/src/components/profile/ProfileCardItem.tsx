@@ -14,6 +14,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {ApplicationState} from "../../redux/reducers";
 import Loader from "react-loader-spinner";
 import {onDeleteProduct} from "../../redux/actions/profileActions";
+import {useHistory} from "react-router";
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
@@ -46,6 +47,7 @@ const ProfileCardItem = ({card:{
     liked}} : profileCardItemInterface) => {
 
     const classes = useStyles();
+    const navigation = useHistory();
     const dispatch = useDispatch();
     const theme = useTheme();
     const [activeStep, setActiveStep] = useState(0);
@@ -66,6 +68,15 @@ const ProfileCardItem = ({card:{
 
     const onDeleteClicked = () => {
         dispatch(onDeleteProduct(id))
+    }
+
+    const onNavigate = (id : number) => {
+        navigation.push({
+            pathname: '/products',
+            state: {
+                category: id,
+            },
+        });
     }
 
     return (
@@ -103,7 +114,7 @@ const ProfileCardItem = ({card:{
 
                 </CardContent>
                 <CardActions disableSpacing>
-                    <Button>
+                    <Button onClick={() => onNavigate(category.id)}>
                         <Typography>#{category.name}</Typography>
                     </Button>
                     <Link href={`/products/${id}`}>

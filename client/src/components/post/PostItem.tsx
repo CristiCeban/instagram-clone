@@ -25,6 +25,7 @@ import {ApplicationState} from "../../redux/reducers";
 import {addToFavorite, deleteFromFavorite} from "../../redux/actions/productsActions";
 import {Color} from "../../config/Colors";
 import Loader from "react-loader-spinner";
+import {useHistory} from "react-router";
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
@@ -32,6 +33,7 @@ const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 const PostItem = ({name,category,id,longDescription,photos,price,shortDescription,userId,liked,favoriteScreen} : ProductPublicPostInterface) => {
     const classes = useStyles();
     const theme = useTheme();
+    const navigation = useHistory();
     const dispatch = useDispatch();
     const {inProgressAddingToWish,addingIdToWishList} = useSelector((state: ApplicationState) => state.productsReducers)
     const [isLiked,setLiked] = useState<boolean>(liked)
@@ -63,6 +65,15 @@ const PostItem = ({name,category,id,longDescription,photos,price,shortDescriptio
         setActiveStep(step);
     };
 
+    const onNavigate = (id : number) => {
+        navigation.push({
+            pathname: '/products',
+            state: {
+                category: id,
+            },
+        });
+    }
+
     return (
         <div className={classes.mainDiv}>
             <Grid item xs={11} sm={9} md={8} style={{margin:"0px auto"}}>
@@ -76,9 +87,6 @@ const PostItem = ({name,category,id,longDescription,photos,price,shortDescriptio
                             </Link>
                             <p>{userId?.userName}</p>
                         </div>
-                        <IconButton>
-                            <MoreHoriz/>
-                        </IconButton>
                     </div>
                     <AutoPlaySwipeableViews
                         axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
@@ -111,7 +119,7 @@ const PostItem = ({name,category,id,longDescription,photos,price,shortDescriptio
                         </Typography>
                     </CardContent>
                     <CardActions disableSpacing>
-                        <Button>
+                        <Button onClick={() => onNavigate(category.id)}>
                             <Typography>#{category.name}</Typography>
                         </Button>
                         <IconButton aria-label="add to favorites" onClick={addToWishList} disabled={inProgressAddingToWish&&addingIdToWishList == id}>

@@ -14,6 +14,7 @@ import {addToFavorite, deleteFromFavorite} from "../../redux/actions/productsAct
 import {ApplicationState} from "../../redux/reducers";
 import Loader from "react-loader-spinner";
 import {Color} from "../../config/Colors";
+import {useHistory} from "react-router";
 
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
@@ -65,6 +66,7 @@ const ProfileForeignCardItem = ({ card:
     const dispatch = useDispatch();
     const classes = useStyles();
     const theme = useTheme();
+    const navigation = useHistory();
 
     const [isLiked,setLiked] = useState<boolean>(liked);
     const {inProgressAddingToWish,addingIdToWishList} = useSelector((state: ApplicationState) => state.productsReducers)
@@ -87,6 +89,15 @@ const ProfileForeignCardItem = ({ card:
     const handleStepChange = (step: number) => {
         setActiveStep(step);
     };
+
+    const onNavigate = (id : number) => {
+        navigation.push({
+            pathname: '/products',
+            state: {
+                category: id,
+            },
+        });
+    }
     return(
         <Grid item xs={12} sm={6} md={4}>
             <Card className={classes.card}>
@@ -99,9 +110,6 @@ const ProfileForeignCardItem = ({ card:
                         </Link>
                         <p>{userId?.userName}</p>
                     </div>
-                    <IconButton>
-                        <MoreHoriz/>
-                    </IconButton>
                 </div>
 
                 <AutoPlaySwipeableViews
@@ -136,7 +144,7 @@ const ProfileForeignCardItem = ({ card:
                 </CardContent>
 
                 <CardActions disableSpacing>
-                    <Button>
+                    <Button onClick={() => onNavigate(category.id)}>
                         <Typography>#{category.name}</Typography>
                     </Button>
                     <Link href={`/products/${id}`}>
