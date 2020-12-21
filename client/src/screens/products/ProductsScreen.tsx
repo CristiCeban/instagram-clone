@@ -9,7 +9,7 @@ import {
     InputAdornment,
     MenuItem,
     Slider,
-    Typography
+    Typography, InputBase, Checkbox
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import {useDispatch, useSelector} from "react-redux";
@@ -20,31 +20,45 @@ import {Color} from "../../config/Colors";
 import InfiniteScroll from "react-infinite-scroll-component";
 import LoadingFooterIndicator from "../../components/product/LoadingFooterIndicator";
 import ProfileForeignCardItem from "../../components/profile/ProfileForeignCardItem";
-import {Autorenew, Close, FilterList} from "@material-ui/icons";
+import {Autorenew, Close, FilterList, Refresh} from "@material-ui/icons";
 import {onGetAllCategories} from "../../redux/actions/generalActions";
 import TextField from "@material-ui/core/TextField";
+import ApiService from '../../services/api'
+import {useLocation} from "react-router-dom";
 
+
+interface SortBy {
+    id : number,
+    label : string,
+}
+
+const sortedValue = [{id : 0,label : 'Descendent'},{id : 1,label : 'Ascendant'}]
 
 const ProductsScreen = () => {
     const dispatch = useDispatch();
     const classes = useStyles();
+    const location = useLocation();
     const {productsSearch,inProgressProductsSearch,productsSearchNextPage,search,
         productsSearchLastPage} = useSelector((state:ApplicationState) => state.productsReducers);
 
     const {isLoadingAllCategories,allCategories} = useSelector((state : ApplicationState) => state.generalReducers)
 
+    const [sortBy,setSortBy] = useState<SortBy>(sortedValue[0])
+
     const [open, setOpen] = React.useState(false);
-    const [category,setSelectedCategory] = useState();
+    const [isCheckBox,setCheckBox] = React.useState<boolean>(false)
+    const [category,setSelectedCategory] = useState<number | undefined>(undefined);
     const [newSearch,setNewSearch] = useState(0)
 
-    const [value, setValue] = React.useState<number[]>([20, 37]);
+    const [value, setValue] = React.useState<number[]>([0, 50]);
+    const [price,setPrice] = React.useState<number[]>([0,100]);
 
     const handleChange = (event: any, newValue: number | number[]) => {
         setValue(newValue as number[]);
     };
 
     function valuetext(value: number) {
-        return `${value}°C`;
+        return `${value}`;
     }
 
     const handleOpen = () => {
@@ -62,10 +76,43 @@ const ProductsScreen = () => {
     }
 
     useEffect(() => {
-        if(typeof category !== "number")
-            dispatch(getProductsBySearch({search}))
-        else
-            dispatch(getProductsBySearch({search,categoryId:category},true,true))
+        (async() => {
+            const response = await ApiService.get('products/price',{});
+            setPrice([response.minPrice,response.maxPrice])
+        })()
+
+    },[])
+
+    console.log(location?.state?.category);
+    useEffect(() => {
+        if((location?.state?.category || location?.state?.category ===0 )&& location?.state?.category!==category) {
+            setSelectedCategory(location?.state?.category)
+            dispatch(getProductsBySearch({search, categoryId: location?.state?.category}, true, true))
+        } else {
+            let payload = {}
+            if (search)
+                payload = Object.assign({search}, payload);
+            if (isCheckBox) {
+                let min, max;
+                if (value[0] < value[1]) {
+                    min = value[0]
+                    max = value[1]
+                } else {
+                    min = value[1]
+                    max = value[0]
+                }
+                payload = Object.assign({priceStart: min}, payload)
+                payload = Object.assign({priceEnd: max}, payload)
+            }
+            if (sortBy === 0 || sortBy === 1) {
+                payload = Object.assign({Sort: sortBy}, payload)
+            }
+            console.log(payload)
+            if (typeof category !== "number")
+                dispatch(getProductsBySearch(payload))
+            else
+                dispatch(getProductsBySearch({...payload, categoryId: category}, true, true))
+        }
     },[search,newSearch])
 
     useEffect(() => {
@@ -73,19 +120,56 @@ const ProductsScreen = () => {
     },[])
 
     const refresh = () => {
+
         if(typeof category !== "number")
-            dispatch(getProductsBySearch({search}))
+            dispatch(getProductsBySearch(search))
         else
             dispatch(getProductsBySearch({search,categoryId:category},true,true))
     }
 
+    const handleRefresh = () => {
+        setSelectedCategory(undefined);
+        setOpen(false);
+        setSortBy(sortedValue[0])
+        dispatch(getProductsBySearch({search}))
+    }
     const loadMore = () => {
         if(typeof category !== "number")
-            dispatch(getProductsBySearch({search},false))
+            dispatch(getProductsBySearch({search,page : productsSearchNextPage},false))
         else
-            dispatch(getProductsBySearch({search,categoryId:category},false,true))
+            dispatch(getProductsBySearch({search,page : productsSearchNextPage,categoryId:category},false,true))
     }
 
+    const changeRangeSecond = (e : any) => {
+        const target = e.target.value;
+        if(!e || !e?.target || !e?.target?.value)
+            console.log('asa')
+        else
+        {
+            console.log(target)
+            if(parseInt(target) < 0)
+                setValue(prev => [prev[0],0])
+            else if(parseInt(e.target.value) > price[1])
+                setValue(prev => [prev[0],price[1]])
+            else
+                setValue(prev => [prev[0], parseInt(target)])
+        }
+    }
+
+    const changeRangeFirst = (e : any) => {
+        const target = e.target.value;
+        if(!e || !e?.target || !e?.target?.value)
+            console.log('asa')
+        else
+        {
+            if(parseInt(target) < 0)
+                setValue(prev => [0,prev[0]])
+            else if(parseInt(e.target.value) > price[1])
+                setValue(prev => [price[1],prev[0]])
+            else
+                setValue(prev => [parseInt(target),prev[0]])
+        }
+    }
     return(
         <div>
             {inProgressProductsSearch ?
@@ -99,6 +183,7 @@ const ProductsScreen = () => {
                             <FilterList width={20} height={20}/>
                         </IconButton>
                     </div>
+
                     <Modal
                         aria-labelledby="transition-modal-title"
                         aria-describedby="transition-modal-description"
@@ -111,6 +196,7 @@ const ProductsScreen = () => {
                             timeout: 500,
                         }}
                     >
+
                         <Fade in={open}>
                             <div className={classes.paper}>
                                 {isLoadingAllCategories ?
@@ -145,17 +231,65 @@ const ProductsScreen = () => {
                                                 </MenuItem>
                                             ))}
                                         </TextField>
-                                        <Typography>Select price interval</Typography>
+
+                                        <TextField
+                                            variant="outlined"
+                                            margin="normal"
+                                            fullWidth
+                                            name="categoryId"
+                                            label="Sort"
+                                            select
+                                            id="sortId"
+                                            value={sortBy}
+                                            onChange={(value: any) => setSortBy(value.target.value)}
+                                        >
+                                            {sortedValue.map((option) => (
+                                                <MenuItem key={option.id} value={option.id}>
+                                                    {option.label}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
+
+                                        <div style={{display:'flex',justifyContent:'row'}} >
+                                            <Checkbox
+                                                checked={isCheckBox}
+                                                onChange={(e) => setCheckBox(e.target.checked)}
+                                                inputProps={{ 'aria-label': 'primary checkbox' }}
+                                                aria-label={'Select price Interval'}
+                                            />
+                                            <Typography style={{marginTop:10}}>Select price interval</Typography>
+                                        </div>
                                         <Slider
+                                            disabled={!isCheckBox}
                                             value={value}
                                             onChange={handleChange}
                                             valueLabelDisplay="auto"
                                             aria-labelledby="range-slider"
                                             getAriaValueText={valuetext}
+                                            max={price[1]}
+                                            min={price[0]}
                                         />
+                                        <div style={{display:'flex',justifyContent:'space-between'}}>
+                                            <InputBase
+                                                type={'number'}
+                                                placeholder={'Min Price'}
+                                                value={value[0]}
+                                                onChange={changeRangeFirst}
+                                            />
+                                            <InputBase
+                                                type={'number'}
+                                                placeholder={'Max Price'}
+                                                value={value[1]}
+                                                onChange={changeRangeSecond}
+                                            />
+                                        </div>
+
                                         <div style={{display:'flex',justifyContent:'space-between'}}>
                                             <IconButton onClick={handleRenew}>
                                                 <Autorenew/>
+                                            </IconButton>
+                                            <IconButton onClick={handleRefresh}>
+                                                <Refresh/>
                                             </IconButton>
                                             <IconButton onClick={handleClose}>
                                                 <Close/>
@@ -212,7 +346,7 @@ const useStyles = makeStyles((theme) => ({
         height : 200,
     },
     filterIcon: {
-        left:'10%'
+        float:'right'
     },
     modal: {
         display: 'flex',
