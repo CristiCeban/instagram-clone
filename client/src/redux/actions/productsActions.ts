@@ -208,7 +208,7 @@ export const deleteFromFavorite = (id : number) => {
 export const getProductsBySearch = (params:any = {},initialLoading = true,isCategory = false) => {
     const param = {
         page : 0,
-        size:9,
+        size:6,
         sort : 0,
     };
     params = Object.assign(param,params);

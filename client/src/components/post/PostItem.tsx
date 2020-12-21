@@ -112,7 +112,7 @@ const PostItem = ({name,category,id,longDescription,photos,price,shortDescriptio
                             Product:{name}
                         </Typography>
                         <Typography>
-                            Price:{price}:LEI
+                            Price:{price}
                         </Typography>
                         <Typography>
                             {shortDescription}

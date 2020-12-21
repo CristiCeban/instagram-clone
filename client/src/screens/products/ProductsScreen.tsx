@@ -25,6 +25,7 @@ import {onGetAllCategories} from "../../redux/actions/generalActions";
 import TextField from "@material-ui/core/TextField";
 import ApiService from '../../services/api'
 import {useLocation} from "react-router-dom";
+import {useHistory} from "react-router";
 
 
 interface SortBy {
@@ -38,6 +39,7 @@ const ProductsScreen = () => {
     const dispatch = useDispatch();
     const classes = useStyles();
     const location = useLocation();
+    const navigation = useHistory();
     const {productsSearch,inProgressProductsSearch,productsSearchNextPage,search,
         productsSearchLastPage} = useSelector((state:ApplicationState) => state.productsReducers);
 
@@ -83,9 +85,12 @@ const ProductsScreen = () => {
 
     },[])
 
-    console.log(location?.state?.category);
     useEffect(() => {
         if((location?.state?.category || location?.state?.category ===0 )&& location?.state?.category!==category) {
+            console.log('s-a intrat')
+            const state = { ...navigation?.location?.state };
+            delete state.category;
+            navigation.replace({ ...navigation.location, state });
             setSelectedCategory(location?.state?.category)
             dispatch(getProductsBySearch({search, categoryId: location?.state?.category}, true, true))
         } else {
@@ -105,7 +110,7 @@ const ProductsScreen = () => {
                 payload = Object.assign({priceEnd: max}, payload)
             }
             if (sortBy === 0 || sortBy === 1) {
-                payload = Object.assign({Sort: sortBy}, payload)
+                payload = Object.assign({sort: sortBy}, payload)
             }
             console.log(payload)
             if (typeof category !== "number")
