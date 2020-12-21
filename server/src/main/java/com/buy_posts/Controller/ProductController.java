@@ -116,7 +116,7 @@ public class ProductController {
         return productService.getProducts(page, size, categoryId,user);
     }
 
-    @GetMapping(path = "/category/search")
+    @GetMapping(value = "/category/search")
     public ProductsDto getProductsCategoryAndSearch(@RequestParam("page") int page,
                                                     @RequestParam("size") int size,
                                                     @RequestParam("sort") Integer sort,

@@ -155,7 +155,9 @@ public class ProductService {
         if(sort == 0){
             sortedByPrice = PageRequest.of(page, size, Sort.by("price").descending());
         }
-        Page<ProductDao> productsPage = productRepository.findAll(sortedByPrice);
+
+        Page<ProductDao> productsPage = productRepository.findAllByCategoryId(sortedByPrice,categoryId);
+
         if(searchTerm == null && price1 != null && price2 != null){
             productsPage = productRepository.findAllByCategoryIdAndPriceBetween(sortedByPrice, categoryId, price1, price2);
         }
